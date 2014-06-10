@@ -27,4 +27,6 @@ def get_dists(fpath):
     data = data[is_control, :]
     data = data[:, np.array(even_fa_idx.keys())]
 
-    return Dataset._make([data, even_fa_idx.values()])
+    return Dataset._make([data.astype(np.float), even_fa_idx.values()])
+
+    
