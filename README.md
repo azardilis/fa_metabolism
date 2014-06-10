@@ -1,7 +1,7 @@
 fa_metabolism
 =============
 
-The idea is to model the Fatty Acid elongation pathway(from KEGG: [hsa00062](http://www.genome.jp/kegg-bin/show_pathway?hsa00062)) using Stochastic Petri Nets(described formally for example [here](http://link.springer.com/chapter/10.1007/978-3-540-75140-3_14) and [here](http://www.fd.cvut.cz/department/k611/pedagog/THO_A/A_soubory/SPN_Introduction.pdf) among other places).
+The idea is to model the Fatty Acid elongation pathway(from KEGG: [hsa00062](http://www.genome.jp/kegg-bin/show_pathway?hsa00062)) using Stochastic Petri Nets(described formally for example [here](http://link.springer.com/chapter/10.1007/978-3-540-75140-3_14) and [here](http://www.fd.cvut.cz/department/k611/pedagog/THO_A/A_soubory/SPN_Introduction.pdf)).
 
 The pathway, as obtained from KEGG, was first manually converted to a Stochastic Petri Net using [SNOOPY](http://www-dssz.informatik.tu-cottbus.de/DSSZ/Software/Snoopy) for a first experimentation.
 The net was then simplified to capture only the most important aspects of the pathway. SNOOPY files for both the initial and simplified nets are in the /model directory.
