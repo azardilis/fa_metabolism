@@ -6,7 +6,7 @@ from collections import namedtuple
 def get_dists(fpath):
     Dataset = namedtuple('Dataset', ['data', 'col_labels'])
     d, file = os.path.split(fpath)
-    even_fas = set(line.rstrip() for line in open(d + "/uns_fas.txt"))
+    even_fas = set(line.split()[0].rstrip() for line in open(d + "/uns_fas.txt"))
     factor = "Treatment"
 
     d_reader = csv.reader(open(fpath))
@@ -27,6 +27,34 @@ def get_dists(fpath):
     data = data[is_control, :]
     data = data[:, np.array(even_fa_idx.keys())]
 
-    return Dataset._make([data.astype(np.float), even_fa_idx.values()])
+    labels = list(label.replace(" ", "") for label in even_fa_idx.values()) 
+    return Dataset._make([data.astype(np.float), labels])
+
+def get_name_cor():
+    return dict(tuple(line.split()) for line in open("data/uns_fas.txt"))
+
+def get_fas_idx(spn, real_ds, names):
+    idxs = {}
+    for rn, sn in names.iteritems():
+        idxs[real_ds.col_labels.index(rn)] = spn.places.index(sn)
+
+    return(idxs)
+    
+def dist(real_ds, sim_ds, idxs):
+    # simple distance between the simulated distributions
+    # and the real distributions
+    dist = 0.0
+    for ri, si in idxs.iteritems():
+        di = np.mean(real_ds.data[:, ri]) - np.mean(sim_ds[:, si])
+        dist += di
+
+    return dist
+
+    
+
+    
+    
+
+    
 
     
