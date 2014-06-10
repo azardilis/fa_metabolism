@@ -2,6 +2,7 @@ import os
 import csv
 import numpy as np
 from collections import namedtuple
+import fa
 
 def get_dists(fpath):
     Dataset = namedtuple('Dataset', ['data', 'col_labels'])
@@ -42,7 +43,7 @@ def get_fas_idx(spn, real_ds, names):
     
 def dist(real_ds, sim_ds, idxs):
     # simple distance between the simulated distributions
-    # and the real distributions
+    # and the real distributions.
     dist = 0.0
     for ri, si in idxs.iteritems():
         di = np.mean(real_ds.data[:, ri]) - np.mean(sim_ds[:, si])
@@ -50,6 +51,12 @@ def dist(real_ds, sim_ds, idxs):
 
     return dist
 
+def score_spn(spn, real_ds):
+    sim_ds = fa.get_model_dists(spn, n_iter=100, n_steps=500)
+    names = get_name_cor()
+    idxs = get_fas_idx(spn, real_ds, names)
+
+    return dist(real_ds, sim_ds, idxs)
     
 
     
