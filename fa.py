@@ -14,7 +14,7 @@ def simulate_gill(spn, n_steps):
     # spn: A tuple representing the SPN
     #
     # Performs the standard Gillespie algorithm for (Markov) jump processes
-    # Might not be consistent with the SPN oepreational semantics
+    # Might not be consistent with the SPN operational semantics
     SimResults = namedtuple('SimResults', ['trajectories', 'wait_times'])
     state_out = np.zeros((n_steps+1, len(spn.places)))
     w_times = np.zeros(n_steps+1)
