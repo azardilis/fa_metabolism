@@ -58,6 +58,15 @@ def simulate_pn(spn, n_steps):
         state_out[i, :] = state
 
     return state_out[:steps_taken,]
+
+def get_model_dists(spn, n_iter, n_steps):
+    dists = np.zeros((n_iter, len(spn.places)))
+    for i in xrange(n_iter):
+        sim_res = simulate_pn(spn, n_steps)
+        final_marking = sim_res[-1, :]
+        dists[i, :] = final_marking
+
+    return dists
     
 def load_model(fpath):
     StochasticPetriNet = namedtuple("StochasticPetriNet", ["pre", "init", "S", "rates",
@@ -95,18 +104,4 @@ def anim_fa_model(fpath, n_steps):
     results = simulate(spn, n_steps)
 
     return results
-
-
-    
-
-    
-
-    
-
-
-
-
-
-
-
 
