@@ -1,10 +1,12 @@
 import numpy as np
-import pysces
 import os
 from collections import namedtuple
 from operator import attrgetter
 import matplotlib.pyplot as plt
 import sys
+cdir = os.getcwd()
+import pysces
+os.chdir(cdir)
 
 def is_enabled(spn, ri, state):
     #check if applying reaction ri can proceed and return either True or False
@@ -42,7 +44,7 @@ def get_enabled(spn, state):
 def simulate_pn(spn, n_steps):
     # Simulates exactly according to the operational semantics of SPNs
     # Proceeds similarly to the animation pebble game
-    steps_taken = 0
+    steps_taken = n_steps
     state_out = np.zeros((n_steps+1, len(spn.places)))
     state = np.copy(spn.init)
     state_out[0, :] = np.copy(spn.init)
@@ -69,6 +71,7 @@ def get_model_dists(spn, n_iter, n_steps):
     return dists
     
 def load_model(fpath):
+    cdir = os.getcwd()
     StochasticPetriNet = namedtuple("StochasticPetriNet", ["pre", "init", "S", "rates",
                                                           "places", "transitions"])
     d, fname =  os.path.split(fpath)
@@ -83,7 +86,7 @@ def load_model(fpath):
     init = list(getattr(mod, place+"_init") for place in places)
     rate_getter = attrgetter("rate")
     rates = list(rate_getter(getattr(mod, transition)) for transition in transitions)
-
+    os.chdir(cdir)
     return StochasticPetriNet._make([pre, np.array(init), S, np.array(rates),
                                     places, transitions])
 
