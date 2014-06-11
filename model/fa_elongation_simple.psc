@@ -1,4 +1,4 @@
-	
+
 R1:
 	Acetyl_CoA + Butanoyl_CoA > Hexanoyl_CoA
 	2.1
@@ -46,9 +46,9 @@ R6:
 storage_Hexadecanoyl:
 	Hexadecanoyl_CoA > Hexadecanoyl_CoA_sink
 	1.0
-	
-	
-Acetyl_CoA = 160
+
+
+Acetyl_CoA = 300
 Butanoyl_CoA = 100
 Hexanoyl_CoA = 0
 Octanoyl_CoA = 0
