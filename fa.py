@@ -2,7 +2,8 @@ import numpy as np
 import os
 from collections import namedtuple
 from operator import attrgetter
-from multiprocessing import Process, Queue
+from multiprocessing import Pool
+from functools import partial
 import matplotlib.pyplot as plt
 import sys
 cdir = os.getcwd()
@@ -12,7 +13,7 @@ os.chdir(cdir)
 StochasticPetriNet = namedtuple("StochasticPetriNet", ["pre", "init", "S", "rates",
                                                           "places", "transitions"])
 
-def is_enabled(spn, ri, state):
+def is_enabled(spn, state, ri):
     #check if applying reaction ri can proceed and return either True or False
     return np.all(spn.pre[:, ri] <= state)
 
@@ -40,7 +41,7 @@ def simulate_gill(spn, n_steps):
     return SimResults._make([state_out, w_times])
 
 def get_enabled(spn, state):
-    enabled = list(is_enabled(spn, ri, state) for ri in xrange(len(spn.transitions)))
+    enabled = list(is_enabled(spn, state, ri) for ri in xrange(len(spn.transitions)))
     enabled_trans = np.where(np.array(enabled) == True)[0]
 
     return enabled_trans
@@ -61,7 +62,7 @@ def simulate_pn(spn, n_steps):
         ri = enabled[np.argmin(w_times)]
         state = state + spn.S[:, ri]
 
-        return state
+    return state
 
 def get_model_dists(spn, n_iter, n_steps):
     dists = np.zeros((n_iter, len(spn.places)))
@@ -97,7 +98,7 @@ def plot_sim_results(results):
 def sim_fa_model(fpath, n_steps):
     # Read the model and simulate with standard Gillespie for n_steps steps
     spn = load_model(fpath)
-    results = simulate(spn, n_steps)
+    results = simulate_gill(spn, n_steps)
 
     return results
 
