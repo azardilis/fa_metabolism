@@ -2,16 +2,20 @@ import numpy as np
 import os
 from collections import namedtuple
 from operator import attrgetter
+from multiprocessing import Process, Queue
 import matplotlib.pyplot as plt
 import sys
 cdir = os.getcwd()
 import pysces
 os.chdir(cdir)
 
+StochasticPetriNet = namedtuple("StochasticPetriNet", ["pre", "init", "S", "rates",
+                                                          "places", "transitions"])
+
 def is_enabled(spn, ri, state):
     #check if applying reaction ri can proceed and return either True or False
     return np.all(spn.pre[:, ri] <= state)
-    
+
 def simulate_gill(spn, n_steps):
     # spn: A tuple representing the SPN
     #
@@ -45,9 +49,8 @@ def simulate_pn(spn, n_steps):
     # Simulates exactly according to the operational semantics of SPNs
     # Proceeds similarly to the animation pebble game
     steps_taken = n_steps
-    state_out = np.zeros((n_steps+1, len(spn.places)))
     state = np.copy(spn.init)
-    state_out[0, :] = np.copy(spn.init)
+
     for i in xrange(1, n_steps+1):
         enabled = get_enabled(spn, state)
         if enabled.size == 0:
@@ -57,23 +60,20 @@ def simulate_pn(spn, n_steps):
         w_times = np.random.exponential(1/spn.rates[enabled])
         ri = enabled[np.argmin(w_times)]
         state = state + spn.S[:, ri]
-        state_out[i, :] = state
 
-    return state_out[:steps_taken,]
+        return state
 
 def get_model_dists(spn, n_iter, n_steps):
     dists = np.zeros((n_iter, len(spn.places)))
     for i in xrange(n_iter):
         sim_res = simulate_pn(spn, n_steps)
-        final_marking = sim_res[-1, :]
-        dists[i, :] = final_marking
+        dists[i, :] = sim_res
 
     return dists
-    
+
 def load_model(fpath):
     cdir = os.getcwd()
-    StochasticPetriNet = namedtuple("StochasticPetriNet", ["pre", "init", "S", "rates",
-                                                          "places", "transitions"])
+
     d, fname =  os.path.split(fpath)
     mod = pysces.model(fname, d)
     mod.Simulate()
@@ -93,7 +93,7 @@ def load_model(fpath):
 def plot_sim_results(results):
     plt.plot(results.wait_times, results.trajectories)
     plt.show()
-    
+
 def sim_fa_model(fpath, n_steps):
     # Read the model and simulate with standard Gillespie for n_steps steps
     spn = load_model(fpath)
