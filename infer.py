@@ -70,14 +70,3 @@ def score_spn(spn, real_ds):
 
 
 
-
-
-
-
-
-
-
-
-
-
-
