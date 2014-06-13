@@ -29,15 +29,15 @@ R4:
 
 storage_Dodecanoyl:
 	Dodecanoyl_CoA > Dodecanoyl_CoA_sink
-	0.2
+	0.01
 
 R5:
 	Acetyl_CoA + Dodecanoyl_CoA > Tetradecanoyl_CoA
-	2.0
+	3.0
 
 storage_Tetradecanoyl:
 	Tetradecanoyl_CoA > Tetradecanoyl_CoA_sink
-	0.5
+	0.1
 
 R6:
 	Acetyl_CoA + Tetradecanoyl_CoA > Hexadecanoyl_CoA
