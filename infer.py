@@ -60,13 +60,15 @@ def dist(real_ds, sim_ds):
     return dist
 
 def score_spn(spn, real_ds):
-    sim_ds = fa.get_model_dists(spn, n_iter=100, n_steps=500)
+    sim_ds = fa.get_model_dists(spn, n_iter=30, n_steps=500)
     idxs = get_fas_idx(spn, real_ds)
 
     real_ds  = real_ds.data[:, np.array(idxs.keys())]
     sim_ds = sim_ds[:, np.array(idxs.values())]
 
     return dist(real_ds, sim_ds)
+
+
 
 
 
