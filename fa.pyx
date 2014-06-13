@@ -44,7 +44,7 @@ def simulate_gill(spn, n_steps):
 
     return SimResults._make([state_out, w_times])
     
-@cython.boundscheck(False) # turn of bounds-checking for entire function
+@cython.boundscheck(False) 
 def get_enabled_c(np.ndarray[DTYPE_t, ndim=2] pre, np.ndarray[DTYPE_t, ndim=1] state):
     enabled = []
     cdef int i
