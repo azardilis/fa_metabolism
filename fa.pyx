@@ -14,9 +14,18 @@ os.chdir(cdir)
 
 DTYPE = np.int
 ctypedef np.int_t DTYPE_t
-StochasticPetriNet = namedtuple("StochasticPetriNet", ["pre", "init", "S", "rates",
-                                                          "places", "transitions"])
 
+class StochasticPetriNet:
+
+    def __init__(self, pre, init, S, rates, places, transitions):
+        self.pre = pre
+        self.init = init
+        self.S = S
+        self.rates = rates
+        self.places = places
+        self.transitions = transitions
+
+        
 def is_enabled(spn, state, ri):
     #check if applying reaction ri can proceed and return either True or False
     return np.all(spn.pre[:, ri] <= state)
@@ -104,9 +113,12 @@ def load_model(fpath):
     rate_getter = attrgetter("rate")
     rates = list(rate_getter(getattr(mod, transition)) for transition in transitions)
     os.chdir(cdir)
-    return StochasticPetriNet._make([pre, np.array(init, dtype=np.int), S, np.array(rates),
-                                    places, transitions])
 
+    spn = StochasticPetriNet(pre, np.array(init, dtype=np.int), S, np.array(rates),
+                             places, transitions)
+
+    return spn
+    
 def plot_sim_results(results):
     plt.plot(results.wait_times, results.trajectories)
     plt.show()
