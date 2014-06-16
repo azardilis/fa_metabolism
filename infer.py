@@ -60,7 +60,9 @@ def dist(real_ds, sim_ds):
 
     return dist
 
-def score_spn(spn, real_ds):
+def score_spn(rates, spn, real_ds):
+    alt_ind = np.array([4, 6, 8, 10, 12, 14])
+    spn.rates[alt_ind] = rates
     sim_ds = fa.get_model_dists(spn, n_iter=30, n_steps=500)
     idxs = get_fas_idx(spn, real_ds)
 
@@ -68,29 +70,18 @@ def score_spn(spn, real_ds):
     sim_ds = sim_ds[:, np.array(idxs.values())]
 
     return dist(real_ds, sim_ds)
+    
 
-def optimise_spn(spn, real_ds):
+def optimise_spn(obj, spn, real_ds, ranges, epsilon=0.02, n_steps=5000):
     accepted_rates = []
-    epsilon = 0.02
-    n_steps = 5000
-    prior = partial(np.random.uniform, 0, 3, len(spn.rates))
 
     for i in xrange(n_steps):
         print i
-        spn.rates = prior()
-        if score_spn(spn, real_ds) < epsilon:
-            print spn.rates
-            accepted_rates.append(spn.rates)
+        rates = [np.random.uniform(r[0], r[1]) for r in ranges]
+        if obj(rates) < epsilon:
+            print rates
+            accepted_rates.append(rates)
 
 
     return accepted_rates
-
-    
-            
-    
-    
-
-
-
-
 
