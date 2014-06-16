@@ -3,6 +3,7 @@ import csv
 import numpy as np
 from collections import namedtuple
 import fa
+from functools import partial
 
 def get_dists(fpath):
     Dataset = namedtuple('Dataset', ['data', 'col_labels'])
@@ -67,6 +68,27 @@ def score_spn(spn, real_ds):
     sim_ds = sim_ds[:, np.array(idxs.values())]
 
     return dist(real_ds, sim_ds)
+
+def optimise_spn(spn, real_ds):
+    accepted_rates = []
+    epsilon = 0.02
+    n_steps = 5000
+    prior = partial(np.random.uniform, 0, 3, len(spn.rates))
+
+    for i in xrange(n_steps):
+        print i
+        spn.rates = prior()
+        if score_spn(spn, real_ds) < epsilon:
+            print spn.rates
+            accepted_rates.append(spn.rates)
+
+
+    return accepted_rates
+
+    
+            
+    
+    
 
 
 
