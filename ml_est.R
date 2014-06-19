@@ -29,7 +29,6 @@ GetMLEstimates <- function() {
     return(ml.params)
 }
 
-
 Likelihood <- function(p) {
     D <- c(5, 231, 3061, 468, 4, 1)
     succ.probs <- list(1-p, p)
@@ -50,8 +49,8 @@ ProposalFunc <- function(p) {
 }
 
 mcmc <- function(ip, n.steps) {
-    trace <- matrix(rep(0, n.steps*6), nrow=n.steps)
-    trace[1, ] <- ip
+    mcmc.trace <- matrix(rep(0, n.steps*6), nrow=n.steps)
+    mcmc.trace[1, ] <- ip
     p <- ip
     oldll <- Likelihood(p)
     for (i in 2:n.steps) {
@@ -62,11 +61,10 @@ mcmc <- function(ip, n.steps) {
             p <- pp
             oldll <- loglik
         }
-
-        trace[i, ] <- p
+        mcmc.trace[i, ] <- p
     }
 
-    return(trace)
+    return(mcmc.trace)
 }
 
 
