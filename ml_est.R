@@ -1,14 +1,24 @@
 
-GetMLEstimates <- function() {
+GetMLEstimates <- function(data) {
     # Return point estimates for the parameters based on the ML
     # estimation of success probabilities of the independent
     # Bernoulli trials
-    MakeAbsNums <- function(data) {
-        nd <- apply(data, 1, function(x) { floor(x / min(x[x > 0])) })
+    MakeAbsNums <- function(d) {
+        nd <- apply(d, 1, function(x) { floor(x / min(x[x > 0])) })
 
         return(t(nd))
     }
 
+    n.data <- MakeAbsNums(data)
+    n.succ <- colSums(n.data)
+    n.trials <- rowSums(apply(n.data, 1, function(x) { cumsum(x) }))
+    n.trials[n.trials == 0] <- 1 #avoid NaNs
+    ml.params <- n.succ / n.trials
+
+    return(ml.params)
+}
+
+FilterControls <- function() {
     FilterData <- function(data) {
         fas <- c("C.12.0", "C.14.0", "C.16.0", "C.18.0", "C.20.0", "C22.0")
         data <- data[data$Treatment=="C", rev(fas)]
@@ -19,15 +29,27 @@ GetMLEstimates <- function() {
     fname <- "data/GCFIDrawdata.csv"
     data <- read.csv(fname)
     data <- FilterData(data)
-    n.data <- MakeAbsNums(data)
 
-    n.succ <- colSums(n.data)
-    n.trials <- rowSums(apply(n.data, 1, function(x) { cumsum(x) }))
-
-    ml.params <- n.succ / n.trials
-
-    return(ml.params)
+    return(data)
 }
+
+GetMLEstimatesSample <- function() {
+    #Return point estimates for the parameters based on the ML
+    #estimation of success probabilities per sample
+    fname <- "data/GCFIDrawdata.csv"
+    data <- read.csv(fname)
+    fas <- c("C.12.0", "C.14.0", "C.16.0", "C.18.0", "C.20.0", "C22.0")
+    data <- data[, rev(fas)]
+
+    res <- apply(data, 1, function(x) {GetMLEstimates(matrix(x, nrow=1))})
+    res <- t(res)
+    colnames(res) <- rev(fas)
+
+    return(res)
+}
+
+
+
 
 Likelihood <- function(p) {
     D <- c(5, 231, 3061, 468, 4, 1)
@@ -37,7 +59,6 @@ Likelihood <- function(p) {
         events <- c(rep(1, i-1), 2)
         sp <- sum(sapply(1:length(events), function(x) { log(succ.probs[[events[x]]][x]) }))
         lprobs[i] <- D[i] * sp
-
     }
 
     return(sum(lprobs))
@@ -49,6 +70,7 @@ ProposalFunc <- function(p) {
 }
 
 mcmc <- function(ip, n.steps) {
+    # MCMC sampling from the posterior of model parameters
     mcmc.trace <- matrix(rep(0, n.steps*6), nrow=n.steps)
     mcmc.trace[1, ] <- ip
     p <- ip
