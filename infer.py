@@ -4,6 +4,7 @@ import numpy as np
 from collections import namedtuple
 import fa
 from functools import partial
+from itertools import product
 
 def get_dists(fpath):
     Dataset = namedtuple('Dataset', ['data', 'col_labels'])
@@ -70,7 +71,7 @@ def score_spn(rates, spn, real_ds):
     sim_ds = sim_ds[:, np.array(idxs.values())]
 
     return dist(real_ds, sim_ds)
-    
+
 
 def optimise_spn(obj, spn, real_ds, ranges, epsilon=0.02, n_steps=5000):
     accepted_rates = []
@@ -85,3 +86,32 @@ def optimise_spn(obj, spn, real_ds, ranges, epsilon=0.02, n_steps=5000):
 
     return accepted_rates
 
+def get_wastage(spn, sim_res, sinks):
+    # a metric of the 'wastage' of the system
+    # wastage defined as the tokens not gone to one of the sinks
+    # of the system because the system reached a dead state
+    # number should be normalised by the number of initial tokens
+
+    wt = np.array([t for p, t in zip(spn.places, sim_res) if p not in sinks])
+
+    return np.sum(wt)
+
+
+def opt_acoa(spn):
+    # Optimise the distribution of the acetyl-CoA produced from pyruvate
+    # in the initial step of TCA cycle and FA elongation pathways to
+    # reduce wastage ie tokens being in non sink nodes at the end of
+    # a simulation
+    sinks = set(['C12', 'C14', 'C16', 'C18', 'C20', 'C22', 'SUCCmit'])
+    rate_inds = np.array([1, 2, 3])
+
+    domain = np.linspace(0.0, 2.0, 20)
+    wastages = {}
+
+    for l1, l2, l3 in product(domain, domain, domain):
+        spn.rates[rate_inds] = [l1, l2, l3]
+        sim_res = fa.simulate_pn(spn, 1000)
+        w = get_wastage(spn, sim_res, sinks)
+        wastages[(l1, l2, l3)] = w
+
+    return wastages
