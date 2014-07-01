@@ -678,7 +678,7 @@
           </graphics>
         </attribute>
         <attribute name="Marking" id="178275" net="1">
-          <![CDATA[100]]>
+          <![CDATA[1000]]>
           <graphics count="1">
             <graphic x="743.53" y="90.00" id="178280" net="1" show="1" grparent="178282" state="1" pen="0,0,0" brush="255,255,255"/>
           </graphics>
