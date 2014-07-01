@@ -25,7 +25,7 @@ class StochasticPetriNet:
         self.places = places
         self.transitions = transitions
 
-        
+
 def is_enabled(spn, state, ri):
     #check if applying reaction ri can proceed and return either True or False
     return np.all(spn.pre[:, ri] <= state)
@@ -52,14 +52,14 @@ def simulate_gill(spn, n_steps):
         w_times[i] = t
 
     return SimResults._make([state_out, w_times])
-    
-@cython.boundscheck(False) 
+
+@cython.boundscheck(False)
 def get_enabled_c(np.ndarray[DTYPE_t, ndim=2] pre, np.ndarray[DTYPE_t, ndim=1] state):
     enabled = []
     cdef int i
     cdef int j
     cdef int t
-    
+
     for i in range(pre.shape[1]):
         t = 1
         for j in range(pre.shape[0]):
@@ -118,7 +118,7 @@ def load_model(fpath):
                              places, transitions)
 
     return spn
-    
+
 def plot_sim_results(results):
     plt.plot(results.wait_times, results.trajectories)
     plt.show()
@@ -136,4 +136,7 @@ def anim_fa_model(fpath, n_steps):
     results = simulate_pn(spn, n_steps)
 
     return results
+
+def get_out(spn, sim_res):
+    return dict(zip(spn.places, sim_res))
 
