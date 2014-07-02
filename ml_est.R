@@ -53,6 +53,7 @@ GetMLEstimatesSample <- function() {
 
 Likelihood <- function(p) {
     D <- c(5, 231, 3061, 468, 4, 1)
+    D <- c(1, 0, 0, 0, 0, 0)
     succ.probs <- list(1-p, p)
     lprobs <- rep(0, length(D))
     for (i in 1:length(D)) {
@@ -90,5 +91,32 @@ mcmc <- function(ip, n.steps) {
 }
 
 
+
+GetEventProb <- function(p, i) {
+    if (i == 1) { return(p[1]) }
+    pi <- p[i]*prod((1-p)[1:(i-1)])
+    return(pi)
+}
+
+GetSinkProb <- function(p) {
+    return(sapply(1:length(p), function(x) { GetEventProb(p, x) }))
+}
+
+
+GetInputRateEstimates <- function() {
+    bern.tca <- 0.5
+    data <- FilterControls()
+    p <- rev(GetMLEstimates(data))
+    ep <- GetSinkProb(p)
+    event.exp <- sum((1:length(p)) * ep)
+
+    rates <- c(1, event.exp, event.exp)
+    rates <- rates/sum(rates)
+
+    rates[3] <- rates[3] / bern.tca
+    rates <- rates / sum(rates)
+
+    return(rates)
+}
 
 
