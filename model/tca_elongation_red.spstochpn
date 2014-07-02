@@ -404,7 +404,7 @@
         <attribute name="Name" id="178141" net="1">
           <![CDATA[C18:0]]>
           <graphics count="1">
-            <graphic xoff="25.00" yoff="20.00" x="598.53" y="470.00" id="178146" net="1" show="1" grparent="178150" state="1" pen="0,0,0" brush="255,255,255"/>
+            <graphic xoff="6.00" yoff="18.00" x="579.53" y="468.00" id="178146" net="1" show="1" grparent="178150" state="1" pen="0,0,0" brush="255,255,255"/>
           </graphics>
         </attribute>
         <attribute name="ID" id="178142" net="1">
@@ -470,7 +470,7 @@
         <attribute name="Name" id="178163" net="1">
           <![CDATA[C20:0]]>
           <graphics count="1">
-            <graphic xoff="25.00" yoff="20.00" x="678.53" y="470.00" id="178168" net="1" show="1" grparent="178172" state="1" pen="0,0,0" brush="255,255,255"/>
+            <graphic xoff="4.00" yoff="18.00" x="657.53" y="468.00" id="178168" net="1" show="1" grparent="178172" state="1" pen="0,0,0" brush="255,255,255"/>
           </graphics>
         </attribute>
         <attribute name="ID" id="178164" net="1">
@@ -678,7 +678,7 @@
           </graphics>
         </attribute>
         <attribute name="Marking" id="178275" net="1">
-          <![CDATA[1000]]>
+          <![CDATA[61]]>
           <graphics count="1">
             <graphic x="743.53" y="90.00" id="178280" net="1" show="1" grparent="178282" state="1" pen="0,0,0" brush="255,255,255"/>
           </graphics>
@@ -711,7 +711,7 @@
           </graphics>
         </attribute>
         <attribute name="Marking" id="178286" net="1">
-          <![CDATA[1000]]>
+          <![CDATA[100]]>
           <graphics count="1">
             <graphic x="150.00" y="50.00" id="178291" net="1" show="1" grparent="178293" state="1" pen="0,0,0" brush="255,255,255"/>
           </graphics>
@@ -804,7 +804,7 @@
                   <![CDATA[Main]]>
                 </colList_col>
                 <colList_col nr="1">
-                  <![CDATA[0.88]]>
+                  <![CDATA[0.30126094]]>
                 </colList_col>
               </colList_row>
             </colList_body>
@@ -856,7 +856,7 @@
                   <![CDATA[Main]]>
                 </colList_col>
                 <colList_col nr="1">
-                  <![CDATA[0.13]]>
+                  <![CDATA[ 0.09621717]]>
                 </colList_col>
               </colList_row>
             </colList_body>
@@ -1860,7 +1860,7 @@
                   <![CDATA[Main]]>
                 </colList_col>
                 <colList_col nr="1">
-                  <![CDATA[1.77]]>
+                  <![CDATA[0.60252189]]>
                 </colList_col>
               </colList_row>
             </colList_body>
