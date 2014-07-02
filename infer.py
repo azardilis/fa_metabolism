@@ -3,7 +3,6 @@ import csv
 import numpy as np
 from collections import namedtuple
 import fa
-from functools import partial
 from itertools import product
 
 def get_dists(fpath):
@@ -22,7 +21,7 @@ def get_dists(fpath):
             even_fa_idx[i] = col
 
     data = np.loadtxt(fpath, dtype=str, skiprows=1, delimiter=',')
-    tr_idx = np.where(header == "Treatment")[0]
+    tr_idx = np.where(header == factor)[0]
 
 
     #select even unsaturated FAs columns and Control samples
@@ -115,3 +114,33 @@ def opt_acoa(spn):
         wastages[(l1, l2, l3)] = w
 
     return wastages
+
+def assess_rates(spn, sinks):
+
+    def obj_fun(acoa_rates):
+        rate_inds = np.array([1, 2, 3])
+        spn.rates[rate_inds] = acoa_rates
+        sim_res = fa.simulate_pn(spn, 1000)
+        w = get_wastage(spn, sim_res, sinks)
+        
+        return w
+
+    return obj_fun
+
+def rej_sampler_acoa(spn, n_steps):
+    sinks = set(['C12', 'C14', 'C16', 'C18', 'C20', 'C22', 'SUCCmit', 'OAAmit'])
+    f = assess_rates(spn, sinks)
+    prop_rates = lambda : np.random.uniform(0, 1, 3)
+    eps = 15.0 #arbitrary acceptance threshold
+    acc_rates = []
+    
+    for i in xrange(n_steps):
+        print i
+        acoa_rates = prop_rates()
+        acoa_rates = acoa_rates/np.sum(acoa_rates)
+        #ws = np.array(list(f(acoa_rates) for _ in xrange(10)))
+        ws = f(acoa_rates)
+        if np.median(ws) < eps:
+            acc_rates.append(acoa_rates)
+
+    return acc_rates
