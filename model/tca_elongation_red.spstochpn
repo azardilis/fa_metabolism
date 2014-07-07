@@ -678,7 +678,7 @@
           </graphics>
         </attribute>
         <attribute name="Marking" id="178275" net="1">
-          <![CDATA[61]]>
+          <![CDATA[100]]>
           <graphics count="1">
             <graphic x="743.53" y="90.00" id="178280" net="1" show="1" grparent="178282" state="1" pen="0,0,0" brush="255,255,255"/>
           </graphics>
@@ -804,7 +804,7 @@
                   <![CDATA[Main]]>
                 </colList_col>
                 <colList_col nr="1">
-                  <![CDATA[0.30126094]]>
+                  <![CDATA[0.31614514]]>
                 </colList_col>
               </colList_row>
             </colList_body>
@@ -856,7 +856,7 @@
                   <![CDATA[Main]]>
                 </colList_col>
                 <colList_col nr="1">
-                  <![CDATA[ 0.09621717]]>
+                  <![CDATA[0.05156458]]>
                 </colList_col>
               </colList_row>
             </colList_body>
@@ -1860,7 +1860,7 @@
                   <![CDATA[Main]]>
                 </colList_col>
                 <colList_col nr="1">
-                  <![CDATA[0.60252189]]>
+                  <![CDATA[0.63229028]]>
                 </colList_col>
               </colList_row>
             </colList_body>
