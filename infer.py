@@ -23,7 +23,6 @@ def get_dists(fpath):
     data = np.loadtxt(fpath, dtype=str, skiprows=1, delimiter=',')
     tr_idx = np.where(header == factor)[0]
 
-
     #select even unsaturated FAs columns and Control samples
     is_control = np.array(list(b[0] for b in data[:, tr_idx] == "C"))
     data = data[is_control, :]
