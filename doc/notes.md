@@ -5,6 +5,10 @@ These will form the basis for the presentation and will also serve as
 a skeleton for the main report.
 
 ## Introduction
+Give a general context of our work, define the goals, and outline structure contents of the report.
+
+Comment:(I think this section needs some concrete examples and I will also have to add some references for the 
+modelling methodologies I mentioned. For example Regev for the use of pi-calculus etc.)
 
 Perhaps the huge complexity of biological systems has
 led Biology as a discipline to focus on understanding the inner
@@ -12,7 +16,7 @@ workings of their components instead of understanding the systems a
 whole. Perhaps it was also the idea that if we knew how all the
 constituent parts work than we would know how the entire systems
 work. While System Biology ideas are not new (for example Weiner etc.)
-they relatively recently regained momentum and a rewenable interest
+they relatively recently regained momentum and a renewable interest
 thanks to new experimental technologies that has led to the
 accumulation of a wealth of data. This quickly led to the realisation
 that in taking a 'wholistic' view at the systems the most important
@@ -21,7 +25,7 @@ but rather the interactions between them and the constraints these
 interactions impose on their concurrent behaviour and to the overall
 behaviour of the system.
 
-Computer Science, altough a fundamentally different discipline than
+Computer Science, although a fundamentally different discipline than
 Biology, has gone through a similar trend. The focus at the start of
 computing was on the computation of individual information processing
 entities. This is reflected in the models of computation that inspired
@@ -47,7 +51,7 @@ calculation/computation of the individual components. This is
 reflected in later formalisms about concurrent and distributed systems
 like process algebras of various forms with the most important
 representative being pi-calculus. Being a calculus it follows from the
-tradtion of lamba-calculus and its operational semantics is defined in
+tradition of lambda-calculus and its operational semantics is defined in
 terms of syntax manipulation (rewrite/reduction rules). While in
 lambda-calculus(model of individual process) the reduction rules are
 about function application- calculation-, the rewrite rules for
@@ -83,7 +87,7 @@ become very popular and is almost the de facto approach to time
 simulation of biological systems. So this is an attempt to fill in the
 gap with mathematical methods and mathematical models.
 
-But since Computer Science has developed appproaches to specifically
+But since Computer Science has developed approaches to specifically
 tackle the complexity of systems of interacting components, can we use
 those practises to talk about biological systems more formally? In
 principle, yes. The computer science formalisms like process algebras,
@@ -145,13 +149,13 @@ have a graphical syntax instead of textual syntax. Despite the fact that they
 lack one of the defining characteristics of process calculi they do have 
 formal operational semantics but since they don't have a textual 
 representation these are not rewrite/reduction rules but rather
-operations on the network/graph. Another diffrence with more traditional
+operations on the network/graph. Another difference with more traditional
 process algebras is that compositionality is defined explicitly whereas in more
 traditional process algebras this is done implicitly through the definition of the behaviour
 of the individual constituent components. This makes them closer to familiar chemical
 stoichiometry reaction equations. This fact along with their graphical notation and the 
 many tools for their execution, visualisation, and analysis makes them very intuitive and an
-attractive choicefor modelling. In particular here we use a specific
+attractive choice for modelling biochemical systems in particular. Here we use a specific
 variant of Petri Nets called Stochastic Petri Nets which gives some
 extra modelling capabilities. In the next section we will give a short
 background on Petri Nets and the biology and biochemistry
@@ -161,7 +165,7 @@ using available data. A description of the system in a variant of pi-calculus is
 also given for comparison. In Section 4 an extended version of the model is given
 including some regulatory constructs of the system and finally the last section
 includes a critical evaluation of the use of Petri Nets and in extension other 
-process algebras and a disucssion on future perspectives.
+process algebras and a discussion on future perspectives.
 
 End of introduction.
 
@@ -181,32 +185,37 @@ semantics with the addition of delay.
 
 #### Chemical example
 
-## FA metabolism basics Explain the system that we try to model from
-Acetyl-CoA to FAs.
+## FA metabolism basics 
+Explain the system that we try to model from
+Acetyl-CoA to FAs. Pictures etc.
 
 
 ## Basic Petri Net model
 
-#### Original model and reduced order model Assumptions made for
+#### Original model and reduced order model 
+Assumptions made for
 reduced order model etc.
 
-#### Reduced order model as a series of Bernoulli trials # The Data
+#### Reduced order model as a series of Bernoulli trials 
 
-##### Point estimation of parameters From Data to point estimates of
-the success probabilities.  ##### An exact likelihood function and
-parameter distributions Explain the likelihood function for the system
+##### Point estimation of parameters 
+From Data to point estimates of
+the success probabilities.  
+
+##### An exact likelihood function and parameter distributions 
+Explain the likelihood function for the system
 and give results of MCMC for success probabilities.
 
-##### Flow parameters calculation(lambdas) Stoichiometry
+##### Flow parameters calculation(lambdas) 
+Stoichiometry
 considerations etc.
 
-
-##### A stochastic pi-calculus version of the basic model Difference
+##### A stochastic pi-calculus version of the basic model 
+Difference
 with standard pi-calculus, quantitative semantics.
 
 
 ## Extended Petri Net model (control AMPK)
-
 Explain control mechanisms. Give references to literature Give the
 model and explain
 
@@ -214,9 +223,9 @@ model and explain
 
 ## Discussion
 
-Is Petri Nets a succesfull/useful formalism for talking about
+Is Petri Nets a successful/useful formalism for talking about
 metabolism?  Advantages/Disadvantages (maybe compared to stoch
-pi-calculus)
+pi-calculus and other process algebras or rule-based systems)
 
 The Future: a formal modeling language for multi-level modeling of
 biological systems which will support multi-level abstractions and the
@@ -230,5 +239,5 @@ think computational models instead of mathematical models would be a
 better choice(more intuitive, better tools)
 
 Something that will combine the advantages of reaction-centric graphical languages like Petri Nets and 
-the advantages of process-algebras maybe?
+the component-centric process-algebras maybe?
 
