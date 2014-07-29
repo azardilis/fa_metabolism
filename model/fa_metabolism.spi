@@ -1,21 +1,24 @@
-directive sample 5000.
+directive sample 1000.
 
-directive plot C6(); C8(); C10(); C12(); C14(); C16()
+(* directive plot C6(); C8(); C10(); C12(); C14(); C16() *)
 
-val store_rate_6 = 0.5
-val store_rate_8 = 0.5
-val store_rate_10 = 0.5
-val store_rate_12= 0.5
-val store_rate_14 = 0.5
-val mal_rate = 0.005
+val store_rate_12= 0.0003000656
+val store_rate_14 = 0.0400323889
+val store_rate_16 = 0.8235217126
+val store_rate_18 = 0.9888339514
+val store_rate_20 = 0.7785977860
+val mal_rate = 0.006
 val acyl_rate = 0.001
 
-new form6@1.0:chan
-new form8@1.0:chan
-new form10@1.0:chan
+new form6@1.0: chan
+new form8@1.0: chan
+new form10@1.0: chan
 new form12@1.0: chan
-new form14@1.0: chan
-new form16@1.0: chan
+new form14@0.9996999344: chan
+new form16@0.95996761: chan
+new form18@0.17647829: chan
+new form20@0.01116605: chan
+new form22@0.22140221: chan
 
 (* 
 Acetyl-CoA can either become Malonyl-CoA or Acyl-CoA
@@ -41,21 +44,9 @@ and Malonyl_CoA() =
 	or !form16; ()
 )
 and Acyl_CoA() = ?form6; Acyl_CoA_6()
-and Acyl_CoA_6() = 
-(
-	do ?form8; Acyl_CoA_8()
-	or delay@store_rate_6; C6()
-)
-and Acyl_CoA_8() = 
-(
-	do ?form10; Acyl_CoA_10()
-	or delay@store_rate_8; C8()
-)
-and Acyl_CoA_10() = 
-(
-	do ?form12; Acyl_CoA_12()
-	or delay@store_rate_10; C10()
-)
+and Acyl_CoA_6() = ?form8; Acyl_CoA_8()
+and Acyl_CoA_8() = ?form10; Acyl_CoA_10()
+and Acyl_CoA_10() = ?form12; Acyl_CoA_12()
 and Acyl_CoA_12() = 
 (
 	do ?form14; Acyl_CoA_14()
@@ -66,16 +57,34 @@ and Acyl_CoA_14() =
 	do ?form16; Acyl_CoA_16()
 	or delay@store_rate_14; C14()
 )
-and Acyl_CoA_16() = delay@0.0; C16()
-and C6() = ()
-and C8() = ()
-and C10() = ()
+and Acyl_CoA_16() = 
+(
+	do ?form18; Acyl_CoA_18()
+	or delay@store_rate_16; C16()
+)
+and Acyl_CoA_18() = 
+(
+	do ?form20; Acyl_CoA_20()
+	or delay@store_rate_18; C18()
+)
+and Acyl_CoA_20() = 
+(
+	do ?form22; Acyl_CoA_22()
+	or delay@store_rate_20; C20()
+)
+and Acyl_CoA_22() = delay@0.0001; C22()
 and C12() = ()
 and C14() = ()
 and C16() = ()
+and C18() = ()
+and C20() = ()
+and C22() = ()
+
+run(200 of Acetyl_CoA())
 
 
-run(100 of Acetyl_CoA())
+
+
 
 
 
