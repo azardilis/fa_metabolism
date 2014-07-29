@@ -9,7 +9,6 @@ Give a general context of our work, define the goals, and outline structure cont
 
 Comment:(I think this section needs some concrete examples and I will also have to add some references for the 
 modelling methodologies I mentioned. For example Regev for the use of pi-calculus etc.)
-
 Perhaps the huge complexity of biological systems has
 led Biology as a discipline to focus on understanding the inner
 workings of their components instead of understanding the systems a
@@ -28,16 +27,18 @@ behaviour of the system.
 Computer Science, although a fundamentally different discipline than
 Biology, has gone through a similar trend. The focus at the start of
 computing was on the computation of individual information processing
-entities. This is reflected in the models of computation that inspired
+entities. This is reflected in the abstract models of computation that inspired
 early computers and programming languages like Turing Machines and
 lambda calculus. These formalisms describe computation in a different
 way, lambda calculus as rewrite/reduction rules in a calculus and
 Turing Machines as state manipulation of an Abstract Machine. Despite
 these differences they both capture computation of single information
-processing entities formally and are equivalent in expressive power
+processing entities formally in the simplest way and are equivalent in expressive power
 (see Church-Turing thesis). This notion of computation is more
 formally called operational semantics of a formal system as they
-describe how they operate or behave over 'time'. As computing and
+describe how they operate or behave over 'time'. 
+For $$\lambda$$-calculus
+As computing and
 technology grew over time the focus moved from single information
 processing entities to systems of tens, hundreds, and even more (see
 Internet, clusters) of information processing entities. Then the
@@ -149,7 +150,10 @@ have a graphical syntax instead of textual syntax. Despite the fact that they
 lack one of the defining characteristics of process calculi they do have 
 formal operational semantics but since they don't have a textual 
 representation these are not rewrite/reduction rules but rather
-operations on the network/graph. Another difference with more traditional
+operations on the network/graph. In a way the dichotomy between state manipulation and term rewriting formal systems has
+continued into the concurrent world with more traditional process algebras being closer in their operation to 
+lambda-calculus and Petri Nets being closer to Turing Machines since they're both related to automata and state 
+manipulation. Another difference with more traditional
 process algebras is that compositionality is defined explicitly whereas in more
 traditional process algebras this is done implicitly through the definition of the behaviour
 of the individual constituent components. This makes them closer to familiar chemical
@@ -178,6 +182,8 @@ advantages -> intuitive, closely resembles chemical notation but more formal, ge
 #### Semantics 
 Operational semantics formally both in terms of graph
 changes.
+
+
 
 #### Stochastic Petri Net extension 
 Differences in the operation
@@ -240,4 +246,84 @@ better choice(more intuitive, better tools)
 
 Something that will combine the advantages of reaction-centric graphical languages like Petri Nets and 
 the component-centric process-algebras maybe?
+
+
+
+
+
+
+
+
+Introduction
+--------------
+
+
+# Topics
+
+- Biology has moved its focus from individual components to systems of interacting components
+- No formal methods were needed when working on the invidual components so biology didn't
+develop a tradition. However apparent need for a different approach when systems grow in size
+to be able to handle the complexity
+- But the fact that biology has no tradition meant that System Biology has tried to fill in
+the gap by bringing in practises from other more traditionally formal practises
+- Early attempts were schematic representations trying to capture the interactions and
+dependencies between the components
+- However very static and a dynamic picture is needed.
+
+Mathematical models in biology and Flux Balance analysis
+Bottom up and top down
+From the time of newton and with the success it had in Physic dynamic systems theory has been
+imported into other disciplines and Biology was one of them. Dynamic systems theory is a
+theory that is able to capture the interactions between continuous quantities
+
+Explain from theory to FBA with an example
+
+Outline limitations of FBA
+
+
+The challenge of lipid metabolism
+Lipid metabolism is important because blah blah diseases blah
+
+Deterministic not very suited to this problem
+
+1 solution stochastic modelling Markov Jump processes,
+
+Here we use an alternative from the Computer Science world Petri Nets
+Stress that language is important!! we're computer scientists here
+
+Computational Models in Biology
+
+Do the analogy between compsci and biology
+
+Do some historical review about when the metaphor was first made etc
+Fontana. maybe this is a more suited formalism?
+
+Dichotomy continues in the distributed formalisms: most of them continue on the
+l-calculus tradition -> pi-calculus, rule based systems
+
+and some attempts to have the best of both worlds
+Spim for example defines a graphical language and an abstract machine for the execution
+of stochastic pi-calculus
+
+Petri Nets are graphical
+intuitive because no major conceptual departure from reaction equations
+they have formal operational semantics nonetheless and cool tools to animate them
+
+
+Methods
+--------
+
+# Topics
+
+
+
+
+
+
+
+
+
+
+
+
 
