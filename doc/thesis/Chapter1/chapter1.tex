@@ -1,3 +1,4 @@
+
 %*****************************************************************************************
 %*********************************** First Chapter ***************************************
 %*****************************************************************************************
@@ -88,14 +89,148 @@ in other state variables and even themselves thus capturing the
 interaction element. Since the time of Newton and classical mechanics
 ,where these ideas originated, the toolbox of dynamical systems theory
 has grown to include techniques for qualitative understanding of
-system without the need to solve them either numerically or analytically.
+system without the need to solve them either numerically or
+analytically. 
 
+In biochemistry each species in the system is represented by its 
+concentration leading to a differential equation for each species. The
+rate of change of the concentration of a species is described in terms
+of in flows- increasing the rate of change(production)- and out flows
+- decreasing the rate of change(degradation). These flows can be
+dependent on the concentrations of other variables(species) which
+participate in the same biochemical reactions. Consider for example a
+system with $n$ components which we can group into the global state of
+the system $\mathbf{x} = (x_1, x_2, \dots x_n)$. All the reactions
+that take place in the system change, in discrete levels, the numbers
+of molecules of the species:
 
+\begin{align*}
+\mathbf{x} &\overset{r_1(\mathbf{x})}{\longrightarrow} \mathbf{x} +
+\mathbf{\delta_1}\\
+\mathbf{x} &\overset{r_2(\mathbf{x})}{\longrightarrow} \mathbf{x} +
+\mathbf{\delta_2}\\
+\vdots \\
+\mathbf{x} &\overset{r_m(\mathbf{x})}{\longrightarrow} \mathbf{x} +
+\mathbf{\delta_m}
+\end{align*}
+So for every reaction we have one such rule and $\delta_k$ are the
+discrete levels by which the species change for every reaction. Each
+reaction has an associated and possible state dependent rate $r_k(x)$
+which is the expected number of times it takes place in a time
+unit. The in-flows are the positive deltas and out-flows the negative
+ones. The differential equation describing the evolution of the average numbers
+of  species $i$ is then the sum of the in
+and out flows over all reactions in the system:
+
+\begin{equation*}
+\frac{dx_i}{dt} = \sum_{m} r_m(\mathbf{x})\delta_{mi}
+\end{equation*}
+
+Usually this formulation of the problem leads to integration with a
+numerical ODE solver of the above system to get the dynamic behaviour
+of the system. The usual problem mathematical biologists face is that
+the reaction rate function(the $r_k(\mathbf{x})$s) contain parameter
+constants that are not usually known. 
+%Maybe write another problem here
+
+In the contex of metabolic systems however there is a mathematical technique however, called Flux Balance
+Analysis, that is used to compute these flows without explicit
+knowledge of these parameters by making some assumptions about the
+system to simplify the problem. If we assume that that metabolites
+cannot accumulate within the cell and their levels are more or less
+balanced then the system is at steady-state. The steady-state assumption means that the average positive flux-defined as the sum of
+all the in-flows- and the average negative flux-defined as the sum of
+all the out-flows- that means that all the for every species its rate
+of change, which is the sum of all flows(negative and
+positive), is equal to 0. Solving for the fluxes leads to a linear equation for each
+species. For a more concise notation all the $\delta_{nm}$ are
+packaged into a matrix $\mathbf{S}$, traditionally called the Stoichiometric
+matrix and the fluxes in a vector $\mathbf{r}$. Then the problem
+becomes solving the system $\mathbf{Sr} = \mathbf{0}$ to calculate the
+fluxes $\mathbf{r}$ through our system of interest. The only problem
+with this formulation of the problem is that the system is
+underdetermined since usually the number of reactions is higher than
+the number of species. To solve this the solution space is constrained
+with the use of an objective function which leads to a linear
+programming problem formulation which is easily solvable.
+
+Flux balance analysis is a very powerful technique since it allows us
+to overcome the problem of the rate parameters and calculate the
+fluxes through the system in a computationally efficient way. It is
+not without its limitations though.
+
+%Say stuff about the limitations
 \section{Challenge of lipid metabolism}
+%I need to motivate stochastic simulations better here and also write
+%a bit more(with references) about why lipid metabolism is important
 
+Lipid metabolism is particularly important topic since it is linked
+with several disorders and diseases. The fact that it is has
+complicated regulatory mechanisms has made getting a systems level
+understaning of it very important. In fact many system biology
+attempts have been made to get even a genome-wide picture of metabolism in
+mammals or other organisms. We think that lipid metabolism Systems
+Biology modelling might benefit from a different type of approach than
+the deterministic picture offered by dynamic systems theory and
+consequently FBA. The iterative nature of many of its subsystems, like
+the Fatty Acid Synthesis/Elongation system which we examine in this
+study, along with the need to understand more local regulatory
+mechanims calls for a reaction-centric view of the system.
 
+A biochemical system, like the one given in the previous section,
+consisting of a number of reactions that alter the integer numbers of
+molecules of the species describes a random process and a Continuous
+Time Markov Chain in particular. The differential equations we used as
+a basis for FBA are a just
+deterministic view of the average behaviour. The dynamics of the
+system can be set in motion inside a computer using the Gillespie
+exact simulation algorithm which creates sample
+time-series. Statistical information like the strenth of the
+fluctuations (normalised variance) can be computed by collecting a lot
+of these traces.
+
+In this study we use an alternative more formal language with an
+intuitive graphical notation borrowed from the
+world of Computer Science to talk about these random
+processes that come up from this reaction-centric view of biochemical systems.
 
 \section{Computational models in Biology}
+Computer Science, although a fundamentally different discipline than
+Biology, has gone through a similar trend. The focus at the start of
+computing was on the computation of individual information processing
+entities. This is reflected in the abstract models of computation that inspired
+early computers and programming languages like Turing Machines and
+lambda calculus. These formalisms describe computation in a different
+way, lambda calculus as rewrite/reduction rules in a calculus and
+Turing Machines as state manipulation of an Abstract Machine. Despite
+these differences they both capture computation of single information
+processing entities formally in the simplest way and are equivalent in expressive power
+(see Church-Turing thesis). This notion of computation is more
+formally called operational semantics of a formal system as they
+describe how they operate or behave over 'time'. 
+
+As computing and
+technology grew over time the focus moved from single information
+processing entities to systems of tens, hundreds, and even more (see
+Internet, clusters) of information processing entities. Then the
+realisation settled in that the most important aspect of those systems
+is computation but in a much more broader sense than mere
+calculation(which was the focus in earlier computer systems). This
+broader notion of computation encompasses the interaction between the
+computing/information processing components and in fact this
+interaction part of computation is much more important than the
+calculation/computation of the individual components. This is
+reflected in later formalisms about concurrent and distributed systems
+like process algebras of various forms with the most important
+representative being pi-calculus. Being a calculus it follows from the
+tradition of lambda-calculus and its operational semantics is defined in
+terms of syntax manipulation (rewrite/reduction rules). While in
+lambda-calculus(model of individual process) the reduction rules are
+about function application- calculation-, the rewrite rules for
+pi-calculus are about message passing in shared channels between
+processes- interaction.
+
+
 
 
 \section{Outline of work}
