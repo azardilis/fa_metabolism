@@ -11,52 +11,87 @@
     \graphicspath{{Chapter1/Figs/Vector/}{Chapter1/Figs/}}
 \fi
 
+Relatively recent technological advances which led to an accumulation
+of a wealth of data that have made Biology as a
+discipline shift some of its efforts from understanding individual
+components to understanding systems of interacting components. A
+systems level understanding of biological system is really important
+as it is the distributed information processing that happens at the
+systems level that gives rise to phenotype and the macroscopic
+behaviour of cells to sustain life. Biology has not traditionally used
+any formal methods but as the systems under investigation grew in size
+some more formal approaches were needed. System Biology is a relatively
+new field that tries to fill the gap by bringing practises from
+traditionally more formal disciplines like Mathematics, Physics, and
+Computer Science into the study of biological systems.
 
-A systems level understanding of biology has always been in the back
-of the minds of biologists since it is this distributed information
-processing that ultimately gives rise to phenotype and macroscopic
-behaviour to sustain life. Perhaps the apparent great complexity at
-which these systems operate or the lack of relevant experimental data
-has made Biology as a discipline to focus its efforts on the
-understanding of the information processing capabilities and inner
-workings of the individual constituent components of these
-systems. Relatively recent technological advances however have led to
-an accumulation of a wealth of data sheding light into the interactions
-between components, their dependencies and the constraints these
-impose. While understanding the individual components, genes,
-proteins, is still important these new data sources have led to a shift
-of focus to the study of biological systems in their entirety. In
-doing so we realised that the most important aspect of these systems
-is not the inner workings of the individual components but rather the
-interactions between them.
+In the area of metabolism we have gone from a study of the properties
+of single enzymes and metabolites to the study of the behaviour of
+entire metabolic pathways and even entire genome-wide metabolisms
+of mammalian and model organisms. This accumulated knowledge about the
+interconnections in and between metabolic pathways is deposited in
+large online databases that integrate informations from various
+sources. While these diagrams are a rich source of information
+since metabolism is a highly dynamic process sometimes a more dynamic
+picture is needed. Mathematical techniques like Flux Balance analysis
+originating from Dynamical Systems Theory are particularly popular in
+the analysis of the flows in and out of metabolic pathways.
 
-Traditionally biology has not used any formal methods to explain
-things and perhaps that was not needed when we were dealing with
-single entities. As the systems grew in size it became apparent that
-some change in direction was needed to handle the increased complexity
-and get a coherent story. Systems Biology tries to fill this gap by
-bringing in practises from other more traditionally formal fields like
-Mathematics, Physics, Computer Science(\citet{kitano2002systems, ideker2001new}).
+We have recently been able to pinpoint the biochemical reasons behind
+different diseases in the loss of balance between anabolic and catabolic
+activities in cells. These activities are known to be tightly
+regulated to avoid excess production and accumulation of metabolites
+which can be the reasons behind observed disorders. The products and
+intermediaries of lipid metabolism are central in many metabolic
+disorders and diseases. While Flux Balance
+Analysis is of great importance in the study of large metabolic
+networks it is not so suited in studying more local metabolic
+processes and their crucial regulatory mechanisms. 
 
-Early attempts to capture the more complex picture painted by the
-increase in the number of components were to use static diagrams to
-capture the interactions and dependencies between them. These diagrams
-have been widely used in Biochemistry and particularly in metabolism
-since the species conversion process that takes place in metabolic
-pathways can easily be seen as a path or paths through these diagrams going from
-one metabolite to the next(see for example
-Figure~\ref{fig:fa_synthesis_pathway}). Now these diagrams are very important and
-they contain important knowledge about our understanding of the
-operations of biological systems. There exist databases that contain our current
-understanding of a particular system annotated with information from
-different sources and these are particularly popular for metabolic
-pathways (see \citet{kanehisa2000kegg},
-\citet{pharkya2003review}). These static diagrams are an example of
-bottoms-up approach in System Biology which is a data-driven process,
-starting from some large experimental datasets we extract biological
-information. This is in contrast to the top-down approach where
-starting from detailed knowledge about a system we try to build a
-mechanistic explanation of it(\citet{schneider2013understanding}). 
+Here we propose an alternative reaction-centric view of metabolic
+systems and lipid metabolism in particular which we think will be an important tool in the mechanistic
+characterisation of crucial local metabolic processes and their
+regulatory mechanisms. We also propose the formal language of Petri
+Nets, which has been successfully used before in biochemical networks,
+as a potential tool to capture this alternative reaction-centric view
+of lipid metabolism. The goals and the work done towards this project were therefore two-fold:
+Firstly create a reaction-centric model of the Fatty Acid(FA)
+synthesis/elongation process which is an important part of lipid
+metabolism and secondly assess the formal modelling language of Petri
+Nets as a potential tool to capture this view. Since part of the work
+done was about modelling methodology and since we noticed a more
+general trend towards executable formal models in biology we also
+present here an alternative version of the model in the process
+algebra of  pi-calculus in an attempt to contrast the two formal
+modeling approaches: net models and process algebra models.
+ 
+In this introduction I start by introducing the currently most popular
+methodology for the description of metabolic pathways(FBA), 
+outline the biological importance of lipid metabolism and the
+motivation for a reaction-centric view, and finally I try to place
+Petri Nets and pi-calculus(the two methodologies used) in the formal
+distributed computing modelling language world.
+
+\section{Dynamical systems theory and Flux Balance Analysis}
+Systems Biology attempts to master the complexity and understand metabolic
+pathways and any biological system by usually contructing
+models. There are two types of models based on their construction
+method. Bottom-up models are constructed by extracting biological
+knowledge from experimental datasets. This category includes for
+example the diagrammatic means of capturing the interconnected
+structure of metabolic pathwayw. Top-down models on the other hand
+start from a detailed knowledge of the system to get a mechanistic
+model of the system.
+
+Early attemps to capture the interactions and dependencies between
+components were made with bottom-up models which resulted in large diagrams that
+capture the conversion processes happending inside metabolic pathways. While these
+diagrams are important and are a useful represntation of our knowledge
+about metabolism they lack the dynamic nature which is crucial in a
+systems level understanding of a system which should not only include
+the connections between the components but also how these components
+interact over time, how their behaviour is
+controlled, and how they respond to external stimuli.
 
 \begin{figure}[htbp!] 
 \centering    
@@ -70,16 +105,6 @@ mechanistic explanation of it(\citet{schneider2013understanding}).
 \label{fig:fa_synthesis_pathway}
 \end{figure}
 
-Despite the importance of the bottom-up static diagrams they paint a
-very static picture of the system which is not enough to gain a full
-understanding of the system. What is often needed is a dynamic picture
-of the system with a top-down mechanistic model to observe things that
-are not possible from a static
-picture like control mechanisms, dynamic interactions between
-components over time, and dynamic responses to external stimuli.
-
-
-\section{Dynamical systems theory and Flux Balance Analysis}
 This need to look into dynamic behaviour led to Dynamical System
 theory which based on its success in Physics has found its way in many
 other fields. Dynamical system theory captures the relationship
@@ -131,7 +156,6 @@ numerical ODE solver of the above system to get the dynamic behaviour
 of the system. The usual problem mathematical biologists face is that
 the reaction rate function(the $r_k(\mathbf{x})$s) contain parameter
 constants that are not usually known. 
-%Maybe write another problem here
 
 In the contex of metabolic systems however there is a mathematical technique however, called Flux Balance
 Analysis, that is used to compute these flows without explicit
@@ -140,30 +164,39 @@ system to simplify the problem. If we assume that that metabolites
 cannot accumulate within the cell and their levels are more or less
 balanced then the system is at steady-state. The steady-state assumption means that the average positive flux-defined as the sum of
 all the in-flows- and the average negative flux-defined as the sum of
-all the out-flows- that means that all the for every species its rate
-of change, which is the sum of all flows(negative and
+all the out-flows- are equal which in turn means that the rate of
+change for every species , defined as the sum of all flows(negative and
 positive), is equal to 0. Solving for the fluxes leads to a linear equation for each
 species. For a more concise notation all the $\delta_{nm}$ are
 packaged into a matrix $\mathbf{S}$, traditionally called the Stoichiometric
-matrix and the fluxes in a vector $\mathbf{r}$. Then the problem
+matrix, and the fluxes in a vector $\mathbf{r}$. Then the problem
 becomes solving the system $\mathbf{Sr} = \mathbf{0}$ to calculate the
 fluxes $\mathbf{r}$ through our system of interest. The only problem
 with this formulation of the problem is that the system is
 underdetermined since usually the number of reactions is higher than
 the number of species. To solve this the solution space is constrained
 with the use of an objective function which leads to a linear
-programming problem formulation which is easily solvable.
+programming problem formulation which is easily solvable. An small
+contrived example to illustrate the above process is given in
+Figure~\ref{fig:fba}.
+
+\begin{figure}[htbp!] 
+\centering    
+\includegraphics[width=1.0\textwidth]{fba}
+\caption[Flux Balance analysis]{A small example how starting from a
+  bottom-up model like a pathway from KEGG we can go on to apply FBA
+  and calculate the fluxes through our pathway}
+\label{fig:fba}
+\end{figure}
 
 Flux balance analysis is a very powerful technique since it allows us
-to overcome the problem of the rate parameters and calculate the
+to overcome the problem of the rate function parameters and calculate the
 fluxes through the system in a computationally efficient way. It is
 not without its limitations though.
 
 %Say stuff about the limitations
 \section{Challenge of lipid metabolism}
-%I need to motivate stochastic simulations better here and also write
-%a bit more(with references) about why lipid metabolism is important
-
+% This first paragraph needs more detail!!
 Lipid metabolism is particularly important topic since it is linked
 with several disorders and diseases. The fact that it is has
 complicated regulatory mechanisms has made getting a systems level
@@ -189,48 +222,104 @@ time-series. Statistical information like the strenth of the
 fluctuations (normalised variance) can be computed by collecting a lot
 of these traces.
 
-In this study we use an alternative more formal language with an
-intuitive graphical notation borrowed from the
-world of Computer Science to talk about these random
-processes that come up from this reaction-centric view of biochemical systems.
+In this study we propose Petri Nets as an alternative language to capture this
+reaction-centric view which we think is more expressive than the
+standard Markov processes formulation. While Petri Nets and their
+evolution through their formal operational semantics also described a
+CTMC and are thus equivalent in power with the standard Markov jump
+processes we believe that they posses some characteristics(see next
+section and Methods) that makes them useful in the analysis of the
+reaction-centric view of lipid metabolism. Language is important not
+only because a syntax is needed to define our models in but also because
+the notation we use is our tool of thought and the use of the correct
+language for thinking about a problem can enhance our understadnding
+and ultimately help us solving it. That is why we have more
+than one high-level programming language despite the fact that all of
+them are Turing complete and therefore have the ability to express all
+computations.
+
+In the next section we try to place Petri Nets, the main modelling
+language used, and pi-calculus, the alternative used as a way to
+contrast net and process algebras models, in the spectra of formal
+modelling methodologies for distributed computation.
 
 \section{Computational models in Biology}
 Computer Science, although a fundamentally different discipline than
-Biology, has gone through a similar trend. The focus at the start of
-computing was on the computation of individual information processing
-entities. This is reflected in the abstract models of computation that inspired
-early computers and programming languages like Turing Machines and
-lambda calculus. These formalisms describe computation in a different
-way, lambda calculus as rewrite/reduction rules in a calculus and
-Turing Machines as state manipulation of an Abstract Machine. Despite
-these differences they both capture computation of single information
-processing entities formally in the simplest way and are equivalent in expressive power
-(see Church-Turing thesis). This notion of computation is more
-formally called operational semantics of a formal system as they
-describe how they operate or behave over 'time'. 
+Biology, has undergone a similar transformation in its focus from
+single information processing entities to systems of interacting
+entities(see the Internet, clusters). The term computation at the
+distributed level is now broader; it not only describes mere
+calculation but it also includes the interaction between
+components. This change in the term computation can be seen through
+the models we use to capture the notion of computation. At the early
+days of computing(even before actual electronic computers) the models
+of computation included lambda-calculus and Turing Machines. These
+early formalisms capture computation differently, Turing Machine as
+global state transitions in an Abstract Machine and lambda-calculus
+as reduction rules in a calculus, but they are effectively equivalent
+in expressive power(see Church-Turing thesis). As computer systems
+grew there was an interest for similar
+minimalistic languages to express distributed computation. Some
+formalisms that were invented during that period were
+\citet{milner1980calculus} Calculus of Communicating Systems,
+\citet{lafont1989interaction} Interaction nets,
+\citet{milner1992calculus} pi-calculus, and Petri
+Nets(\citet{murata1989petri}). 
 
-As computing and
-technology grew over time the focus moved from single information
-processing entities to systems of tens, hundreds, and even more (see
-Internet, clusters) of information processing entities. Then the
-realisation settled in that the most important aspect of those systems
-is computation but in a much more broader sense than mere
-calculation(which was the focus in earlier computer systems). This
-broader notion of computation encompasses the interaction between the
-computing/information processing components and in fact this
-interaction part of computation is much more important than the
-calculation/computation of the individual components. This is
-reflected in later formalisms about concurrent and distributed systems
-like process algebras of various forms with the most important
-representative being pi-calculus. Being a calculus it follows from the
-tradition of lambda-calculus and its operational semantics is defined in
-terms of syntax manipulation (rewrite/reduction rules). While in
-lambda-calculus(model of individual process) the reduction rules are
-about function application- calculation-, the rewrite rules for
-pi-calculus are about message passing in shared channels between
-processes- interaction.
+The analogy between distributed computer systems and biochemical
+systems was made explicit by \citet{berry1989chemical} and the
+Chemical Abstract Machine. The modelling langugages used for
+distributed computation are applicalbe in biological systems since
+they both a high number of concurrent components with dependencies
+introducing non-determinism. \citet{fontana1996barrier} went as far as
+to propose pi-calculus as an alternative to dynamical systems
+theory since he considered a calculus of objects that can change and their
+interactions more appropriate for describing biochemical systems than a calculus of continuous
+interacting quantities. \citet{priami2001application} went on to use a
+stochastic version of pi-calculus to describe a biochemical systems
+and from then on other Computer Science inspired formalisms came up like
+\citet{cardelli2005brane} with Brane-calculi, \citet{danos2004formal}
+with kappa, and
+\citet{ciocchetta2009bio} with Bio-PEPA. 
 
+Petri Nets lean towards the automata and Turing Machines style of
+computation because their operational semantics are in terms of state
+transitions from a distributed global state. They have a very intuitive
+graphical notation and concurrency,
+non-determinism, and the causal independencies between events is
+inherent in their structure. They
+also have a very natural correspondence to biochemical reactions and
+in their basic form have been used to capture qualitative properties
+of biochemical systems. In this study we use the stochastic version of
+Petri Nets which explicitly models time to describe and quantitatively
+analyse the
+reaction-centric view of the FA elongation and synthesis
+process. 
 
-
+Process algebras, which pi-calculus is an example of, on the other
+hand define syntax to specify the behaviour and state transitions of the individual
+components of the system independently therefore reactions and
+compositionality are not explicitly captured. In this study I
+particularly use Stochastic Pi Machine (SPiM) which is a programming
+language derived from stochastic pi-calculus but extended to include
+operational semantics for execution on an Abstract Machine and also a
+formal graphical notation. The fact that this variant shares
+characteristics from both net model and process algebras approached
+makes it an interesting case-study.
 
 \section{Outline of work}
+To summarise the main aim of this study was to assess the
+applicability of the Petri net formal language to capture a
+reaction-centric view of lipid metabolism by producing a model of the 
+Fatty Acid biosyntesis/elongation process. For completeness we also
+created a stochastic pi-calculus version of the model to contrast the
+two methodologies as part of the more general turn towards executable
+formal models in Biology. An extended version of the basic process is
+also given including part of its regulatory mechanisms.
+
+In chapter~\ref{chap:methods} an overview of the methods used in
+modelling the process is given, namely Petri Nets and stochastic
+pi-calculus. In section~\ref{chap:work} the basic and extended model
+are presented along with their tuning with available metabolomics
+data. Finally in section~\ref{chap:discussion} 
+
