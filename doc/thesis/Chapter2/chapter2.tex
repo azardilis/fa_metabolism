@@ -3,14 +3,14 @@
 %*****************************************************************************************
 
 \chapter{Methods}
-
+\label{chap:methods}
 \ifpdf
     \graphicspath{{Chapter2/Figs/Raster/}{Chapter2/Figs/PDF/}{Chapter2/Figs/}}
 \else
     \graphicspath{{Chapter2/Figs/Vector/}{Chapter2/Figs/}}
 \fi
 
-
+\section{Data sources}
 
 \section{Petri Nets}
 \subsection{Syntax and Semantics of Basic nets}
@@ -79,7 +79,7 @@ With this new variant of Petri Nets we maintain the non-determinism through the 
 \subsection{Application to Biochemistry}
 The correspondence between a biochemical system and a Stochastic Petri Net is as follows: the chemical species of the system become places, reactions become transitions and their rates the rates of the transitions, and the stoichiometry of the reactions is represented in the \textit{pre} and \textit{post} maps. This is a very natural correspondence between chemical reactions and Petri Nets. In fact the standard notation for chemical notation is itself a process algebra albeit not a very formal one. So for example consider a made-up reaction that takes 2 molecules of A and 3 molecules of B and produces 5 molecules of C:
 \begin{equation*}
-2A + 3B \overset{r_k}{\longrightarrow} 5C
+A + B \overset{r_1}{\longrightarrow} 2C
 \end{equation*}
 
 This is an event, a reaction with rate $k$, which tells us how the state of the system changes but although implicitly we know the conditions for it to take place they are not formally captured by the informal process algebra of chemical reactions as defined by the standard arrow notation. A Petri Net representation of this reaction however captures the reaction more formally:
