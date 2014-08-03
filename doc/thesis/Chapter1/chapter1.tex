@@ -23,7 +23,7 @@ any formal methods but as the systems under investigation grew in size
 some more formal approaches were needed. System Biology is a relatively
 new field that tries to fill the gap by bringing practises from
 traditionally more formal disciplines like Mathematics, Physics, and
-Computer Science into the study of biological systems.
+Computer Science into the study of biological systems \cite [] {ideker2001new}.
 
 In the area of metabolism we have gone from a study of the properties
 of single enzymes and metabolites to the study of the behaviour of
@@ -45,10 +45,10 @@ which can be the reasons behind observed disorders. The products and
 intermediaries of lipid metabolism are central in many metabolic
 disorders and diseases. While Flux Balance
 Analysis is of great importance in the study of large metabolic
-networks it is not so suited in studying more local metabolic
-processes and their crucial regulatory mechanisms. 
+networks it is not so suited in studying more local probabilistic metabolic
+processes and their crucial regulatory mechanisms.
 
-Here we propose an alternative reaction-centric view of metabolic
+Here we propose an alternative reaction-centric and stochastic view of metabolic
 systems and lipid metabolism in particular which we think will be an important tool in the mechanistic
 characterisation of crucial local metabolic processes and their
 regulatory mechanisms. We also propose the formal language of Petri
@@ -60,16 +60,17 @@ synthesis/elongation process which is an important part of lipid
 metabolism and secondly assess the formal modelling language of Petri
 Nets as a potential tool to capture this view. Since part of the work
 done was about modelling methodology and since we noticed a more
-general trend towards executable formal models in biology we also
+general trend towards executable formal models in biology \cite [] {fisher2007executable} we also
 present here an alternative version of the model in the process
 algebra of  pi-calculus in an attempt to contrast the two formal
 modeling approaches: net models and process algebra models.
- 
+
 In this introduction I start by introducing the currently most popular
-methodology for the description of metabolic pathways(FBA), 
+methodology for the description of metabolic pathways(FBA),
 outline the biological importance of lipid metabolism and the
 motivation for a reaction-centric view, and finally I try to place
-Petri Nets and pi-calculus(the two methodologies used) in the formal
+Petri Nets and pi-calculus(the two methodologies used) in the spectrum
+of formal
 distributed computing modelling language world.
 
 \section{Dynamical systems theory and Flux Balance Analysis}
@@ -81,7 +82,7 @@ knowledge from experimental datasets. This category includes for
 example the diagrammatic means of capturing the interconnected
 structure of metabolic pathwayw. Top-down models on the other hand
 start from a detailed knowledge of the system to get a mechanistic
-model of the system.
+model of the system \cite [] {schneider2013understanding}.
 
 Early attemps to capture the interactions and dependencies between
 components were made with bottom-up models which resulted in large diagrams that
@@ -91,10 +92,10 @@ about metabolism they lack the dynamic nature which is crucial in a
 systems level understanding of a system which should not only include
 the connections between the components but also how these components
 interact over time, how their behaviour is
-controlled, and how they respond to external stimuli.
+controlled, and how they respond to external stimuli \cite [] {kitano2002systems}.
 
-\begin{figure}[htbp!] 
-\centering    
+\begin{figure}[htbp!]
+\centering
 \includegraphics[width=1.0\textwidth]{fa_synthesis_pathway}
 \caption[Fatty Acid synthesis pathway]{Fatty acid synthesis pathway
   captured by the standard diagrammatic language used to capture
@@ -115,9 +116,9 @@ interaction element. Since the time of Newton and classical mechanics
 ,where these ideas originated, the toolbox of dynamical systems theory
 has grown to include techniques for qualitative understanding of
 system without the need to solve them either numerically or
-analytically. 
+analytically.
 
-In biochemistry each species in the system is represented by its 
+In biochemistry each species in the system is represented by its
 concentration leading to a differential equation for each species. The
 rate of change of the concentration of a species is described in terms
 of in flows- increasing the rate of change(production)- and out flows
@@ -155,12 +156,12 @@ Usually this formulation of the problem leads to integration with a
 numerical ODE solver of the above system to get the dynamic behaviour
 of the system. The usual problem mathematical biologists face is that
 the reaction rate function(the $r_k(\mathbf{x})$s) contain parameter
-constants that are not usually known. 
+constants that are not usually known.
 
 In the contex of metabolic systems however there is a mathematical technique however, called Flux Balance
 Analysis, that is used to compute these flows without explicit
 knowledge of these parameters by making some assumptions about the
-system to simplify the problem. If we assume that that metabolites
+system to simplify the problem \cite [] {orth2010flux}. If we assume that that metabolites
 cannot accumulate within the cell and their levels are more or less
 balanced then the system is at steady-state. The steady-state assumption means that the average positive flux-defined as the sum of
 all the in-flows- and the average negative flux-defined as the sum of
@@ -180,8 +181,8 @@ programming problem formulation which is easily solvable. An small
 contrived example to illustrate the above process is given in
 Figure~\ref{fig:fba}.
 
-\begin{figure}[htbp!] 
-\centering    
+\begin{figure}[htbp!]
+\centering
 \includegraphics[width=1.0\textwidth]{fba}
 \caption[Flux Balance analysis]{A small example how starting from a
   bottom-up model like a pathway from KEGG we can go on to apply FBA
@@ -192,40 +193,96 @@ Figure~\ref{fig:fba}.
 Flux balance analysis is a very powerful technique since it allows us
 to overcome the problem of the rate function parameters and calculate the
 fluxes through the system in a computationally efficient way. It is
-not without its limitations though.
+not without its limitations though. For large networks of components
+finding a suitable objective function to used to transform to solve
+the underdetermined problem can be difficult. More importantly and
+since it relies on the average behaviour as described by the
+differential equations it is not able to capture stochastic,
+non-deterministic behaviour.
 
-%Say stuff about the limitations
 \section{Challenge of lipid metabolism}
-% This first paragraph needs more detail!!
-Lipid metabolism is particularly important topic since it is linked
-with several disorders and diseases. The fact that it is has
-complicated regulatory mechanisms has made getting a systems level
-understaning of it very important. In fact many system biology
-attempts have been made to get even a genome-wide picture of metabolism in
-mammals or other organisms. We think that lipid metabolism Systems
-Biology modelling might benefit from a different type of approach than
-the deterministic picture offered by dynamic systems theory and
-consequently FBA. The iterative nature of many of its subsystems, like
-the Fatty Acid Synthesis/Elongation system which we examine in this
-study, along with the need to understand more local regulatory
-mechanims calls for a reaction-centric view of the system.
+Lipid metabolism is the set of all the anabolic and catabolic
+processes that involve lipid products which serve mainly as energy
+stores or in the form of lipid bilayers as membranes. The starting
+point of lipid metabolism are the Fatty Acids which act as building
+blocks for more complex lipids like triacylglycerols. Lipids are
+produced by the organism to serve as energy stores in the well-fed state when there is an excess
+of carbohydrates and no immediate energy requirements. Any excess
+glucose molecules are converted to lipids as follows: When the
+glucogen stores are full, glucose molecules will find the way through
+the glycolysis pathway blocked at the level of phosphofructokinase so
+they take a diversion through the Pentose Phosphate pathway and then
+join the glycolytic processes at a later stage bypassing the
+block. Then they continue down the normal route to Acetyl-CoA and the
+Krebs cycle in the mitochondria. Here since the immediate energy requirements
+are low Acetyl-CoA only makes it to the first stage of the Krebs cycle
+producing Citrate instead of continuing through the cycle and then to
+the Respiratory chain to produce energy. Since Citrate cannot proceed any further in the
+cycle its levels accumulate and at some point it diffuses from
+the mitochondrion into the cytosol where it is converted to Acetyl-CoA
+again to serve as a precursor to Fatty Acid Synthesis which required
+the NADPH produced by the Pentose Phosphate pathway. Once Fatty Acid
+are synthesised they can go on to form more complex lipid products like
+TAGs or get further modified by the Fatty Acid elongation pathway or
+by adding bonds to their CH tails. The beta-oxidation pathway in
+mitochondria breaks down Fatty Acids into Acetyl-CoA which is then fed
+into the Krebs cycle \cite [] {salway2013metabolism}.
+
+\begin{figure}[htbp!]
+\centering
+\includegraphics[width=1.0\textwidth]{metabolism}
+\caption[Lipid metabolism and interacting pathways]{A diagram
+  outlining the main pathways involved in lipid metabolism.}
+\label{fig:lipid_metabolism}
+\end{figure}
+
+All the above production processes have their equivalent catabolic
+processes and a balance between the two is essential for metabolic
+homeostasis in organisms. This balance is regulated by within and
+between pathway with control signals which also integrate signals from the
+environment. In diseases like type I Diabetes this balance is
+disrupted because of insuling deficiency which breaks the regulatory
+signals. Fatty Acids and lipid metabolism pathways play a key role
+in this chain of disruptions. Also, free Fatty acids are
+associated with obesity and type II diabetes \cite [] {boden2002free}.
+
+We notice from the above brief overview and the pictorial description
+of the interconnected pathways(Figure~\ref{fig:lipid_metabolism}) that
+in metabolism and lipid metabolism products flow through the
+network with an iterative chain-like conversion process and that at
+several points there are probabilistic decisions to be made for the next step in the
+chain. These decisions are tightly regulated by signals from other
+pathways and the environment and disruption of these signals is
+observed in diseases like Diabetes. It is important therefore to have
+a mechanistic explanation of the 'trip' through the metabolic chain
+and the non-deterministic 'decision-making' that happens and its regulation. We believe
+that in order to get this mechanistic characterisation we would
+benefit from a stochastic reaction-centric view of lipid metabolism to
+give a more local perspective into the iterative conversion processes
+and their stochastic nature which stems from the probabilistic
+decision-making process. In this study we
+focus on the Fatty Acid Biosynthesis pathway which is an important
+part of lipid metabolism and it exhibits the characeteristics that are
+suited to a reaction-centric analysis: iterative behaviour with
+non-deterministic decisions and regulation mechanisms that relate it
+to other pathways.
 
 A biochemical system, like the one given in the previous section,
 consisting of a number of reactions that alter the integer numbers of
-molecules of the species describes a random process and a Continuous
+molecules of the species describes a stochastic process and a Continuous
 Time Markov Chain in particular. The differential equations we used as
 a basis for FBA are a just
 deterministic view of the average behaviour. The dynamics of the
 system can be set in motion inside a computer using the Gillespie
 exact simulation algorithm which creates sample
-time-series. Statistical information like the strenth of the
+time-series \cite [] {gillespie1977exact}. Statistical information like the strenth of the
 fluctuations (normalised variance) can be computed by collecting a lot
 of these traces.
 
 In this study we propose Petri Nets as an alternative language to capture this
 reaction-centric view which we think is more expressive than the
 standard Markov processes formulation. While Petri Nets and their
-evolution through their formal operational semantics also described a
+evolution through their formal operational semantics also describe a
 CTMC and are thus equivalent in power with the standard Markov jump
 processes we believe that they posses some characteristics(see next
 section and Methods) that makes them useful in the analysis of the
@@ -233,7 +290,7 @@ reaction-centric view of lipid metabolism. Language is important not
 only because a syntax is needed to define our models in but also because
 the notation we use is our tool of thought and the use of the correct
 language for thinking about a problem can enhance our understadnding
-and ultimately help us solving it. That is why we have more
+and ultimately help us solving it \cite [] {iverson2007notation}. That is why we have more
 than one high-level programming language despite the fact that all of
 them are Turing complete and therefore have the ability to express all
 computations.
@@ -264,14 +321,14 @@ formalisms that were invented during that period were
 \citet{milner1980calculus} Calculus of Communicating Systems,
 \citet{lafont1989interaction} Interaction nets,
 \citet{milner1992calculus} pi-calculus, and Petri
-Nets(\citet{murata1989petri}). 
+Nets \cite [] {murata1989petri}.
 
 The analogy between distributed computer systems and biochemical
 systems was made explicit by \citet{berry1989chemical} and the
 Chemical Abstract Machine. The modelling langugages used for
 distributed computation are applicalbe in biological systems since
-they both a high number of concurrent components with dependencies
-introducing non-determinism. \citet{fontana1996barrier} went as far as
+they both include a high number of concurrent components with dependencies
+introducing non-deterministic behaviour. \citet{fontana1996barrier} went as far as
 to propose pi-calculus as an alternative to dynamical systems
 theory since he considered a calculus of objects that can change and their
 interactions more appropriate for describing biochemical systems than a calculus of continuous
@@ -280,7 +337,7 @@ stochastic version of pi-calculus to describe a biochemical systems
 and from then on other Computer Science inspired formalisms came up like
 \citet{cardelli2005brane} with Brane-calculi, \citet{danos2004formal}
 with kappa, and
-\citet{ciocchetta2009bio} with Bio-PEPA. 
+\citet{ciocchetta2009bio} with Bio-PEPA.
 
 Petri Nets lean towards the automata and Turing Machines style of
 computation because their operational semantics are in terms of state
@@ -289,12 +346,12 @@ graphical notation and concurrency,
 non-determinism, and the causal independencies between events is
 inherent in their structure. They
 also have a very natural correspondence to biochemical reactions and
-in their basic form have been used to capture qualitative properties
-of biochemical systems. In this study we use the stochastic version of
+in their basic form have been used mainly to capture qualitative properties
+of biochemical systems \cite [] {baldan2010petri}. In this study we use the stochastic version of
 Petri Nets which explicitly models time to describe and quantitatively
 analyse the
 reaction-centric view of the FA elongation and synthesis
-process. 
+process.
 
 Process algebras, which pi-calculus is an example of, on the other
 hand define syntax to specify the behaviour and state transitions of the individual
@@ -303,14 +360,15 @@ compositionality are not explicitly captured. In this study I
 particularly use Stochastic Pi Machine (SPiM) which is a programming
 language derived from stochastic pi-calculus but extended to include
 operational semantics for execution on an Abstract Machine and also a
-formal graphical notation. The fact that this variant shares
-characteristics from both net model and process algebras approached
+formal graphical notation \cite [] {export:65224, export:65223}. The
+fact that this variant shares
+characteristics from both net models and process algebras approached
 makes it an interesting case-study.
 
 \section{Outline of work}
 To summarise the main aim of this study was to assess the
 applicability of the Petri net formal language to capture a
-reaction-centric view of lipid metabolism by producing a model of the 
+reaction-centric view of lipid metabolism by producing a model of the
 Fatty Acid biosyntesis/elongation process. For completeness we also
 created a stochastic pi-calculus version of the model to contrast the
 two methodologies as part of the more general turn towards executable
@@ -321,5 +379,5 @@ In chapter~\ref{chap:methods} an overview of the methods used in
 modelling the process is given, namely Petri Nets and stochastic
 pi-calculus. In section~\ref{chap:work} the basic and extended model
 are presented along with their tuning with available metabolomics
-data. Finally in section~\ref{chap:discussion} 
+data. Finally in section~\ref{chap:discussion}
 
