@@ -6,7 +6,8 @@ Chapter 1 - Introduction
  - Add limitations of FBA - especially in regards to lipid metabolism and regulatory mechanisms
  - Add references where needed throughout
  - Be more explicit about the importance of lipid metabolism and need for reaction-centric view
- - (Opt) Mention somewhere that there is an extended
+ Add from the book what lipid metabolism is and how it works. Its importance in diabetes again from the book.
+ - (Opt) Mention somewhere that there is an extended version of the model
 
  Chapter 2 - Methods
  - Make the PN intro tie in more with what I said in Chapter 1
@@ -16,7 +17,8 @@ Chapter 1 - Introduction
 
  Chapter 3 - Work
 
+
  Chapter 4 - Discussion
  - Think of at least the headings for the main points
 
- 
+

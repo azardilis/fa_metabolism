@@ -97,6 +97,9 @@ def get_model_dists(spn, n_iter, n_steps):
 
     return dists
 
+def write_model_dists(spn, res, fn):
+    np.savetxt(fname=fn, X=res, header=" ".join(spn.places))
+
 def load_model(fpath):
     cdir = os.getcwd()
 

@@ -1,4 +1,4 @@
-
+fa
 GetMLEstimates <- function(data) {
     # Return point estimates for the parameters based on the ML
     # estimation of success probabilities of the independent
