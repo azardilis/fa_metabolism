@@ -1,13 +1,14 @@
-fa
+MakeAbsNums <- function(d) {
+    nd <- apply(d, 1, function(x) { floor(x / min(x[x > 0])) })
+
+    return(t(nd))
+}
+
 GetMLEstimates <- function(data) {
     # Return point estimates for the parameters based on the ML
     # estimation of success probabilities of the independent
     # Bernoulli trials
-    MakeAbsNums <- function(d) {
-        nd <- apply(d, 1, function(x) { floor(x / min(x[x > 0])) })
 
-        return(t(nd))
-    }
 
     n.data <- MakeAbsNums(data)
     n.succ <- colSums(n.data)
@@ -49,21 +50,38 @@ GetMLEstimatesSample <- function() {
 }
 
 
+LikelihoodData <- function(D) {
 
+    Likelihood <- function(p) {
 
-Likelihood <- function(p) {
-    D <- c(5, 231, 3061, 468, 4, 1)
-    D <- c(1, 0, 0, 0, 0, 0)
-    succ.probs <- list(1-p, p)
-    lprobs <- rep(0, length(D))
-    for (i in 1:length(D)) {
-        events <- c(rep(1, i-1), 2)
-        sp <- sum(sapply(1:length(events), function(x) { log(succ.probs[[events[x]]][x]) }))
-        lprobs[i] <- D[i] * sp
+        succ.probs <- list(1-p, p)
+        lprobs <- rep(0, length(D))
+        for (i in 1:length(D)) {
+            events <- c(rep(1, i-1), 2)
+            sp <- prod(sapply(1:length(events), function(x) { succ.probs[[events[x]]][x] }))
+            lprobs[i] <- D[i]*sp
+        }
+
+        return(prod(lprobs))
     }
 
-    return(sum(lprobs))
+    return(Likelihood)
 }
+
+ProcessLik <- function(D) {
+
+    Lik <- function(p) {
+        probs <- rep(0, length(D))
+        probs[1] <- D[1]*p[1]
+        for (i in 2:length(D)) {
+            probs[i] <- D[i]*p[i]*prod(1-p[1:(i-1)])
+        }
+        return(probs)
+    }
+
+    return(Lik)
+}
+
 
 ProposalFunc <- function(p) {
     return(sapply(p, function(x) { rtruncnorm(1, 0, 1, mean=x, sd=0.1) }))
@@ -72,13 +90,16 @@ ProposalFunc <- function(p) {
 
 mcmc <- function(ip, n.steps) {
     # MCMC sampling from the posterior of model parameters
+    data <- FilterControls()
+    n.data <- rev(colSums(MakeAbsNums(data)))
+
     mcmc.trace <- matrix(rep(0, n.steps*6), nrow=n.steps)
     mcmc.trace[1, ] <- ip
     p <- ip
-    oldll <- Likelihood(p)
+    oldll <- dmultinom(n.data, sum(n.data), GetSinkProb(p), log=TRUE)
     for (i in 2:n.steps) {
         pp <- ProposalFunc(p)
-        loglik <- Likelihood(pp)
+        loglik <- dmultinom(n.data, sum(n.data), GetSinkProb(pp), log=TRUE)#Likelihood(pp)
         a <- loglik - oldll
         if (log(runif(1)) < a) {
             p <- pp
@@ -117,6 +138,11 @@ GetInputRateEstimates <- function() {
     rates <- rates / sum(rates)
 
     return(rates)
+}
+
+
+BinLik <- function(x, p, n) {
+    return(dbinom(x,size=n,prob=p,log=TRUE))
 }
 
 
