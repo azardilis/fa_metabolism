@@ -1,4 +1,5 @@
 
+
 \chapter{Work}
 \label{chap:work}
 % **************************** Define Graphics Path **************************
@@ -9,7 +10,7 @@
 \fi
 
 The aim of this study was to capture the iterative elongation process
-of even-chain saturated Fatty Acids. Fatty Acids are 
+of even-chain saturated Fatty Acids. Fatty Acids are
 carboxylic acids with long hydrocarbon side groups
 (Figure~\ref{fig:fas}) and they are usually characterised by the
 number of carbons in these side-groups, for example a FA with a chain
@@ -47,7 +48,7 @@ concatenations to elongate the FA product with each elongation step
 full pathway from KEGG can be seen in
 Figure~\ref{fig:kegg_synthesis}. The elongation pathway located in ER
 is similar in nature but the intermediaries are CoAs instead of
-ACPs(Figure \ref{fig:kegg_elongation}). 
+ACPs(Figure \ref{fig:kegg_elongation}).
 
 \begin{figure}[htbp!]
 \centering
@@ -84,7 +85,7 @@ post-places the products. Here we made our first assumptions by
 omitting the enzymes from the reactions. Information about the enzymes
 is not so important for our purposes since we are interested in the
 numbers of molecules of the metabolites in the system. Information
-about the enzymes can be incorporated in the transition rates. 
+about the enzymes can be incorporated in the transition rates.
 The net can be animated using its formal
 operational semantics and as transitions/reactions occur
 tokens/metabolites move through the net. The FA products are
@@ -101,7 +102,7 @@ transitions are enabled. The translation from the KEGG pathway model
 to the Petri Net model was done manually with the SNOOPY \cite []
 {heiner2012snoopy}tool which
 allows you to draw a net and play the token game for basic nets to
-observe its behaviour. 
+observe its behaviour.
 
 \begin{figure}[htbp!]
 \centering
@@ -187,7 +188,7 @@ series of binary probabilistic decisions or Bernoulli trials. The way
 the inputs of the model are set up, at the start of the model
 execution only the initial transition producing the first product $C_4$ is
 enabled. If we consider that after this transition fires (since its
-the only one enabled) it 
+the only one enabled) it
 will only fire again after its initial product has reached a sink then
 at each point only one token is travelling through the net. This token
 goes through an iteration of binary decisions: stay at current length
@@ -235,31 +236,144 @@ corresponds to a conflict between two events that share pre-conditions
 which create non-determinsim through a race condition between the two
 depdendent events. This 'conflict' which represents this decision
 process is captured inherently in the structure and semantics of Petri
-Nets. 
+Nets.
 
 Each realisation of the stochastic process described by the Petri Net
 model which is itself a series of successive realisations of series of
-Bernoulli trials will have different outputs. 
-
-
-
-
-
+Bernoulli trials will have different outputs. While SNOOPY is a great
+tool for the visual side of things, creating the model and animating
+them, in order to be able to execute the model many times to get
+output profiles we needed a programmatic solution. I wrote code in
+Python that can read a model, execute it once or many times, and write
+out the results. For the description of the model I used the PySCeS
+model description language for biochemical systems which is aimed at
+the Python language. The reactions are
+defined in the standard chemical notation and since this corresponds
+exactly to Petri Net transitions it was easy to load the description
+into an appropriate Petri Net representation(Figure~\ref{fig:code}).
 
 
 \subsection{Model parameters}
+In the previous section I described the building of the basic model
+based on the goals and assumptions of the study. The elongation aspect
+that we are interested in was reduced down to a sequence of successive
+series of Bernoulli trials that determine the length that a FA will
+stop its elongation at. The interesting parameters of the model, the
+ones that will affect the output, are the success probabilities for
+the stay-continue decisions for FA intermediaries with lengths
+$[C_{12}, C_{22}]$ since they are ones that have sinks. In this
+section two methods for the identification of these parameters for
+tuning the model so that its execution is biologically valid are
+presented. They both rely on experimental data from an MS study that
+contains relative MS spectra intensities for a number of lipid
+products extracted from cells. The aim of the study for which the
+experiment was conducted was to identify the effect of some treatment
+in lipid products so it included 90 samples from control and treatment
+(at different levels) individuals. Here we are only interested in creating a null
+model so only the 30 samples from the control individuals in the
+experiment were retained for
+the purposes of parameter tuning.
+
+The outputs of the net model are integer number of tokens accumulated
+at each of the sinks or FA of different lengths while the experimental
+data are relative intensities which are continuous numbers. In order
+to be able to compare the two for the tuning of the parameters the
+experimental data were transformed from relative intensities to
+relative absolute numbers. The transormation of a sample of relative
+intensities $\mathbf{s} = \{s_1, s_2, s_3, s_4, s_5, s_6\}$ became a
+transformed sample $\mathbf{ts} = \{ ts_i | ts_i = \lfloor s_i /
+min(\mathbf{s}) \rfloor \}$.
+ Since we are only interested in the
+relative proportions of the outputs going from relative intensities to
+relative numbers should not affect the outcome. The data can then be
+seen as different realisations of the stochastic process described by
+the real model that acts in nature. The attempt is then to tune our
+model to be as close to the real model as possible by trying to tune
+the proportions of the outputs of our model to match the proportions
+of the outputs by the real model represented in the experimental
+data. This is  classical Machine Learning formulation of the inverse
+problem(Figure~\ref{fig:ml}). In this section I first present a method to get point
+estimates and then profiles for the success probabilities parameters of the series of Bernoulli
+trials representing the chain of decisions for a token travelling
+through the net.
+
 
 \subsubsection{Point estimates}
+The data more formally are a matrix $D$ with an element $D_{ik}$ being
+the number of tokens accumulated in the $k$-th FA in the $i$-th
+sample or realisation of the process. Since we have multiple
+realisations of Bernoulli trials the success probabilities can also be
+though of as success probabilities in binomial distributions. The
+Maximum Likelihood point estimator for binomial success probabilities
+is given for the $i$-th decision corresponding to the $i$-th FA,
+\begin{equation*}
+\hat{p_i} = \frac{k_i}{n_i}
+\end{equation*}
+, where $k_i$ is the number of successes and $n_i$ is the number of
+trials. If we extract information about the number of successes and
+number of trials for each binary decision in the process from the data
+that are different realisation of the process then we can
+straightforwardly compute the success probabilities we are after.
+
+If we a take a specific sample (a row from data matrix $D$) then the
+number of successes for an FA are simply just the number of tokens of
+that FA in the sample since those are the tokens that when faced with
+the decision of whether to get stored as that FA or continue to form
+longer FAs they chose the former. Success and failure are arbitrarily
+assigned to staying and continuing respectively. The number of trials
+is the number of all the tokens that reached that FA intermediary, both
+the ones that stayed \textit{and} the ones that continued. Since this
+is an iterative process the ones that continued are the number of
+tokens that made it to the sinks after the FA(the ones on the right as
+we look at the Petri Net mode picture,
+Figure~\ref{fig:pn_elongation_full}). To illustrate this consider a
+sample which could be a row from our data matrix $D$: $\{C_{12}=5,
+C_{14}=10, C_{16}=34, C_{18}=23, C_{20}=3, C_{22}=5\}$. The ML
+estimator for the $i$-th FA product in that sample will be:
+\begin{equation*}
+\hat{p_i} = \frac{C_i}{\sum_{n \geq i} C_n}
+\end{equation*}
+The success probabilities $p_1$ to $p_6$ for the above sample, with $p_1$ corresponding to
+the first binary decision and $C_{12}$, $p_s$ to the second decision
+and $C_{14}$ and so on, are:
+\begin{align*}
+\hat{p_1} & = 5/(5+10+34+23+3+5) = 0.0625\\
+\hat{p_2} & = 10 / (10+34+23+3+5) = 0.1333\\
+\hat{p_3} & = 34 / (34+23+3+5) = 0.523\\
+\hat{p_4} & = 23 / (23+3+5) = 0.742\\
+\hat{p_5} & = 3 / (3+5) = 0.375\\
+\hat{p_6} & = 1
+\end{align*}
+This is for one sample but since all the samples are from the same
+population(controls) we can combine the successes/trials data from all
+samples and generalise the ML success probability estimation for the
+$i$-th FA products as:
+\begin{equation*}
+\hat{p_i} = \frac{\sum_k D_{ki}}{\sum_k \sum_{n\geq i} D_{kn}}
+\end{equation*}
+We assume that the columns of data matrix D are ordered according to
+the order of FAs in the system.
+
+Computing the success probabilities from the real experimental dataset
+gives the following values: $\{\hat{p_1} = 0.0003000656,
+\hat{p_2}=0.0400323889, \hat{p_3}=0.8235217126,
+\hat{p_4}=0.9888339514, \hat{p_5}=0.778597786, \hat{p_6}=1.0\}$. Since
+we do not care about the timeframe of the process but rather at the
+output at the end the relative proportions of the transitions
+participating in a binary decision are what is important therefore we
+can use the calculated success probabilities as the rates of the
+transitions related to the binary decision. So for example since
+$\hat{p_3}\approx0.82$ then the rates of the transitions corresponding to the
+binary decision for the 3rd FA, $C_{16}$, will be: rate of transition
+for $C_{16}$ storage (success) $0.82$ and rate of transition for
+$C_{18}$ formation (failure) $0.18$($1-P(success)$).
+
 
 \subsubsection{Profiles}
 
-\subsection{Execution results}
 
 
-
-\section{A stochastic $\pi$-calculus version}
-
-
+\subsection{A stochastic $\pi$-calculus implementation}
 
 
 
