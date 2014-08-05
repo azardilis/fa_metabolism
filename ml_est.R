@@ -91,9 +91,9 @@ ProposalFunc <- function(p) {
 mcmc <- function(ip, n.steps) {
     # MCMC sampling from the posterior of model parameters
     data <- FilterControls()
-    n.data <- rev(colSums(MakeAbsNums(data)))
+    n.data <- rev(colSums(MakeAbsNums(data[1, ])))
 
-    mcmc.trace <- matrix(rep(0, n.steps*6), nrow=n.steps)
+    mcmc.trace <- matrix(rep(0, n.steps*length(ip)), nrow=n.steps)
     mcmc.trace[1, ] <- ip
     p <- ip
     oldll <- dmultinom(n.data, sum(n.data), GetSinkProb(p), log=TRUE)
