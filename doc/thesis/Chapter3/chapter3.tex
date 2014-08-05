@@ -22,7 +22,7 @@ pathway in the Endoplasmatic Reticulum(ER).
 
 \begin{figure}[htbp!]
 \centering
-\includegraphics[width=1.0\textwidth]{fas}
+\includegraphics[width=0.6\textwidth]{fas}
 \caption[Fatty Acid structure]{The structure of Fatty Acids(FA) which
   consists of a long hydrocarbon side-group. The length of this
   side-group charactersises the FA.}
@@ -52,11 +52,9 @@ ACPs(Figure \ref{fig:kegg_elongation}).
 
 \begin{figure}[htbp!]
 \centering
-\includegraphics[width=1.0\textwidth]{fas}
-\caption[FA structure]{The structure of Fatty Acids(FA) which
-  consists of a long hydrocarbon side-group. The length of this
-  side-group charactersises the FA.}
-\label{fig:fas}
+\includegraphics[width=1.0\textwidth]{fa_metabolism}
+\caption[FA metabolism]{FA metabolism in relation to other pathways.}
+\label{fig:fa_synthesis}
 \end{figure}
 
 \begin{figure}[htbp!]
@@ -70,7 +68,7 @@ ACPs(Figure \ref{fig:kegg_elongation}).
 
 \begin{figure}[htbp!]
 \centering
-\includegraphics[width=1.0\textwidth]{kegg_elongation}
+\includegraphics[width=0.3\textwidth]{kegg_elongation}
 \caption[Fatty Acid elongation in ER]{General form of FA elongation in
 ER. Notice that the intermediate products are CoAs instead of ACPs as
 in biosynthesis.}
@@ -182,6 +180,15 @@ metabolites to 'fuel' any further reactions. The output of the system
 is the number of tokens accumulated at each of the sinks or FAs of
 different lengths.
 
+\begin{figure}[htbp!]
+\centering
+\includegraphics[width=1.0\textwidth]{fa_elongation_full}
+\caption[Petri Net implementation(basic model)]{Petri Net
+  implementation of the basic model as described in the main text}
+\label{fig:fa_elongation_full}
+\end{figure}
+
+
 Observing the execution pattern of the basic net model we notice an
 execution pattern which leads to an elegant view of the system as a
 series of binary probabilistic decisions or Bernoulli trials. The way
@@ -213,6 +220,15 @@ P(staying)& =P(t_1) = \frac{\lambda_{t_1}}{\lambda_{t_1} + \lambda_{t_2}}\\
 P(continuing) & = P(t_2) = \frac{\lambda_{t_2}}{\lambda_{t_1} + \lambda_{t_2}} = 1 - P(t_1)\\
 \end{align*}
 
+
+\begin{figure}[htbp!]
+\centering
+\includegraphics[width=0.5\textwidth]{binary_decision}
+\caption[Binary stay-continue decision]{Binary decision at a
+  particular point in the execution.}
+\label{fig:binary_decision}
+\end{figure}
+
 In other words this is a Bernoulli trial with probability of success
 $p = P(t_1)$. Since we only care about the outputs at the end of the
 execution and not the timeframe of the process from start to finish
@@ -238,6 +254,14 @@ depdendent events. This 'conflict' which represents this decision
 process is captured inherently in the structure and semantics of Petri
 Nets.
 
+\begin{figure}[htbp!]
+\centering
+\includegraphics[width=0.55\textwidth]{trials}
+\caption[Stochastic proces as a series of Bernoulli trials]{The entire
+stochastic process a series of Bernoulli trials.}
+\label{fig:trials}
+\end{figure}
+
 Each realisation of the stochastic process described by the Petri Net
 model which is itself a series of successive realisations of series of
 Bernoulli trials will have different outputs. While SNOOPY is a great
@@ -251,6 +275,13 @@ the Python language. The reactions are
 defined in the standard chemical notation and since this corresponds
 exactly to Petri Net transitions it was easy to load the description
 into an appropriate Petri Net representation(Figure~\ref{fig:code}).
+
+\begin{figure}[htbp!]
+\centering
+\includegraphics[width=1.0\textwidth]{code}
+\caption[Workflow]{Structure of the code and workflow}
+\label{fig:code}
+\end{figure}
 
 
 \subsection{Model parameters}
@@ -297,6 +328,14 @@ estimates and then profiles for the success probabilities parameters of the seri
 trials representing the chain of decisions for a token travelling
 through the net.
 
+\begin{figure}[htbp!]
+\centering
+\includegraphics[width=0.5\textwidth]{ml}
+\caption[ML inverse problem formulation]{ML inverse problem formulation}
+\label{fig:ml}
+\end{figure}
+
+
 
 \subsubsection{Point estimates}
 The data more formally are a matrix $D$ with an element $D_{ik}$ being
@@ -325,7 +364,7 @@ is the number of all the tokens that reached that FA intermediary, both
 the ones that stayed \textit{and} the ones that continued. Since this
 is an iterative process the ones that continued are the number of
 tokens that made it to the sinks after the FA(the ones on the right as
-we look at the Petri Net mode picture,
+we look at the Petri Net model picture,
 Figure~\ref{fig:pn_elongation_full}). To illustrate this consider a
 sample which could be a row from our data matrix $D$: $\{C_{12}=5,
 C_{14}=10, C_{16}=34, C_{18}=23, C_{20}=3, C_{22}=5\}$. The ML
@@ -355,9 +394,22 @@ We assume that the columns of data matrix D are ordered according to
 the order of FAs in the system.
 
 Computing the success probabilities from the real experimental dataset
-gives the following values: $\{\hat{p_1} = 0.0003000656,
-\hat{p_2}=0.0400323889, \hat{p_3}=0.8235217126,
-\hat{p_4}=0.9888339514, \hat{p_5}=0.778597786, \hat{p_6}=1.0\}$. Since
+can be seen in Table~\ref{tab:param_estimates}.
+
+\begin{table}
+\centering
+    \begin{tabular}{ccc}
+    Parameter & Value \\
+    $p_1$ &  0.0003000656 \\
+    $p_2$ & 0.0400323889\\
+    $p_3$ &  0.8235217126\\
+    $p_4$ &  0.9888339514\\
+    $p_5$ &  0.778597786 \\
+    $p_6$ &  1.0
+    \end{tabular}
+\label{tab:param_estimates}
+\end{table}
+Since
 we do not care about the timeframe of the process but rather at the
 output at the end the relative proportions of the transitions
 participating in a binary decision are what is important therefore we
@@ -370,12 +422,196 @@ $C_{18}$ formation (failure) $0.18$($1-P(success)$).
 
 
 \subsubsection{Profiles}
+In the previous section I derived point estimates for the success
+probabilities guiding the binary decisions taking place during the
+elongation process. I did that by considering the success
+probabilities that maximise the likelihood function $L(D|p_i)$ for
+the $i$-th FA and data $D$ being the number of successes and number of
+trials. In this section I will present a likelihood function for the
+entire process which comes naturally by thinking of the process as
+before as a sequence of series of Bernoulli trials. I then use this
+likelihood function to get the profiles of the parameters of interest.
 
+
+The data from one of the samples can be seen as one realisation of the
+stochastic process with the numbers of tokens at each FA being the
+outputs of the series of Bernoulli trials that make up one realisation
+of the entire process. Each series of Bernoulli trials describes the
+journey of one token through the net which ends when it finds a
+sink. If for example the token ends up at the third sink that means
+that the outcome of the series of Bernoulli trials was: fail, fail,
+success. Therefore the data consisting of the number of tokens that
+ended up at each FA gives us a history of the series of trials that
+happened during that realisation of the process. Consider the
+following sample $\{C_{12}=5, C_{14}=10, C_{16}=34, C_{18}=23,
+C_{20}=3, C_{22}=5\}$ which is one realisation of the process from
+the start until reaching a dead-state. The numbers tell us the 'fate'
+of each of the tokens that went through the net during that
+realisation of the process, 5 tokens made the decision to stay at the
+first trial- [success]- , 10 tokens made a decision to continue on the
+first decision and then to stay on the second decision- [fail,
+sucess]-, 34 tokens continued on the first two decision and stayed on
+the third- [fail, fail, success], and so on. We can therefore calculate
+the probabilities for each FA product sinks as follows:
+\begin{align}
+P(C_{12}) &= p_1 \nonumber\\
+P(C_{14}) &= (1-p_1)p_2 \nonumber\\
+P(C_{16}) &= (1-p_1)(1-p_2)p_3 \nonumber \\
+P(C_{18}) &= (1-p_1)(1-p_2)(1-p_3)p_4 \nonumber\\
+P(C_{20}) &= (1-p_1)(1-p_2)(1-p_3)(1-p_4)p_5 \nonumber\\
+P(C_{22}) &= (1-p_1)(1-p_2)(1-p_3)(1-p_4)(1-p_5)p_6 \nonumber\\
+\label{eq:param_cor}
+\end{align}
+The entire process can then be seen as a multinomial draw with 6
+outcomes,  $\{C_{12}, C_{14}, C_{16}, C_{18}, C_{20}, C_{22}\}$, with
+their respective probabilities given above and with the number of
+trials being the number of tokens that ended up in sinks for that
+particular realisation of the process. This gives the likelihood
+function of the data given the success probabilities as
+probability mass function of the multinomial distribution:
+\begin{equation*}
+L(D|\mathbf{\theta}) = f(C_{12},\dots, C_{22}; n ; P(C_{12}), \dots,
+P(C_{22})\}) =
+\end{equation*}
+
+Using the likelihood function for the entire process we can find the
+posterior of the initial success probabilities $p_1$ to $p_6$,
+\begin{equation*}
+P(\{p_i\} | D) \sim L(D | \{p_i\}) P(\{p_i\})
+\end{equation*}
+where the data $D$ is simply the outputs of one realisation of the
+process or the counts at each sink and $P(\{p_i\})$ are the priors of
+the parameters. If we assume uniformative priors the above parameter
+posterior simply becomes: $P(\{p_i\} | D) \sim L(D | \{p_i\})$. Since
+the parameters are not exactly the parameters of the multinomial but
+they are only related through Equations~\ref{eq:param_cor} an analytic
+solutions is not very attractive but since it is still a small problem
+we can resort to a simple simulation scheme to sample from the required
+posterior. I used the standard Metropolis-Hastings MCMC method to
+sample from the posterior as given above starting from a random point
+in parameter space and a symmetric normal proposal distribution with
+mean the previous accepted guess and an arbitrary chosen variance. The
+MCMC traces and the histograms of the samples obtained from the
+posteriors can be seen in Figure.
 
 
 \subsection{A stochastic $\pi$-calculus implementation}
+In this section I present a stochastic pi-calculus version of the
+model which is specifically written in its SPiM variant which extends
+the traditional pi-calculus first by introducing explicitly time which
+is needed for quantitive analysis of biochemical networks and also by
+adding operational semantics in terms of an Abstract Machine and a
+graphical representation language. The SPiM code is given for the
+processes making up the system to introduce further some of the
+concepts of the SPiM language. For more information about the SPiM
+language.
+
+The SPiM graphcal representation of the model can be seen in
+Figure~\ref{fig:spim_graph}. Each component of that graph is a
+stochastic pi-calculus process and edges between them indicate that
+one one of them can evolve into the other. The nature of the model is
+different from the equivalent model given in the previous section. The
+evolution of every species represented by a stochastic pi-calculus
+process is defined independently. We start the computation by running 100
+\texttt{Acyl_CoA} processes and 30 \texttt{Malonyl_CoA} processes:
+
+\begin{verbatim}
+run(100 of Malonyl_CoA() | 30 of Acyl_CoA())
+\end{verbatim}
+
+The initial reaction of the system creating is represented as
+communication by channell \texttt{form6} between \texttt{Acyl_CoA} and
+\texttt{Malonyl_CoA} processes. Once the communication happens the
+\texttt{Acyl_CoA} process evolves into the  \texttt{Acyl_CoA_4}
+process while \texttt{Malonyl_CoA} process goes to the empty
+process(gets consumed). After that all the processes corresponding
+FAs between $C_6$ and $C_{10}$ only have one communication option,
+communicate via the appropriate channell with a \texttt{Malonyl_CoA}
+process and then evolve into a process corresponding to a longer
+FA. For example process \texttt{Acyl_CoA_8}:
+
+\begin{verbatim}
+and Acyl_CoA_8() = ?form10; Acyl_CoA_10()
+\end{verbatim}
+
+After that all the processes corresponding to intermediaries for longer
+than $C_{10}$ FAs have two communication options corresponding to the familiar
+stay-continue stochastic decision that we have seen in the previous section, they
+can either communicate with a \texttt{Malonyl_CoA} process and evolve
+into a process corresponding to a longer FA while the
+\texttt{Malonyl_CoA} process terminates or do a delay and evolve into
+their corresponding FA product. The FA products which are modelled as
+empty processes could have been ignored since they do not interact
+further with any other processes but they were kept there
+intentionally to keep track of their numbers.
+
+\begin{figure}[htbp!]
+\centering
+\includegraphics[width=1.0\textwidth]{spim_graph}
+\caption[SPiM graph]{SPiM graph}
+\label{fig:spim_graph}
+\end{figure}
+
+\begin{verbatim}
+let Malonyl_CoA() =
+(
+	do !form6; ()
+	or !form8; ()
+	or !form10; ()
+	or !form12; ()
+	or !form14; ()
+	or !form16; ()
+)
+and Acyl_CoA() = ?form6; Acyl_CoA_6()
+and Acyl_CoA_6() = ?form8; Acyl_CoA_8()
+and Acyl_CoA_8() = ?form10; Acyl_CoA_10()
+and Acyl_CoA_10() = ?form12; Acyl_CoA_12()
+and Acyl_CoA_12() =
+(
+	do ?form14; Acyl_CoA_14()
+	or delay@store_rate_12; C12()
+)
+and Acyl_CoA_14() =
+(
+	do ?form16; Acyl_CoA_16()
+	or delay@store_rate_14; C14()
+)
+and Acyl_CoA_16() =
+(
+	do ?form18; Acyl_CoA_18()
+	or delay@store_rate_16; C16()
+)
+and Acyl_CoA_18() =
+(
+	do ?form20; Acyl_CoA_20()
+	or delay@store_rate_18; C18()
+)
+and Acyl_CoA_20() =
+(
+	do ?form22; Acyl_CoA_22()
+	or delay@store_rate_20; C20()
+)
+and Acyl_CoA_22() = delay@store_rate_22; C22()
+and C12() = ()
+and C14() = ()
+and C16() = ()
+and C18() = ()
+and C20() = ()
+and C22() = ()
+
+run(100 of Malonyl_CoA() | 30 of Acyl_CoA())
+\end{verbatim}
+
+
+
 
 
 
 \section{Extended model of FA synthesis}
+
+\subsection{Petri Net implementation}
+
+
+
+\subsection{Model Parameters}
 
