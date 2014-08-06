@@ -365,7 +365,7 @@ the ones that stayed \textit{and} the ones that continued. Since this
 is an iterative process the ones that continued are the number of
 tokens that made it to the sinks after the FA(the ones on the right as
 we look at the Petri Net model picture,
-Figure~\ref{fig:pn_elongation_full}). To illustrate this consider a
+Figure~\ref{fig:fa_elongation_full}). To illustrate this consider a
 sample which could be a row from our data matrix $D$: $\{C_{12}=5,
 C_{14}=10, C_{16}=34, C_{18}=23, C_{20}=3, C_{22}=5\}$. The ML
 estimator for the $i$-th FA product in that sample will be:
@@ -393,7 +393,7 @@ $i$-th FA products as:
 We assume that the columns of data matrix D are ordered according to
 the order of FAs in the system.
 
-Computing the success probabilities from the real experimental dataset
+The success probabilities ML estimators from the real experimental dataset
 can be seen in Table~\ref{tab:param_estimates}.
 
 \begin{table}
@@ -407,6 +407,7 @@ can be seen in Table~\ref{tab:param_estimates}.
     $p_5$ &  0.778597786 \\
     $p_6$ &  1.0
     \end{tabular}
+\caption{Success probabilities}
 \label{tab:param_estimates}
 \end{table}
 Since
@@ -512,23 +513,23 @@ stochastic pi-calculus process and edges between them indicate that
 one one of them can evolve into the other. The nature of the model is
 different from the equivalent model given in the previous section. The
 evolution of every species represented by a stochastic pi-calculus
-process is defined independently. We start the computation by running 100
-\texttt{Acyl_CoA} processes and 30 \texttt{Malonyl_CoA} processes:
+process which is defined independently. We start the computation by running 100
+\texttt{Acyl\_CoA} processes and 30 \texttt{Malonyl\_CoA} processes:
 
 \begin{verbatim}
 run(100 of Malonyl_CoA() | 30 of Acyl_CoA())
 \end{verbatim}
 
-The initial reaction of the system creating is represented as
-communication by channell \texttt{form6} between \texttt{Acyl_CoA} and
-\texttt{Malonyl_CoA} processes. Once the communication happens the
-\texttt{Acyl_CoA} process evolves into the  \texttt{Acyl_CoA_4}
-process while \texttt{Malonyl_CoA} process goes to the empty
+The initial reaction of the system creating the $C_4$ product is represented as
+communication by channell \texttt{form6} between \texttt{Acyl\_CoA} and
+\texttt{Malonyl\_CoA} processes. Once the communication happens the
+\texttt{Acyl\_CoA} process evolves into the  \texttt{Acyl\_CoA\_4}
+process while \texttt{Malonyl\_CoA} process goes to the empty
 process(gets consumed). After that all the processes corresponding
 FAs between $C_6$ and $C_{10}$ only have one communication option,
-communicate via the appropriate channell with a \texttt{Malonyl_CoA}
+communicate via the appropriate channell with a \texttt{Malonyl\_CoA}
 process and then evolve into a process corresponding to a longer
-FA. For example process \texttt{Acyl_CoA_8}:
+FA. For example process \texttt{Acyl\_CoA\_8}:
 
 \begin{verbatim}
 and Acyl_CoA_8() = ?form10; Acyl_CoA_10()
@@ -537,9 +538,9 @@ and Acyl_CoA_8() = ?form10; Acyl_CoA_10()
 After that all the processes corresponding to intermediaries for longer
 than $C_{10}$ FAs have two communication options corresponding to the familiar
 stay-continue stochastic decision that we have seen in the previous section, they
-can either communicate with a \texttt{Malonyl_CoA} process and evolve
+can either communicate with a \texttt{Malonyl\_CoA} process and evolve
 into a process corresponding to a longer FA while the
-\texttt{Malonyl_CoA} process terminates or do a delay and evolve into
+\texttt{Malonyl\_CoA} process terminates or do a delay and evolve into
 their corresponding FA product. The FA products which are modelled as
 empty processes could have been ignored since they do not interact
 further with any other processes but they were kept there
@@ -603,15 +604,135 @@ run(100 of Malonyl_CoA() | 30 of Acyl_CoA())
 \end{verbatim}
 
 
-
-
-
-
 \section{Extended model of FA synthesis}
+In the previous section I presented a Petri Net and stochastic
+pi-calculus implementations of a
+simplified view of FA elongation/synthesis. In this section I
+will present a Petri net implementation of an extended model which
+captures one of the main control regulatory mechanisms between FA
+biosynthesis and other general metabolic
+machinery of the cell. The first and commited step in the FA
+biosynthesis pathway is the conversion of acetyl-CoA to Malonyl-CoA
+through the action of acetyl-CoA carboxylase. Acetyl-CoA carboxylase
+is inactivated by AMPK protein kinase in mammals. In the well-fed
+state AMPK is itself inactivated which leads to an increase in the
+flow of Acetyl-CoA to Malonyl-CoA and since this is an irreversible
+reaction to the FA biosynthesis pathway. 
+Also in conditions of high glucose
+concentration isocitrate dehydrogenase is inhibited so Acetyl-CoA only
+does the first step of the Krebs cycle when Citrate is produced. Since
+Citrate cannot go any further in the cycle it starts to accumulate
+until it starts to diffuse from the mitochondrion into the cytosol
+where it becames Acetyl-CoA again and acts as precursor for FA
+biosynthesis. The net effect of this two is that more Acetyl-CoA will
+flow towards the FA biosynthesis than go towards the
+Kreb cycle and the Respiratory chain to produce energy because the
+immediate energy requirements are low(high ATP).
+
+\citet{nielsen2009systems} experimentally confirmed that
+this regulatory mechanism is conserved in yeast through the action of
+Snf1 which the yeast analog of the mammalian AMPK and they also
+produced Flux Balance Analysis systems biology models to capture the
+change in flows in the system throught the action of protein kinase
+Snf1. Here we provide a Petri Net implementation of the above
+regulatory scheme as an extension to the basic model we presented
+in the previous section.
 
 \subsection{Petri Net implementation}
+The Petri Net implementation of the above mentioned regulatory
+mechanism as an extension to the basic model presented before can be
+seen in Figure~\ref{fig:pn_ext}. The net starts with an empty
+transition feeding into glucose which can be thought of as an
+interface to the environment. That could for example be used to model
+glucose intake from the diet. Then after that the action of every pathway
+is condensed into a single transition except FA
+biosynthesis/elongation for which we use the basic model developed
+previously. After the initial glucose intake transition, glucolysis is
+represented by a transition from Glucose to Pyruvate and then
+Acetyl-CoA which plays the central role in this regulatory
+mechanism. Acetyl-CoA has a decision of whether to flow towards FA
+biosynthesis represented by transitions to place \texttt{FAsyn}
+or flow towards the TCA cycle and further energy production which is
+represented by a transition to the \texttt{TCA}
+place. The \texttt{TCA}  place represents the combined
+effect of the TCA cycle and the respiratory chain which has as an
+ouput 30 molecules of ATP. ATP can then be consumed by taking part in
+a transition without any post-places. ATP consumption could for
+example be used to model various energy requirements. The FA biosynthesis/elongation
+process is represented as before with the only difference
+being that it now only has a single input which then leads to the two
+inputs used in the basic version of the model. 
+The main regulatory mechanism comes by making ATP a pre-place for the
+Acetyl-CoA transition to \texttt{FAsyn} so that ATP levels can
+influence the rate of that transition and hence the flow towards FA
+biosynthesis. 
 
+\begin{figure}[htbp!]
+\centering
+\includegraphics[width=1.0\textwidth]{pn_ext}
+\caption[Extended Petri Net model]{An extended version of the model}
+\label{fig:pn_ext}
+\end{figure}
 
 
 \subsection{Model Parameters}
+In this section I present a way to contstruct the
+rate functions for the transitions out of Acetyl-CoA in order to get
+the required regulatory behaviour based on ATP levels and a way to
+find the rate parameters for the transitions from the \texttt{FAsyn} place
+to the two main input points for the FA synthesis/elongation process.
+
+Since we have not modelled enzymatic
+activity explicitly but only through the transition rates, the effect that ATP has on the enzyme responsible
+for the flow of Acetyl-CoA to FA synthesis will have to become an effect
+on the rate of the corresponding transition. In order to introduce
+that effect the rate function for the transition taking Acetyl-CoA to FA biosynthesis
+becomes an increasing function of ATP. That by itself
+is not enough though since at high ATP levels the reaction rate not only
+needs to be high but crucially higher than the TCA transition rate in order to
+make the flow towards FA biosynthesis more favorable when Acetyl-CoA
+is faced with the TCA/FA biosynthsesis decision. So again the
+important thing here, since we do not care about the timeframe of the
+process, is the ratio between these parameters. In order to achieve
+that we can set up a basal rate for the two alternatives for a
+base level of ATP for which they are both equally likely to
+happen. Any deviations from that balanced level and the flow towards
+FA biosynthesis becomes more or less likely. Let us consider a
+constant base level of $ATPb$ ATP molecules and a variable $ATP$ for the number
+of ATP molecules at any given time during the execution of the
+model. An example of rate functions that meet our requirements are:
+$\lambda_{TCA} = ATPb^{k}$ and $\lambda_{FAsyn} =
+ATP^{k}$. When $ATP=ATPb$ the transition rates are equal so the
+Acetyl-CoA flows with equal likelihood to TCA and FA
+biosynthesis. The strength of the response to deviations is then:
+\begin{equation*}
+\left ( \frac{ATP}{ATPb}\right)^{k}
+\end{equation*}
+We can control the strength of the response by tuning the $k$
+parameter. For linear responses for example we can set $k=1$ which
+will mean that a 2-fold increase in the ATP level from its base rate
+results in a doubling of the 
+rate of the transition towards FA biosynthesis while the rate towards
+TCA remains constant.
+
+For the transition rates from \texttt{FAsyn} we can make a simple
+stoichiometric argument to find the correct ratio between them that
+will guide the flow towards those two input points of the FA
+synthesis/elongation process. For every $C_2$ concatenation step we
+need one Malonyl-CoA so for example if the process does 7 steps to
+reach the $C_{16}$ then we would need 7 Malonyl-CoAs and 1
+Acetyl-CoA. Since it is a stochastic process however we do not know in
+advance how many steps each token will take through the net. We can
+however find the expectation of the number of steps:
+\begin{equation*}
+E(steps)=\sum_{4 \leq i \leq 9} i \times P(i)
+\end{equation*}
+So on average we need $E(steps)$ Malonyl-CoAs for every one
+Acetyl-ACP. We can set the transition rates towards these two starting
+points to reflect that:
+\begin{align*}
+\frac{\lambda_{Malonyl\_CoA}}{\lambda_{Acetyl\_CoA}} = E(steps)
+\end{align*}
+
+\subsection{Model Execution and discussion}
 
