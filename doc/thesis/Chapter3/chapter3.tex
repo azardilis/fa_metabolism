@@ -1,5 +1,3 @@
-
-
 \chapter{Work}
 \label{chap:work}
 % **************************** Define Graphics Path **************************
@@ -42,7 +40,7 @@ control mechanisms.
 \subsection{Petri Net implementation}
 FA biosynthesis starts with Acetyl-CoA which is being converted to
 Malonyl-CoA. A reaction between Malonyl-CoA and Acetyl-CoA starts off
-the first $C_4$ FA product. After that there are successive $C_2$
+the first $C_4$ FA product and a $CO_2$ molecule. After that there are successive $C_2$
 concatenations to elongate the FA product with each elongation step
 , that requires 4 reactions, requiring another Malonyl-CoA(Figure~\ref{fig:fa_synthesis}). The
 full pathway from KEGG can be seen in
@@ -80,9 +78,9 @@ they are found in the KEGG static model to Petri Net model constructs
 a straight translation between the two is straightforward. All the
 pathway reactions become transitions with pre-places the reactants and
 post-places the products. Here we made our first assumptions by
-omitting the enzymes from the reactions. Information about the enzymes
+omitting the enzymes participating as catalysts from the reactions. Information about the enzymes
 is not so important for our purposes since we are interested in the
-numbers of molecules of the metabolites in the system. Information
+numbers of molecules of the metabolites involved in the process. Information
 about the enzymes can be incorporated in the transition rates.
 The net can be animated using its formal
 operational semantics and as transitions/reactions occur
@@ -93,14 +91,15 @@ trapped. That way the probabilistic iterative nature of the process is
 capture completely, an intermediate of the process can either remain
 at that length or go on to form longer FAs. The sinks are therefore
 the outputs of the stochastic process with the inputs being the places
-that do not act as post-places for any transitions. Starting with some
+that do not act as post-places for any transition. Starting with some
 finite number of molecules at the inputs, these will be consumed
 throughout the process until we reach a dead-state where no further
 transitions are enabled. The translation from the KEGG pathway model
 to the Petri Net model was done manually with the SNOOPY \cite []
 {heiner2012snoopy}tool which
-allows you to draw a net and play the token game for basic nets to
-observe its behaviour.
+allows you to draw a net, play the token game for basic nets to
+observe its behaviour, and get the dynamic behaviour of the
+metabolites over the integration time.
 
 \begin{figure}[htbp!]
 \centering
@@ -126,9 +125,11 @@ and more importantly the proportions
 of molecules/tokens that end up in the sink places at the stop of the model
 execution. Because the process is inherently iterative and
 probabilistic these numbers will be different at the end of each model
-execution. This is in contrast with most dynamic modelling approaches
+execution and in the limit the average number of metabolites will be
+the same as the equivalent deterministic model. This is in contrast with most dynamic modelling approaches
 as we are not interested in the time traces but rather only at the end
-result of this stochastic process. We can think of the Petri Net as a
+result of this stochastic process and matching with the experimental
+dat awe have afterwards. We can think of the Petri Net as a
 magic box governed by some probabilities(that we can tune) where we
 throw some inputs and according to these probabilities some output
 will come out at the other end in the form of proportions of FAs at different
@@ -139,7 +140,7 @@ Having outlined our modelling goals in the previous section we can now
 make some assumptions that will guide our design of the simplified
 synthesis/elongation model that will be our basic model throughout
 this study. First of all the model will capture the combined effect of
-both the pathways. The two pathways are in different compartments of
+both pathways. The two pathways are in different compartments of
 the cell, one in cytosol and one in ER, but we will ignore the
 transportation of FAs from cytosol to ER and we will assume that the
 two process are sequential so a $C_{18}$ for example can be elongated
@@ -151,15 +152,15 @@ needed for each $C_2$ concatenation step to a single step reaction and
 at the same time consider only the forward direction
 reactions. Also, since we are no longer consider exact chemical
 reactions the reactions rate functions will just be constant values
-and we will treat those more as probabilities that will govern the
+and we will treat those as probabilities that will govern the
 non-deterministic decisions during the execution of the model that
-transforms the input signal to output proportions of FAs. Finally I
-also decided to stop the elongation process at $C_{22}$ and that the
+transforms the input signal into output proportions of FAs. Finally we
+also decided to stop the elongation process at $C_{22}$. Therefore the
 sinks will only include products $C_{12}$ - $C_{22}$. FAs with lengths
 4-10 will be included but no output will be accumulated there. These
-decisions are a bit arbitrary but they are ultimately tied with the
-output real datasets I had available for tuning the model(see
-subsequent sections).
+decisions are supported by the real output datasets we had available
+for tuning the model (see
+Results section).
 
 To build the basic model then that follows from the goals and this
 assumptions was built manually with SNOOPY \cite [] {heiner2012snoopy}. This basic model that will
@@ -168,7 +169,7 @@ Figure~\ref{fig:fa_elongation_full}. The model is similar in nature to
 the more full model presented previously but the concatenation steps
 are represented as single transitions and the elongation process goes
 up to $C_{22}$ because the elongation process in the ER is also
-included. Starting simple I also started from the inputs Malonyl-CoA
+included. The model starts from the two input points Malonyl-CoA
 and Acetyl-CoA whereas in reality the only precursor of FA
 biosynthesis is Acetyl-CoA and the 2 input points of the pathway are
 products coming from Acetyl-CoA. The model as presented in
@@ -205,12 +206,12 @@ transformed to an intermediate product there are only two transitions
 enabled: the transition taking it to the next longer intermediate and
 the transition taking to be stored at its current length(Figure~\ref{fig:binary_decision}). Let these
 two transitions be $t_1$ and $t_2$ respectively. According to
-the operational semantics of Stochatic Petri Nets(see Methods section)
+the operational semantics of Stochatic Petri Nets (see Methods section)
 a wait time is sampled for each of the enabled transitions from a
 negative exponential distribution with rate the value of the rate
 function of the
 transition. In this case the rate function of the two transitions are
-constants(see assumptions) $\lambda_{t_1}$ and $\lambda_{t_2}$. Since
+constants (see assumptions) $\lambda_{t_1}$ and $\lambda_{t_2}$. Since
 we know that one of the reactions will fire we can say that the
 firing probabilities of the two transitions or the probabilities of
 the token's decisions are:
@@ -230,7 +231,7 @@ P(continuing) & = P(t_2) = \frac{\lambda_{t_2}}{\lambda_{t_1} + \lambda_{t_2}} =
 \end{figure}
 
 In other words this is a Bernoulli trial with probability of success
-$p = P(t_1)$. Since we only care about the outputs at the end of the
+$p = P(t_1)$. Since we only considered the outputs at the end of the
 execution and not the timeframe of the process from start to finish
 then only the ratio of these two successive transitions rates is
 important and not their absolute numbers. Then the entire journey of a token through the network
@@ -243,7 +244,8 @@ after the other with each one going through the series of decisions
 or Bernoulli trials. The initial assumption that only one token
 travels through the net at each time can in fact be dropped since the
 output of the net only depends on the ratios of the pair of
-transitions representing each binary decision. I just chose to have it
+transitions representing each binary decision. We just chose to
+consider this assumption
 because this leads to the nice picture of the successive realisations
 of chains of Bernoulli trials which is intuitive for illustration
 purposes.
@@ -266,9 +268,9 @@ Each realisation of the stochastic process described by the Petri Net
 model which is itself a series of successive realisations of series of
 Bernoulli trials will have different outputs. While SNOOPY is a great
 tool for the visual side of things, creating the model and animating
-them, in order to be able to execute the model many times to get
-output profiles we needed a programmatic solution. I wrote code in
-Python that can read a model, execute it once or many times, and write
+it, in order to be able to execute the model many times to get
+output profiles we needed a programmatic solution. We wrote code in
+Python that can read a model, execute it once or a number of times, and write
 out the results. For the description of the model I used the PySCeS
 model description language for biochemical systems which is aimed at
 the Python language. The reactions are
@@ -285,7 +287,7 @@ into an appropriate Petri Net representation(Figure~\ref{fig:code}).
 
 
 \subsection{Model parameters}
-In the previous section I described the building of the basic model
+In the previous section we described the building of the basic model
 based on the goals and assumptions of the study. The elongation aspect
 that we are interested in was reduced down to a sequence of successive
 series of Bernoulli trials that determine the length that a FA will
@@ -294,29 +296,8 @@ ones that will affect the output, are the success probabilities for
 the stay-continue decisions for FA intermediaries with lengths
 $[C_{12}, C_{22}]$ since they are ones that have sinks. In this
 section two methods for the identification of these parameters for
-tuning the model so that its execution is biologically valid are
-presented. They both rely on experimental data from an MS study that
-contains relative MS spectra intensities for a number of lipid
-products extracted from cells. The aim of the study for which the
-experiment was conducted was to identify the effect of some treatment
-in lipid products so it included 90 samples from control and treatment
-(at different levels) individuals. Here we are only interested in creating a null
-model so only the 30 samples from the control individuals in the
-experiment were retained for
-the purposes of parameter tuning.
-
-The outputs of the net model are integer number of tokens accumulated
-at each of the sinks or FA of different lengths while the experimental
-data are relative intensities which are continuous numbers. In order
-to be able to compare the two for the tuning of the parameters the
-experimental data were transformed from relative intensities to
-relative absolute numbers. The transormation of a sample of relative
-intensities $\mathbf{s} = \{s_1, s_2, s_3, s_4, s_5, s_6\}$ became a
-transformed sample $\mathbf{ts} = \{ ts_i | ts_i = \lfloor s_i /
-min(\mathbf{s}) \rfloor \}$.
- Since we are only interested in the
-relative proportions of the outputs going from relative intensities to
-relative numbers should not affect the outcome. The data can then be
+tuning the model are presented so that its execution is biologically valid. They both rely on having experimental real dataset of
+realative proportions of FAs. These data can be
 seen as different realisations of the stochastic process described by
 the real model that acts in nature. The attempt is then to tune our
 model to be as close to the real model as possible by trying to tune
@@ -326,7 +307,8 @@ data. This is  classical Machine Learning formulation of the inverse
 problem(Figure~\ref{fig:ml}). In this section I first present a method to get point
 estimates and then profiles for the success probabilities parameters of the series of Bernoulli
 trials representing the chain of decisions for a token travelling
-through the net.
+through the net. The two methods presented here are used to analyse a
+real dataset in the Results section.
 
 \begin{figure}[htbp!]
 \centering
@@ -338,9 +320,9 @@ through the net.
 
 
 \subsubsection{Point estimates}
-The data more formally are a matrix $D$ with an element $D_{ik}$ being
+The experimental data are more formally a matrix $D$ with an element $D_{ik}$ being
 the number of tokens accumulated in the $k$-th FA in the $i$-th
-sample or realisation of the process. Since we have multiple
+sample. Since we have multiple
 realisations of Bernoulli trials the success probabilities can also be
 though of as success probabilities in binomial distributions. The
 Maximum Likelihood point estimator for binomial success probabilities
@@ -355,7 +337,7 @@ that are different realisation of the process then we can
 straightforwardly compute the success probabilities we are after.
 
 If we a take a specific sample (a row from data matrix $D$) then the
-number of successes for an FA are simply just the number of tokens of
+number of successes for an FA are simply the number of tokens of
 that FA in the sample since those are the tokens that when faced with
 the decision of whether to get stored as that FA or continue to form
 longer FAs they chose the former. Success and failure are arbitrarily
@@ -383,39 +365,22 @@ and $C_{14}$ and so on, are:
 \hat{p_5} & = 3 / (3+5) = 0.375\\
 \hat{p_6} & = 1
 \end{align*}
-This is for one sample but since all the samples are from the same
-population(controls) we can combine the successes/trials data from all
+This is for one sample but if all the samples are from the same
+population we can combine the successes/trials data from all
 samples and generalise the ML success probability estimation for the
-$i$-th FA products as:
+$i$-th FA product as:
 \begin{equation*}
 \hat{p_i} = \frac{\sum_k D_{ki}}{\sum_k \sum_{n\geq i} D_{kn}}
 \end{equation*}
 We assume that the columns of data matrix D are ordered according to
 the order of FAs in the system.
 
-The success probabilities ML estimators from the real experimental dataset
-can be seen in Table~\ref{tab:param_estimates}.
-
-\begin{table}
-\centering
-    \begin{tabular}{ccc}
-    Parameter & Value \\
-    $p_1$ &  0.0003000656 \\
-    $p_2$ & 0.0400323889\\
-    $p_3$ &  0.8235217126\\
-    $p_4$ &  0.9888339514\\
-    $p_5$ &  0.778597786 \\
-    $p_6$ &  1.0
-    \end{tabular}
-\caption{Success probabilities}
-\label{tab:param_estimates}
-\end{table}
 Since
-we do not care about the timeframe of the process but rather at the
+we do not consider the timeframe of the process but  only the
 output at the end the relative proportions of the transitions
-participating in a binary decision are what is important therefore we
-can use the calculated success probabilities as the rates of the
-transitions related to the binary decision. So for example since
+participating in a binary decision are what is important. We can therefore
+use the calculated success probabilities as the rates of the
+transitions related to the binary decision. So for example if
 $\hat{p_3}\approx0.82$ then the rates of the transitions corresponding to the
 binary decision for the 3rd FA, $C_{16}$, will be: rate of transition
 for $C_{16}$ storage (success) $0.82$ and rate of transition for
@@ -423,16 +388,16 @@ $C_{18}$ formation (failure) $0.18$($1-P(success)$).
 
 
 \subsubsection{Profiles}
-In the previous section I derived point estimates for the success
+In the previous section we presented a method to get point estimates for the success
 probabilities guiding the binary decisions taking place during the
-elongation process. I did that by considering the success
+elongation process. We did that by considering the success
 probabilities that maximise the likelihood function $L(D|p_i)$ for
 the $i$-th FA and data $D$ being the number of successes and number of
 trials. In this section I will present a likelihood function for the
 entire process which comes naturally by thinking of the process as
-before as a sequence of series of Bernoulli trials. I then use this
-likelihood function to get the profiles of the parameters of interest.
-
+before as a sequence of series of Bernoulli trials. We then use this
+likelihood function to present a method for calculating the profiles
+of the parameters.
 
 The data from one of the samples can be seen as one realisation of the
 stochastic process with the numbers of tokens at each FA being the
@@ -488,12 +453,77 @@ the parameters are not exactly the parameters of the multinomial but
 they are only related through Equations~\ref{eq:param_cor} an analytic
 solutions is not very attractive but since it is still a small problem
 we can resort to a simple simulation scheme to sample from the required
-posterior. I used the standard Metropolis-Hastings MCMC method to
+posterior. I used the standard Metropolis-Hastings Markov Chain Monte Carlo method to
 sample from the posterior as given above starting from a random point
 in parameter space and a symmetric normal proposal distribution with
-mean the previous accepted guess and an arbitrary chosen variance. The
-MCMC traces and the histograms of the samples obtained from the
-posteriors can be seen in Figure.
+mean the previous accepted guess and an arbitrary chosen variance.
+
+
+\subsection{Results}
+In this section we use the methods described previously to analyse and
+calculate the success probabilities from a real experimental
+dataset. The dataset comes from an experimental study for the effects
+of a treatment on the profiles of Fatty Acids on mice. FAs
+were extracted from brown adipose tissue from 91 mice subjected to 5
+levels of treatment. The FAs in the samples include both the free FAs
+and FAs that were cleaved from more complex lipid products. The amount
+of the extracted lipid species was measured with Gas Chromatography
+and a Flame ionization detector that gave relative intensities of each
+product. Each sample contained measurements from 34 FAs products that
+were identifiable in the measurements. From those 34 only 6 correspond
+to the outputs of our model, namely the even-chain saturated FAs
+C12:0, C14:0, C16:0, C18:0, C20:0, C22:0. This guided the model
+construction choices with sink outputs appearing at FAs with only these
+lengths and the entire process stopping at C22. The outputs of the net model are integer number of tokens accumulated
+at each of the sinks while the experimental
+data are relative intensities which are continuous numbers. In order
+to be able to compare the two for the tuning of the parameters the
+experimental data were transformed from relative intensities to
+relative absolute numbers. A sample of relative
+intensities $\mathbf{s} = \{s_1, s_2, s_3, s_4, s_5, s_6\}$ became a
+transformed sample $\mathbf{ts} = \{ ts_i | ts_i = \lfloor s_i /
+min(\mathbf{s}) \rfloor \}$.
+ Since we are only interested in the
+relative proportions of the outputs going from relative intensities to
+relative numbers should not affect the outcome.
+
+Point estimates of the  success probabilities calculated with from the
+Control(treatment level 0)
+subset of the real dataset can be seen in
+Table~\ref{tab:param_estimates}. We then applied Baysian Hierarchical
+Clustering (BHC) to the samples in the dataset to investigate changes
+in the parameters in the different groups. The clustering algorithm
+gave back 4 clusters. The centroid of each of the 4 clusters was used
+to calculate point estimates of the parameters. The centroids for each
+cluster can be seen in Figure~\ref{fig:clusters} and the calculated
+success probabilities for each cluster can be seen in
+Table~\ref{tab:param_estimates_clusters}.
+
+\begin{table}
+\centering
+    \begin{tabular}{ccc}
+    Parameter & Value \\
+    $p_1$ &  0.0003000656 \\
+    $p_2$ & 0.0400323889\\
+    $p_3$ &  0.8235217126\\
+    $p_4$ &  0.9888339514\\
+    $p_5$ &  0.778597786 \\
+    $p_6$ &  1.0
+    \end{tabular}
+\caption{Success probabilities}
+\label{tab:param_estimates}
+\end{table}
+
+\begin{figure}[htbp!]
+\centering
+\includegraphics[width=1.1\textwidth]{clusters}
+\caption[ML inverse problem formulation]{Clusters}
+\label{fig:clusters}
+\end{figure}
+
+
+
+
 
 
 \subsection{A stochastic $\pi$-calculus implementation}
@@ -507,13 +537,13 @@ processes making up the system to introduce further some of the
 concepts of the SPiM language. For more information about the SPiM
 language.
 
-The SPiM graphcal representation of the model can be seen in
+The SPiM graphical representation of the model can be seen in
 Figure~\ref{fig:spim_graph}. Each component of that graph is a
 stochastic pi-calculus process and edges between them indicate that
 one one of them can evolve into the other. The nature of the model is
 different from the equivalent model given in the previous section. The
 evolution of every species represented by a stochastic pi-calculus
-process which is defined independently. We start the computation by running 100
+process is defined independently. We start the computation by running 100
 \texttt{Acyl\_CoA} processes and 30 \texttt{Malonyl\_CoA} processes:
 
 \begin{verbatim}
@@ -521,13 +551,13 @@ run(100 of Malonyl_CoA() | 30 of Acyl_CoA())
 \end{verbatim}
 
 The initial reaction of the system creating the $C_4$ product is represented as
-communication by channell \texttt{form6} between \texttt{Acyl\_CoA} and
+communication by channel \texttt{form6} between \texttt{Acyl\_CoA} and
 \texttt{Malonyl\_CoA} processes. Once the communication happens the
 \texttt{Acyl\_CoA} process evolves into the  \texttt{Acyl\_CoA\_4}
 process while \texttt{Malonyl\_CoA} process goes to the empty
 process(gets consumed). After that all the processes corresponding
 FAs between $C_6$ and $C_{10}$ only have one communication option,
-communicate via the appropriate channell with a \texttt{Malonyl\_CoA}
+communicate via the appropriate channel with a \texttt{Malonyl\_CoA}
 process and then evolve into a process corresponding to a longer
 FA. For example process \texttt{Acyl\_CoA\_8}:
 
@@ -605,7 +635,7 @@ run(100 of Malonyl_CoA() | 30 of Acyl_CoA())
 
 
 \section{Extended model of FA synthesis}
-In the previous section I presented a Petri Net and stochastic
+In the previous section I presented Petri Net and stochastic
 pi-calculus implementations of a
 simplified view of FA elongation/synthesis. In this section I
 will present a Petri net implementation of an extended model which
@@ -617,13 +647,13 @@ through the action of acetyl-CoA carboxylase. Acetyl-CoA carboxylase
 is inactivated by AMPK protein kinase in mammals. In the well-fed
 state AMPK is itself inactivated which leads to an increase in the
 flow of Acetyl-CoA to Malonyl-CoA and since this is an irreversible
-reaction to the FA biosynthesis pathway. 
+reaction to the FA biosynthesis pathway.
 Also in conditions of high glucose
 concentration isocitrate dehydrogenase is inhibited so Acetyl-CoA only
 does the first step of the Krebs cycle when Citrate is produced. Since
 Citrate cannot go any further in the cycle it starts to accumulate
 until it starts to diffuse from the mitochondrion into the cytosol
-where it becames Acetyl-CoA again and acts as precursor for FA
+where it becomes Acetyl-CoA again and acts as precursor for FA
 biosynthesis. The net effect of this two is that more Acetyl-CoA will
 flow towards the FA biosynthesis than go towards the
 Kreb cycle and the Respiratory chain to produce energy because the
@@ -661,11 +691,11 @@ a transition without any post-places. ATP consumption could for
 example be used to model various energy requirements. The FA biosynthesis/elongation
 process is represented as before with the only difference
 being that it now only has a single input which then leads to the two
-inputs used in the basic version of the model. 
+inputs used in the basic version of the model.
 The main regulatory mechanism comes by making ATP a pre-place for the
 Acetyl-CoA transition to \texttt{FAsyn} so that ATP levels can
 influence the rate of that transition and hence the flow towards FA
-biosynthesis. 
+biosynthesis.
 
 \begin{figure}[htbp!]
 \centering
@@ -711,7 +741,7 @@ biosynthesis. The strength of the response to deviations is then:
 We can control the strength of the response by tuning the $k$
 parameter. For linear responses for example we can set $k=1$ which
 will mean that a 2-fold increase in the ATP level from its base rate
-results in a doubling of the 
+results in a doubling of the
 rate of the transition towards FA biosynthesis while the rate towards
 TCA remains constant.
 
@@ -734,5 +764,5 @@ points to reflect that:
 \frac{\lambda_{Malonyl\_CoA}}{\lambda_{Acetyl\_CoA}} = E(steps)
 \end{align*}
 
-\subsection{Model Execution and discussion}
+\subsection{Model Execution and comments}
 
