@@ -1,5 +1,5 @@
 MakeAbsNums <- function(d) {
-    nd <- apply(d, 1, function(x) { floor(x / min(x[x > 0])) })
+    nd <- apply(d, 1, function(x) { ceiling(x / min(x[x > 0])) })
 
     return(t(nd))
 }
@@ -38,6 +38,7 @@ GetMLEstimatesSample <- function() {
     #Return point estimates for the parameters based on the ML
     #estimation of success probabilities per sample
     fname <- "data/GCFIDrawdata.csv"
+
     data <- read.csv(fname)
     fas <- c("C.12.0", "C.14.0", "C.16.0", "C.18.0", "C.20.0", "C22.0")
     data <- data[, rev(fas)]
@@ -144,5 +145,31 @@ GetInputRateEstimates <- function() {
 BinLik <- function(x, p, n) {
     return(dbinom(x,size=n,prob=p,log=TRUE))
 }
+
+
+
+
+
+
+
+
+
+
+cl.inds <- lapply(1:5, function(x) { read.table(paste0("cl", x, ".txt")) })
+fas <- c("C.12.0", "C.14.0", "C.16.0", "C.18.0", "C.20.0", "C22.0")
+fname <- "data/GCFIDrawdata.csv"
+data <- read.csv(fname)
+data <- data[, rev(fas)]
+
+data.cl <- lapply(cl.inds, function(ind.l) { data[unlist(ind.l), ] })
+cl.centres <- lapply(data.cl, function(cl) { colMeans(cl) })
+cl.centres[[4]] <- NULL
+ml.est <- lapply(cl.centres, function(cl) {GetMLEstimates(t(as.matrix(cl)))})
+ml.est.mat <- matrix(unlist(ml.est), nrow=4, byrow = T)
+colnames(ml.est.mat) <- rev(fas)
+ml.est.mat <- ml.est.mat[, fas]
+
+xtable(ml.est.mat)
+
 
 
