@@ -1,3 +1,5 @@
+
+
 \chapter{Work}
 \label{chap:work}
 % **************************** Define Graphics Path **************************
@@ -471,7 +473,7 @@ of the extracted lipid species was measured with Gas Chromatography
 and a Flame ionization detector that gave relative intensities of each
 product. Each sample contained measurements from 34 FAs products that
 were identifiable in the measurements. From those 34 only 6 correspond
-to the outputs of our model, namely the even-chain saturated FAs
+to the outputs of our process of interest, namely the even-chain saturated FAs
 C12:0, C14:0, C16:0, C18:0, C20:0, C22:0. This guided the model
 construction choices with sink outputs appearing at FAs with only these
 lengths and the entire process stopping at C22. The outputs of the net model are integer number of tokens accumulated
@@ -517,11 +519,27 @@ Table~\ref{tab:param_estimates_clusters}.
 \begin{figure}[htbp!]
 \centering
 \includegraphics[width=1.1\textwidth]{clusters}
-\caption[ML inverse problem formulation]{Clusters}
+\caption[ML inverse problem formulation]{Centroids for each of the
+  four cluster discovered in the data with BHC.}
 \label{fig:clusters}
 \end{figure}
 
-
+\begin{table}
+\centering
+    \begin{tabular}{ccccccc}
+          & $p_1$ & $p_2$ & $p_3$ & $p_4$ & $p_5$ & $p_6$ \\
+Cluster 1 & 0.0008979348 & 0.04284002 & 0.7984351 & 0.9906832 &
+0.8333333 &  1 \\
+Cluster 2 & 0.0013392857 & 0.04380867 & 0.8092567 & 0.9901961 &
+0.7500000 & 1 \\
+Cluster 3 & 0.0011865915 & 0.05435105 & 0.8483040 & 0.9896480 &
+0.8000000 & 1 \\
+Cluster 4 & 0.0008532423 & 0.04312553 & 0.8420348 & 0.9887006 &
+0.7500000 & 1 \\
+\end{tabular}
+\caption{Point estimates for the success probabilities for each cluster.}
+\label{tab:param_estimates_cluster}
+\end{table}
 
 
 
