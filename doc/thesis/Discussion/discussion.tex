@@ -6,3 +6,150 @@
 \else
     \graphicspath{{Discussion/Figs/Vector/}{Discussion/Figs/}}
 \fi
+
+This section is divided into two logical parts. The first two
+sections are commentary and critique on firstly the created model and
+secondly the languages we used to capture the model. The last section
+takes the form of perspectives and future directions of both the
+language methodology and our developed model.
+
+\section{Simplified model and accuracy of description}
+In this work we created an abstract simplified reaction-centric model of the elongation
+process that takes place in the cell to grow the CH tails of
+FAs. The model we developed captures the defining high-level
+characteristics of this process accurately. The developed model allows
+us to observe the series of elongation steps and get distributions of
+outputs of FA products that can be compared with real experimental
+datasets as we have done in section Results. We have also shown how
+we can tune the parameters of the model in the presence of such datasets
+. The assumptions we made however
+for the contrusction of the model make it biochemically
+inaccurate. So while it might provide a high level view of the model
+in a conceptually clear way it does not reflect the
+actual biochemical process that takes place inside the cell. All the
+reaction rate functions were assumed to be constant and treated as
+probabilities without regarding enzymatic activity and numbers of
+molecules of the
+reactants. In fact all the concatenation steps of the process involve
+the activity of the same enzymes so the basal reaction rates
+(probability of reaction between two reactant molecules) should be the same for
+all elongation steps. There must be then some other underlying
+biochemical mechanism that
+gives rise to the probabilistic interpretation we provided through our
+model. Each concatenation step was also considered as a single
+reaction instead of the four that it actually takes. This assumption does not pose a big problem for the
+biochemical validity of the model if the stoichiometries and enzyme
+activities participating in the reactions are considered
+carefully. The other big simplification was the combination of the two
+pathways acting together for the elongation of FAs, FA biosynthesis in
+the cytosol
+for FA lengths up to 16 and FA elongation in ER for longer FAs. The
+transportation between the cytsol was not considered.
+
+In the extended model we considered the relation between different
+pathways in the metabolic machinery of the cell. We only wanted to
+investigate the communication between the interfaces of the different
+pathways so we represented pathways by one transition and explicitly
+only the metabolites that provide the communication interface with
+other pathways and most importantly the FA biosynthesis/elongation
+process. So for example the entire TCA cycle and respiratory chain
+responsible for the production was represented as one transition with
+only ATP explicitly modelled as place because that is the point of
+communication with the FA biosynthesis process. Also this interaction
+was represented as single step while in reality it goes through the
+AMPK protein kinase. Again transportation between the compartments
+that in this case also inlude the mitochondrion is not included and
+Acetyl-CoA is represented by a single place. An interesting aspect of
+our model is that we can also capture the communication between the
+pathways and the environment for example by setting the rate for
+glucose intake or the rate of ATP consumption.
+
+In a way our models do not completely fall into the bottom-up or
+top-down approaches to model contstruction. We started from some
+knowledge of the system to construct the model in the first place
+(top-down) but then experimental data guided some of the decisions in
+the model simplification. In the end the FA biosynthesis/elongation
+simplified model can provide accurate description and a mechanistic model for the reproduction of
+measurable quantities but not a mechanistic model for the underlying
+biochemical process. We still consider this a reaction-centric model
+though despite the fact that the Petri Net transitions do not exactly
+correspond to accurate biochemcical reactions. It is still
+reaction-centric because the main events of the model are the
+transformations of species from one form to the other.
+
+\section{Description languages}
+One of the project goals was also to investigate modelling methodology
+for a suitable language to describe the reaction-centric view of lipid
+metabolism. We particularly focused on Petri Nets that were the main
+language used but we also provided an alternative stochastic
+pi-calculus (SPiM) implementation of the basic model.
+
+\textbf{The following text in this Dicsussion is just extended notes(not complete yet):}
+Petri Nets nicely captures the iterative process and probabilistic
+decisions we identified as the main characteristics and motivations
+for this reaction-centric view. This is also inherent in the intutive
+graphical notation. Good tools, nice dyanmic view with token game
+which is defined by formal operational semantics. Also flexible allows
+to model any kind of communication not only physical reactions but
+also our more high level interactions. Not done here but
+could also do static topological analysis along with quantitative
+analysis. For bigger networks could also employ model checking
+technqiues since the language is formally defined. Petri Nets are
+however very monolithic. Need to capture entire system in one
+model. For example can's abstract away, at least not formally, details of one pathway and
+provide only the communication links with other parts. (See future
+perspectives for some thoughts on this)
+
+Stochastic pi-calculus provides the reaction centric view we want and
+the decisions that are so important. Both from the syntax but also
+with the nice graphical notation. Non a straightforward correspondence
+between chemical reactions and pi-calculus constructs. Metabolites
+defined independently so the size of model grows linearly with number
+of species not number of reactions. Could be better for larger
+nets. Also this definition allows for decomposability and modularity
+which can make this approach scale better.
+
+\section{Future perspectives}
+
+\subsection{Language methods}
+Petri Nets with boundaries to create modules of interaction with some
+interfaces between the modules? This is exactly what we have done
+informally in our extended model. This approach combines the
+advantages of Petri Nets and pi-calculus. Could be a good
+solution. Sobocinski paper looks promising. The composition operator
+between bounded PNs could for example be the 'cross-talk' between
+pathways. Modularity -> allows us to define just the interface and not
+the actual implementation of pathways we are not interested at the
+moment. Could also improve collaborations. One group works on one
+pathway in detail, another one some other and they only have to worry
+about the interfaces.
+
+Would be good to have a language that we could use to abstract away
+unwanted details and be able to defined higher level qualities of the
+system in terms of lower level details. Stratified design like
+computer programs! Some attempts: process algebras with hooks from
+Glasgow and bigraphs from Milner.
+
+\subsection{Modelling and experimental validation}
+Evaluate our models and experiments to maybe calc the parameters of
+the extenedn model as well. Time-series measurements so we can see
+control/strength of control.
+
+Add other modifications and cross-talk between pathways. For example
+DAGs, TAGs combinatorial problems. Could also measure these somehow.
+
+Definetely add degradation. Balance is important.
+
+The regulation of FA biosynthesis through AMPK is just one point of
+control. Could also add others.
+
+With a more biochemically valid model we could also something similar
+to what we have done in the Results section. See the differences
+between disease/non-disease. With a biochemical valid model could
+identify mechanisms and misregulations.
+
+
+
+
+
+
