@@ -40,6 +40,7 @@ control mechanisms.
 
 \section{Basic model}
 \subsection{Petri Net implementation}
+\label{sec:pn_implementation}
 FA biosynthesis starts with Acetyl-CoA which is being converted to
 Malonyl-CoA. A reaction between Malonyl-CoA and Acetyl-CoA starts off
 the first $C_4$ FA product and a $CO_2$ molecule. After that there are successive $C_2$
@@ -228,27 +229,24 @@ P(continuing) & = P(t_2) = \frac{\lambda_{t_2}}{\lambda_{t_1} + \lambda_{t_2}} =
 
 In other words this is a Bernoulli trial with probability of success
 $p = P(t_1)$. Since we only considered the outputs at the end of the
-execution and not the timeframe of the process from start to finish
+execution and not the timeframe of the process from start to finish,
 then only the ratio of these two successive transitions rates is
-important and not their absolute numbers. Then the entire journey of a token through the network
-from the initial $C_4$ product until it reaches a sink and gets stored
+important and not their absolute numbers. The entire journey of a token through the network
+is from the initial $C_4$ product until it reaches a sink and gets stored,
 can be thought of a series of Bernoulli
-trials(Figure~\ref{fig:trials}). Then the entire stochastic process
+trials(Figure~\ref{fig:trials}). The entire stochastic process
 can be thought of a sequence of successive realisations of this series
 of trials with tokens travelling through the net one
 after the other with each one going through the series of decisions
 or Bernoulli trials. The initial assumption that only one token
 travels through the net at each time can in fact be dropped since the
 output of the net only depends on the ratios of the pair of
-transitions representing each binary decision. We just chose to
-consider this assumption
-because this leads to the nice picture of the successive realisations
-of chains of Bernoulli trials which is intuitive for illustration
-purposes.
-It is also interesting to note how this binary decision
+transitions representing each binary decision. We consider this assumption, because it is intuitive and reduces the  problem to a successive realisations
+of chains of Bernoulli trials.
+It is also interesting to note how the binary decision
 corresponds to a conflict between two events that share pre-conditions
 which create non-determinsim through a race condition between the two
-depdendent events. This 'conflict' which represents this decision
+depdendent events. The 'conflict' that represents this decision
 process is captured inherently in the structure and semantics of Petri
 Nets.
 
@@ -261,10 +259,11 @@ stochastic process a series of Bernoulli trials.}
 \end{figure}
 
 Each realisation of the stochastic process described by the Petri Net
-model which is itself a series of successive realisations of series of
-Bernoulli trials will have different outputs. While SNOOPY is a great
+model is itself a series of successive realisations of series of
+Bernoulli trials that have different outputs. While SNOOPY is a great
 tool for the visual side of things, creating the model and animating
-it, in order to be able to execute the model many times to get
+it, in order to be able to execute the model many times and many
+orders of multiple iterations to get
 output profiles we needed a programmatic solution. We wrote code in
 Python that can read a model, execute it once or a number of times, and write
 out the results. For the description of the model I used the PySCeS
@@ -283,22 +282,21 @@ into an appropriate Petri Net representation(Figure~\ref{fig:code}).
 
 
 \subsection{Model parameters}
-In the previous section we described the building of the basic model
+In Section~\ref{sec:pn_implementation} we described the building of the basic model
 based on the goals and assumptions of the study. The elongation aspect
 that we are interested in was reduced down to a sequence of successive
-series of Bernoulli trials that determine the length that a FA will
+series of Bernoulli trials to determine the length that a FA will
 stop its elongation at. The interesting parameters of the model, the
 ones that will affect the output, are the success probabilities for
 the stay-continue decisions for FA intermediaries with lengths
 $[C_{12}, C_{22}]$ since they are ones that have sinks. In this
-section two methods for the identification of these parameters for
-tuning the model are presented so that its execution is biologically valid. They both rely on having experimental real dataset of
+section two methods are presented for the identification of these parameters for
+tuning the model so that its execution is biologically valid. They both rely on having experimental real dataset of
 realative proportions of FAs. These data can be
-seen as different realisations of the stochastic process described by
-the real model that acts in nature. The attempt is then to tune our
+seen as different realisations of the stochastic process that acts in nature. The attempt is then to tune our
 model to be as close to the real model as possible by trying to tune
 the proportions of the outputs of our model to match the proportions
-of the outputs by the real model represented in the experimental
+of the outputs by the in the experimental
 data. This is  classical Machine Learning formulation of the inverse
 problem(Figure~\ref{fig:ml}). In this section I first present a method to get point
 estimates and then profiles for the success probabilities parameters of the series of Bernoulli
@@ -319,17 +317,17 @@ real dataset in the Results section.
 The experimental data are more formally a matrix $D$ with an element $D_{ik}$ being
 the number of tokens accumulated in the $k$-th FA in the $i$-th
 sample. Since we have multiple
-realisations of Bernoulli trials the success probabilities can also be
-though of as success probabilities in binomial distributions. The
+realisations of Bernoulli trials, the success probabilities can also be
+thought of as success probabilities in binomial distributions. The
 Maximum Likelihood point estimator for binomial success probabilities
 is given for the $i$-th decision corresponding to the $i$-th FA,
 \begin{equation*}
 \hat{p_i} = \frac{k_i}{n_i}
 \end{equation*}
-, where $k_i$ is the number of successes and $n_i$ is the number of
+where $k_i$ is the number of successes and $n_i$ is the number of
 trials. If we extract information about the number of successes and
 number of trials for each binary decision in the process from the data
-that are different realisation of the process then we can
+that are different realisation of the process, then we can
 straightforwardly compute the success probabilities we are after.
 
 If we a take a specific sample (a row from data matrix $D$) then the
@@ -373,7 +371,7 @@ the order of FAs in the system.
 
 At the end, the relative proportions of the transitions are important not the timeframe of generating the iterations in our process. We can therefore
 use the calculated success probabilities as the rates of the
-transitions related to the binary decision. So for example if
+transitions related to the binary decision(s). So for example if
 $\hat{p_3}\approx0.82$ then the rates of the transitions corresponding to the
 binary decision for the 3rd FA, $C_{16}$, will be: rate of transition
 for $C_{16}$ storage (success) $0.82$ and rate of transition for
@@ -541,8 +539,7 @@ is needed for quantitive analysis of biochemical networks and also by
 adding operational semantics in terms of an Abstract Machine and a
 graphical representation language. The SPiM code is given for the
 processes making up the system to introduce further some of the
-concepts of the SPiM language. For more information about the SPiM
-language.
+concepts of the SPiM language.
 
 The SPiM graphical representation of the model can be seen in
 Figure~\ref{fig:spim_graph}. Each component of that graph is a
