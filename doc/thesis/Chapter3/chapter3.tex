@@ -1,5 +1,3 @@
-
-
 \chapter{Work}
 \label{chap:work}
 % **************************** Define Graphics Path **************************
@@ -49,7 +47,8 @@ that requires 4 reactions, requiring another Malonyl-CoA(Figure~\ref{fig:fa_synt
 full pathway from KEGG can be seen in
 Figure~\ref{fig:kegg_synthesis}. The elongation pathway located in ER
 is similar in nature but the intermediaries are CoAs instead of
-ACPs(Figure \ref{fig:kegg_elongation}).
+ACPs (Figure \ref{fig:kegg_elongation}). ACPs (Acyl Carrier Proteins)
+is where the growing FA chain is bound during elongation. 
 
 \begin{figure}[htbp!]
 \centering
@@ -271,17 +270,18 @@ model description language for biochemical systems which is aimed at
 the Python language \cite [] {olivier2005modelling}. The reactions are
 defined in the standard chemical notation and since this corresponds
 exactly to Petri Net transitions it was easy to load the description
-into an appropriate Petri Net representation(Figure~\ref{fig:code}).
+into an appropriate Petri Net representation (Figure~\ref{fig:code}).
 
 \begin{figure}[htbp!]
 \centering
 \includegraphics[width=1.0\textwidth]{code}
-\caption[Workflow]{Structure of the code and workflow}
+\caption[Workflow]{Structure of the code and workflow.}
 \label{fig:code}
 \end{figure}
 
 
 \subsection{Model parameters}
+\label{sec:params}
 In Section~\ref{sec:pn_implementation} we described the building of the basic model
 based on the goals and assumptions of the study. The elongation aspect
 that we are interested in was reduced down to a sequence of successive
@@ -302,7 +302,7 @@ problem(Figure~\ref{fig:ml}). In this section I first present a method to get po
 estimates and then profiles for the success probabilities parameters of the series of Bernoulli
 trials representing the chain of decisions for a token travelling
 through the net. The two methods presented here are used to analyse a
-real dataset in the Results section.
+real dataset in Section~\ref{sec:results}.
 
 \begin{figure}[htbp!]
 \centering
@@ -451,6 +451,7 @@ mean the previous accepted guess and an arbitrary chosen variance.
 
 
 \subsection{Results}
+\label{sec:results}
 In this section we use the methods described previously to analyse and
 calculate the success probabilities from a real experimental
 dataset. The dataset comes from an experimental study for the effects
@@ -531,7 +532,7 @@ $p_5$ & 0.8333333 & 0.7500000 & 0.8000000 & 0.7500000 \\
 
 
 
-\subsection{A stochastic $\pi$-calculus implementation}
+\subsection{Stochastic $\pi$-calculus implementation}
 In this section I present a stochastic pi-calculus version of the
 model which is specifically written in its SPiM variant which extends
 the traditional pi-calculus first by introducing explicitly time which
@@ -688,14 +689,14 @@ mechanism. Acetyl-CoA has a decision of whether to flow towards FA
 biosynthesis represented by transitions to place \texttt{FAsyn}
 or flow towards the TCA cycle and further energy production which is
 represented by a transition to the \texttt{TCA}
-place. The \texttt{TCA}  place represents the combined
+place (red box in Figure~\ref{fig:pn_ext}). The \texttt{TCA}  place represents the combined
 effect of the TCA cycle and the respiratory chain which has as an
 ouput 30 molecules of ATP. ATP can then be consumed by taking part in
 a transition without any post-places. ATP consumption could for
 example be used to model various energy requirements. FA biosynthesis/elongation
 process is represented as before. The only difference
 is that it now only has a single input which then leads to the two
-inputs used in the basic version of the model.
+inputs used in the basic version of the model (green box in Figure~\ref{fig:pn_ext}).
 The main regulatory mechanism comes by making ATP a pre-place for the
 Acetyl-CoA transition to \texttt{FAsyn} so that ATP levels can
 influence the rate of that transition and hence the flow towards FA
@@ -703,7 +704,7 @@ biosynthesis.
 
 \begin{figure}[htbp!]
 \centering
-\includegraphics[width=1.0\textwidth]{pn_ext}
+\includegraphics[width=1.2\textwidth]{pn_ext}
 \caption[Extended Petri Net model]{An extended version of the model}
 \label{fig:pn_ext}
 \end{figure}
