@@ -52,18 +52,18 @@ $p_1$, 1 token in the circle for place $p_2$, and 2 tokens in the
 circle for place $p_3$. If the net also has one transition $t_1$ and
 the following maps,
 \begin{equation*}
-pre(t_1) = (p_1 = 2, p_2 = 1, p_3=0) \mbox{ and } post(t_1P) = (p_1
+pre(t_1) = (p_1 = 2, p_2 = 1, p_3=0) \mbox{ and } post(t_1) = (p_1
 =0, p_2=0, p_3=2)
 \end{equation*}
-,then the net would have inbound edges from $p_1$ and $p_2$ to the
+then the net would have inbound edges from $p_1$ and $p_2$ to the
 transition node weighted with 2 and 1 respectively and an outbound edge
 weighted by 2 between the transition node and the circle representing
-$p_3$(Figure~\ref{fig:fig:pn_example}). The places connected with
+$p_3$(Figure~\ref{fig:pn_example}). The places connected with
 inbound edges with a transition are called the pre-places and the
 places connected with outbound edges with a transition are called the
-post-places of that transition. When a transition fires tokens are removed from its
+post-places of that transition. When a transition fires, tokens are removed from its
 pre-places and are placed in its post-places according to the weights
-on the corresponding edges. For example in the net defined previously
+on the corresponding edges. For example in the previously defined net,
 if transition $t_1$ fires 2 tokens will be removed from $p_1$, 1 token
 from $p_2$, and 2 tokens will be added to place $p_3$(Figure~\ref{fig:pn_operation}).
 
@@ -96,7 +96,7 @@ leads to a simple algorithm for the execution of Petri Net models:
 Non-determinism comes in the system from step 2 where we choose a
 transition to fire at random from a set of enabled ones. This way multi-option
 probabilistic decisions can be incorporated by having one or more
-transitions that share pre-places(Figure~\ref{fig:nondet}). From the
+transitions that share pre-places. From the
 example Figure~\ref{fig:nondet} when the shared pre-place is
 sufficiently marked both transitions would be enabled. The token would
 have to make a non-deterministic decision between the two
@@ -149,7 +149,7 @@ enabled a wait time is sampled from a negative exponential with rate
 $\lambda(M)_t$ which has to lapse before the transition
 fires. Therefore time is explicitly captured. When more than one
 transition is enabled a wait time is sampled from all of them and the
-one with the least wait time gets to fire. This suits are modelling
+one with the least wait time gets to fire. This suits our modelling
 requirements for assigning probabilities to outcomes of
 non-deterministic decisions. For a decision structure like the one in
 Figure~\ref{fig:nondet} we can set the likelihoods of the two outcomes

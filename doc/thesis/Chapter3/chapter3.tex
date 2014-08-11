@@ -44,7 +44,7 @@ FA biosynthesis starts with Acetyl-CoA which is being converted to
 Malonyl-CoA. A reaction between Malonyl-CoA and Acetyl-CoA starts off
 the first $C_4$ FA product and a $CO_2$ molecule. After that there are successive $C_2$
 concatenations to elongate the FA product with each elongation step
-, that requires 4 reactions, requiring another Malonyl-CoA(Figure~\ref{fig:fa_synthesis}). The
+that requires 4 reactions, requiring another Malonyl-CoA(Figure~\ref{fig:fa_synthesis}). The
 full pathway from KEGG can be seen in
 Figure~\ref{fig:kegg_synthesis}. The elongation pathway located in ER
 is similar in nature but the intermediaries are CoAs instead of
@@ -76,10 +76,10 @@ in biosynthesis.}
 \end{figure}
 
 Because of the natural correspondence between biochemical reactions as
-they are found in the KEGG static model to Petri Net model constructs
+they are annotated in the KEGG static model to Petri Net model constructs
 a straight translation between the two is straightforward. All the
 pathway reactions become transitions with pre-places the reactants and
-post-places the products. Here we made our first assumptions by
+post-places for the products. Here we made our first assumptions by
 omitting the enzymes participating as catalysts from the reactions. Information about the enzymes
 is not so important for our purposes since we are interested in the
 numbers of molecules of the metabolites involved in the process. Information
@@ -90,7 +90,7 @@ tokens/metabolites move through the net. The FA products are
 represented as sinks, places that are not pre-places to any
 transitions, so once a token reaches one of these sinks it is
 trapped. That way the probabilistic iterative nature of the process is
-capture completely, an intermediate of the process can either remain
+captured completely, an intermediate of the process can either remain
 at that length or go on to form longer FAs. The sinks are therefore
 the outputs of the stochastic process with the inputs being the places
 that do not act as post-places for any transition. Starting with some
@@ -149,37 +149,35 @@ two process are sequential so a $C_{18}$ for example can be elongated
 directly to a $C_{20}$ while in reality it would have to first be
 transported to the ER. Since we also take this view of the
 net model as a control box turning input signal through a series of
-steps to an output signal we can safely squeeze the four step reaction chain
+steps to an output signal, we can safely squeeze the four step reaction chain
 needed for each $C_2$ concatenation step to a single step reaction and
 at the same time consider only the forward direction
-reactions. Also, since we are no longer consider exact chemical
+reactions. Also, since we no longer consider exact chemical
 reactions the reactions rate functions will just be constant values
 and we will treat those as probabilities that will govern the
-non-deterministic decisions during the execution of the model that
-transforms the input signal into output proportions of FAs. Finally we
+non-deterministic decisions during the execution of the model. Finally we
 also decided to stop the elongation process at $C_{22}$. Therefore the
 sinks will only include products $C_{12}$ - $C_{22}$. FAs with lengths
 4-10 will be included but no output will be accumulated there. These
-decisions are supported by the real output datasets we had available
+decisions are supported by the output from the real experimental data available
 for tuning the model (see
 Results section).
 
-To build the basic model then that follows from the goals and this
-assumptions was built manually with SNOOPY \cite [] {heiner2012snoopy}. This basic model that will
+The basic model was built with SNOOPY \cite [] {heiner2012snoopy} using the previous conditions and assumptions. This basic model that will
 be the basis for our work in this study can be seen in
 Figure~\ref{fig:fa_elongation_full}. The model is similar in nature to
 the more full model presented previously but the concatenation steps
 are represented as single transitions and the elongation process goes
 up to $C_{22}$ because the elongation process in the ER is also
-included. The model starts from the two input points Malonyl-CoA
+included. Initially, I consider as simple model with two input points Malonyl-CoA
 and Acetyl-CoA whereas in reality the only precursor of FA
 biosynthesis is Acetyl-CoA and the 2 input points of the pathway are
 products coming from Acetyl-CoA. The model as presented in
 Figure~\ref{fig:fa_elongation_full} starts with inputs: 300
 Malonyl-CoA and 100 Acetyl-CoA molecules. The model can then be set in
-motion with SNOOPY until it reaches a dead state which basically
+motion with SNOOPY until it reaches a dead state which 
 corresponds to the point where the system runs out of input
-metabolites to 'fuel' any further reactions. The output of the system
+metabolites to 'fuel' further reactions. The output of the system
 is the number of tokens accumulated at each of the sinks or FAs of
 different lengths.
 
@@ -194,16 +192,12 @@ different lengths.
 
 Observing the execution pattern of the basic net model we notice an
 execution pattern which leads to an elegant view of the system as a
-series of binary probabilistic decisions or Bernoulli trials. The way
-the inputs of the model are set up, at the start of the model
+series of binary probabilistic decisions or Bernoulli trials. At the start of the model
 execution only the initial transition producing the first product $C_4$ is
-enabled. If we consider that after this transition fires (since its
-the only one enabled) it
+enabled. If we consider that after this transition it
 will only fire again after its initial product has reached a sink then
-at each point only one token is travelling through the net. This token
-goes through an iteration of binary decisions: stay at current length
-\textit{or} continue to form a longer
-FA. More formally as the token gets
+at each iteration only one token is travelling through the net. This token
+goes through an iteration of repeating the same binary decision: to either stay at the current length or continue to form a longer FA. More formally as the token gets
 transformed to an intermediate product there are only two transitions
 enabled: the transition taking it to the next longer intermediate and
 the transition taking to be stored at its current length(Figure~\ref{fig:binary_decision}). Let these
@@ -368,7 +362,7 @@ and $C_{14}$ and so on, are:
 \hat{p_6} & = 1
 \end{align*}
 This is for one sample but if all the samples are from the same
-population we can combine the successes/trials data from all
+population, we can combine the successes/trials data from all
 samples and generalise the ML success probability estimation for the
 $i$-th FA product as:
 \begin{equation*}
@@ -377,10 +371,7 @@ $i$-th FA product as:
 We assume that the columns of data matrix D are ordered according to
 the order of FAs in the system.
 
-Since
-we do not consider the timeframe of the process but  only the
-output at the end the relative proportions of the transitions
-participating in a binary decision are what is important. We can therefore
+At the end, the relative proportions of the transitions are important not the timeframe of generating the iterations in our process. We can therefore
 use the calculated success probabilities as the rates of the
 transitions related to the binary decision. So for example if
 $\hat{p_3}\approx0.82$ then the rates of the transitions corresponding to the
@@ -504,7 +495,7 @@ Table~\ref{tab:param_estimates_clusters}.
 \begin{table}
 \centering
     \begin{tabular}{ccc}
-    Parameter & Value \\
+    Parameter & Value \\ \hline
     $p_1$ &  0.0003000656 \\
     $p_2$ & 0.0400323889\\
     $p_3$ &  0.8235217126\\
@@ -512,7 +503,8 @@ Table~\ref{tab:param_estimates_clusters}.
     $p_5$ &  0.778597786 \\
     $p_6$ &  1.0
     \end{tabular}
-\caption{Success probabilities}
+\caption{Success probabilities estimated from the Control samples in
+  the dataset.}
 \label{tab:param_estimates}
 \end{table}
 
@@ -527,18 +519,15 @@ Table~\ref{tab:param_estimates_clusters}.
 \begin{table}
 \centering
     \begin{tabular}{ccccccc}
-          & $p_1$ & $p_2$ & $p_3$ & $p_4$ & $p_5$ & $p_6$ \\
-Cluster 1 & 0.0008979348 & 0.04284002 & 0.7984351 & 0.9906832 &
-0.8333333 &  1 \\
-Cluster 2 & 0.0013392857 & 0.04380867 & 0.8092567 & 0.9901961 &
-0.7500000 & 1 \\
-Cluster 3 & 0.0011865915 & 0.05435105 & 0.8483040 & 0.9896480 &
-0.8000000 & 1 \\
-Cluster 4 & 0.0008532423 & 0.04312553 & 0.8420348 & 0.9887006 &
-0.7500000 & 1 \\
+Parameter&  Cluster 1& Cluster 2& Cluster 3& Cluster 4 \\ \hline
+$p_1$ & 0.0008979348 & 0.0013392857 & 0.0011865915& 0.0008532423 \\
+$p_2$ & 0.04284002 & 0.04380867 & 0.05435105 & 0.04312553 \\
+$p_3$ & 0.7984351 & 0.8092567 & 0.8483040 & 0.8420348 \\
+$p_4$ &  0.9906832 & 0.9901961 & 0.9896480 & 0.9887006 \\
+$p_5$ & 0.8333333 & 0.7500000 & 0.8000000 & 0.7500000 \\
 \end{tabular}
 \caption{Point estimates for the success probabilities for each cluster.}
-\label{tab:param_estimates_cluster}
+\label{tab:param_estimates_clusters}
 \end{table}
 
 
@@ -680,7 +669,7 @@ immediate energy requirements are low(high ATP).
 \citet{nielsen2009systems} experimentally confirmed that
 this regulatory mechanism is conserved in yeast through the action of
 Snf1 which the yeast analog of the mammalian AMPK and they also
-produced Flux Balance Analysis systems biology models to capture the
+produced Flux Balance models to capture the
 change in flows in the system throught the action of protein kinase
 Snf1. Here we provide a Petri Net implementation of the above
 regulatory scheme as an extension to the basic model we presented
@@ -756,7 +745,7 @@ biosynthesis. The strength of the response to deviations is then:
 \begin{equation*}
 \left ( \frac{ATP}{ATPb}\right)^{k}
 \end{equation*}
-We can control the strength of the response by tuning the $k$
+We can therefore control the strength of the response by tuning the $k$
 parameter. For linear responses for example we can set $k=1$ which
 will mean that a 2-fold increase in the ATP level from its base rate
 results in a doubling of the
@@ -782,5 +771,4 @@ points to reflect that:
 \frac{\lambda_{Malonyl\_CoA}}{\lambda_{Acetyl\_CoA}} = E(steps)
 \end{align*}
 
-\subsection{Model Execution and comments}
 

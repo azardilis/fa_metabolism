@@ -1,3 +1,19 @@
+TCA_flow:
+	Acetyl_CoA > TCA
+	0.2		
+
+FA_flow:
+	Acetyl_CoA > FAsyn
+	0.1
+
+Mal_flow:
+	FAsyn > Inp_1
+	0.613
+
+Acyl_flow:
+	FAsyn > Inp_2
+	0.1
+
 R1:
 	Inp_1 + Inp_2 > Acyl_CoA_6
 	0.00001
@@ -56,8 +72,11 @@ storage_C22:
 	Acyl_CoA_20 > C22
 	1.0
 
-Inp_1 = 300
-Inp_2 = 100
+Acetyl_CoA = 0
+TCA = 0
+FAsyn = 500
+Inp_1 = 0
+Inp_2 = 0
 Acyl_CoA_6 = 0
 Acyl_CoA_8 = 0
 Acyl_CoA_10 = 0
