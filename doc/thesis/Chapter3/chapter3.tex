@@ -48,7 +48,7 @@ full pathway from KEGG can be seen in
 Figure~\ref{fig:kegg_synthesis}. The elongation pathway located in ER
 is similar in nature but the intermediaries are CoAs instead of
 ACPs (Figure \ref{fig:kegg_elongation}). ACPs (Acyl Carrier Proteins)
-is where the growing FA chain is bound during elongation. 
+is where the growing FA chain is bound during elongation.
 
 \begin{figure}[htbp!]
 \centering
@@ -106,7 +106,9 @@ metabolites over the integration time.
 \begin{figure}[htbp!]
 \centering
 \includegraphics[width=1.0\textwidth]{pn_fa_elongation}
-\caption[FA elongation Petri Net model]{}
+\caption[FA elongation Petri Net model]{The full Petri Net model of
+  the FA elongation process as a direct translation from the KEGG
+  annotated pathway.}
 \label{fig:pn_fa_elongation}
 \end{figure}
 
@@ -175,7 +177,7 @@ biosynthesis is Acetyl-CoA and the 2 input points of the pathway are
 products coming from Acetyl-CoA. The model as presented in
 Figure~\ref{fig:fa_elongation_full} starts with inputs: 300
 Malonyl-CoA and 100 Acetyl-CoA molecules. The model can then be set in
-motion with SNOOPY until it reaches a dead state which 
+motion with SNOOPY until it reaches a dead state which
 corresponds to the point where the system runs out of input
 metabolites to 'fuel' further reactions. The output of the system
 is the number of tokens accumulated at each sink or FA of
@@ -185,7 +187,7 @@ different lengths.
 \centering
 \includegraphics[width=1.0\textwidth]{fa_elongation_full}
 \caption[Petri Net implementation(basic model)]{Petri Net
-  implementation of the basic model as described in the main text}
+  implementation of the basic model as described in the main text.}
 \label{fig:fa_elongation_full}
 \end{figure}
 
@@ -275,7 +277,8 @@ into an appropriate Petri Net representation (Figure~\ref{fig:code}).
 \begin{figure}[htbp!]
 \centering
 \includegraphics[width=1.0\textwidth]{code}
-\caption[Workflow]{Structure of the code and workflow.}
+\caption[Workflow]{Structure of the code and workflow. The model was
+  written in the PySCeS modelling language.}
 \label{fig:code}
 \end{figure}
 
@@ -428,7 +431,7 @@ function of the data given the success probabilities as
 probability mass function of the multinomial distribution:
 \begin{equation*}
 L(D|\mathbf{\theta}) = f(C_{12},\dots, C_{22}; n ; P(C_{12}), \dots,
-P(C_{22})\}) =
+P(C_{22})\}) = \frac{n!}{C_{12}\dots C_{22}} P(C_{12})^{C_{12}}\dots P(C_{22})^{C_{22}}
 \end{equation*}
 
 Using the likelihood function for the entire process we can find the
@@ -511,7 +514,9 @@ Table~\ref{tab:param_estimates_clusters}.
 \centering
 \includegraphics[width=1.1\textwidth]{clusters}
 \caption[ML inverse problem formulation]{Centroids for each of the
-  four cluster discovered in the data with BHC.}
+  four cluster discovered in the data with BHC. Centroids are given
+  here in relative numbers as transformed from relative intensities in
+the raw data (see main text for conversion process).}
 \label{fig:clusters}
 \end{figure}
 
@@ -584,7 +589,10 @@ intentionally to keep track of their numbers.
 \begin{figure}[htbp!]
 \centering
 \includegraphics[width=1.0\textwidth]{spim_graph}
-\caption[SPiM graph]{SPiM graph}
+\caption[SPiM graph]{SPiM graph for the FA synthesis/elongation
+  process. Component state transitions capture the iterative
+  conversion process taking place nicely. Decisions are also inherent
+  in the graph structure as edge forks out of state nodes.}
 \label{fig:spim_graph}
 \end{figure}
 
@@ -640,6 +648,7 @@ run(100 of Malonyl_CoA() | 30 of Acyl_CoA())
 
 
 \section{Extended model of FA synthesis}
+\label{sec:pn_ext_implementation}
 In the previous section I presented Petri Net and stochastic
 pi-calculus implementations of a
 simplified view of FA elongation/synthesis. In this section I
@@ -704,13 +713,18 @@ biosynthesis.
 
 \begin{figure}[htbp!]
 \centering
-\includegraphics[width=1.2\textwidth]{pn_ext}
-\caption[Extended Petri Net model]{An extended version of the model}
+\includegraphics[width=1.05\textwidth]{pn_ext}
+\caption[Extended Petri Net model]{An extended version of the
+  model. The main regulatory mechanisms comes by making ATP a
+  pre-place to Acetyl-CoA transition towads FA biosynthesis. The boxes
+indicate the main decision points. Parameterisation of the rates of
+these decisions is given in Section~\ref{sec:mod_param_ext}}
 \label{fig:pn_ext}
 \end{figure}
 
 
 \subsection{Model Parameters}
+\label{sec:mod_param_ext}
 In this section I present a way to construct the
 rate functions for the transitions out of Acetyl-CoA in order to get
 the required regulatory behaviour based on ATP levels and a way to
@@ -760,13 +774,13 @@ Acetyl-CoA. Since it is a stochastic process however we do not know in
 advance how many steps each token will take through the net. We can
 however find the expectation of the number of steps:
 \begin{equation*}
-E(steps)=\sum_{4 \leq i \leq 9} i \times P(i)
+E(steps)=\sum_{5 \leq i \leq 10} i \times P(i)
 \end{equation*}
 So on average we need $E(steps)$ Malonyl-CoAs for every one
 Acetyl-ACP. We can set the transition rates towards these two starting
 points to reflect that:
 \begin{align*}
-\frac{\lambda_{Malonyl\_CoA}}{\lambda_{Acetyl\_CoA}} = E(steps)
+\frac{\lambda_{Malonyl\_CoA}}{\lambda_{Acyl\_CoA}} = E(steps)
 \end{align*}
-
-
+For the Control samples from the experimental dataset from
+Section~\ref{sec:results} $E(steps)=7.131454$.

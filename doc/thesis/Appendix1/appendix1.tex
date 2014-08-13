@@ -1,18 +1,31 @@
 % ******************************* Thesis Appendix A ********************************
-\chapter{Code} 
-The code written for this project is available at a Github repository \href{https://github.com/azardilis/fa_metabolism}{here}.
+\chapter{Code}
+The code along with the data and model files for this project is available at a Github repository \href{https://github.com/azardilis/fa_metabolism}{here}.
 Following is a brief explanation of what is contained in the files in
-the Github repository.
+the repository.
 
 \begin{table}[h]
 \centering
-\begin{tabular}{lp{8cm}}
+\begin{tabular}{lp{7cm}}
 \textbf{Filename} & \textbf{Description} \\
-\texttt{fa.py}  &  Contains code for loading a model, executing it, and writing results to file (see Figure~\ref{fig:code}) \\[0.05cm]
+\texttt{fa.py}  &  Contains code for loading a model, executing it, and writing results to file (see Figure~\ref{fig:code}) \\[0.03cm]
 \\
-\texttt{fa.pyx}         &  Same as \texttt{fa.py} but in Cython for improved performance          \\[0.05cm]\\
+\texttt{fa.pyx}         &  Same as \texttt{fa.py} but in Cython for improved performance          \\[0.03cm]\\
 \texttt{ml\_est.R}         &  Contains code for the two methods for
-parameter inference for the basic model as described in Section~\ref{sec:params}. Also includes loading, filtering, and parameter calculation for the experimental dataset as presented in Section~\ref{sec:results}
+parameter inference for the basic model as described in
+Section~\ref{sec:params}. Also includes loading, filtering, and
+parameter calculation for the experimental dataset as presented in
+Section~\ref{sec:results} \\[0.03cm] \\
+\texttt{data/GCFIDrawdata.csv} & Contains the raw experimental data
+with intensities for all FA products \\[0.03cm] \\
+\texttt{model/fa\_elongation\_full.spstochpn} & SNOOPY \cite []
+{heiner2012snoopy} model file for the basic model presented in
+Section~\ref{sec:pn_implementation} \\[0.03cm] \\
+\texttt{model/fa\_elongation\_full.psc} & Same as above but in the
+PySCeS language. Can be loaded with the \texttt{load\_model} function in
+\texttt{fa.py} \\[0.03cm] \\
+\texttt{model/fa\_synthesis\_control.spstochpn} & SNOOPY model file for the
+extended model presented in Section~\ref{sec:pn_ext_implementation}\\
 \end{tabular}
 \end{table}
 

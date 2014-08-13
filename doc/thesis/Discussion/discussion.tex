@@ -14,16 +14,15 @@ takes the form of perspectives and future directions of both the
 language methodology and our developed model.
 
 \section{Simplified model and accuracy of description}
-In this work we created an abstract simplified reaction-centric model of the elongation
-process that takes place in the cell to grow the CH tails of
-FAs. The model we developed captures the defining high-level
+In this work we created an abstract simplified reaction-centric model
+of the biosynthesis and elongation
+process that takes place in the cytosol and ER. The model developed captures the defining high-level
 characteristics of this process accurately. The developed model allows
 us to observe the series of elongation steps and get distributions of
 outputs of FA products that can be compared with real experimental
 datasets as we have done in section Results. We have also shown how
-we can tune the parameters of the model in the presence of such datasets
-. The assumptions we made however
-for the contrusction of the model make it biochemically
+we can tune the parameters of the model in the presence of such datasets. The assumptions we made however
+for the construction of the model make it biochemically
 inaccurate. So while it might provide a high level view of the model
 in a conceptually clear way it does not reflect the
 actual biochemical process that takes place inside the cell. All the
@@ -33,7 +32,7 @@ molecules of the
 reactants. In fact all the concatenation steps of the process involve
 the activity of the same enzymes so the basal reaction rates
 (probability of reaction between two reactant molecules) should be the same for
-all elongation steps. There must be then some other underlying
+all elongation steps with maybe some slight differences due to the different interaction between the enzymes and FA with different lengths. There must be then some other underlying
 biochemical mechanism that
 gives rise to the probabilistic interpretation we provided through our
 model. Each concatenation step was also considered as a single
@@ -44,18 +43,25 @@ carefully. The other big simplification was the combination of the two
 pathways acting together for the elongation of FAs, FA biosynthesis in
 the cytosol
 for FA lengths up to 16 and FA elongation in ER for longer FAs. The
-transportation between the cytsol was not considered.
+transportation between the cytosol was not considered. Transportation
+could be added with the current methods on an ad-hoc basis by
+considering for example a delayed transition between $C_{16}$ and
+$C_{18}$ (transportation delay) or having two $C_{16}$ places, one
+cytosolic and one in ER, and a transition between them encoding the
+transportation event.
 
 In the extended model we considered the relation between different
 pathways in the metabolic machinery of the cell. We only wanted to
 investigate the communication between the interfaces of the different
 pathways so we represented pathways by one transition and explicitly
-only the metabolites that provide the communication interface with
-other pathways and most importantly the FA biosynthesis/elongation
-process. So for example the entire TCA cycle and respiratory chain
+only the metabolites that provide the communication interface between FA biosynthesis/elongation process and
+other pathways. So for example the entire TCA cycle and respiratory chain
 responsible for the production of energy was represented as one transition with
 only ATP as output as that is the point of
-communication with the FA biosynthesis process. Also this interaction
+communication with the FA biosynthesis process. ATP is required in the
+conversion of Acetyl-CoA to Malonyl-CoA for the first commited step
+towards FA biosynthesis and also acts as a regulation metabolite of
+the AMPK protein kinase that inhibits this step. Also this interaction
 was represented as a single step while in reality it goes through the
 AMPK protein kinase. Again transportation between the compartments
 that in this case also inlude the mitochondrion is not included and
@@ -73,12 +79,11 @@ simplified model can provide accurate description and a mechanistic model for th
 measurable quantities but not a mechanistic model for the underlying
 biochemical process. We still consider this a reaction-centric model
 though despite the fact that the Petri Net transitions do not exactly
-correspond to accurate biochemcical reactions. It is still
-reaction-centric because the main events of the model are the
+correspond to accurate biochemcical reactions because the main events of the model are the
 transformations of species from one form to the other.
 
 \section{Description languages}
-One of the project goals was also to investigate modelling methodology
+One of the project goals was also to investigate modelling methods
 for a suitable language to describe the reaction-centric view of lipid
 metabolism. We particularly focused on Petri Nets that were the main
 language used but we also provided an alternative stochastic
@@ -108,8 +113,8 @@ and play the token game. In this work we mainly focused on
 quantitative analysis of stochastic Petri Nets but the dynamic picture
 is only part of the strength of Petri Nets. Their formal specification
 allows for qualititative static topological analyses that yield the
-same insides as standard techniques in the field like Elementary Nodes
-analysis. Another thing that we have not touched here but it is of
+same insides as standard techniques in the field like Elementary Modes
+analysis. Another topic that we do not address here but it is of
 particular interest especially as the models grow in size is the model
 checking ability we have with the use of Petri Nets. We can use model
 checking techniques for example to explore qualitative and quantitive
@@ -117,17 +122,17 @@ static and dynamic properties of systems. \citet{gilbert2007unifying}
 go as far as to provide a unifying framework for both qualitative and
 quantitative analysis of biochemical networks captured with the Petri
 Net language. It is interesting that we can use the same language to
-analyse and talk about features of systems that are usually captured
-with different approaches. One big drawback of Petri Nets is that they
+analyse and describe features of systems that are usually captured
+with different approaches. One major drawback of Petri Nets is that they
 are monolithic. Models cannot be decomposed to smaller parts in order
 for example to abstract away non-important details of parts of the
 process that are not of immediate interest. We did this informally in
 the extended version of the model by defining entire pathways as
-transitions and explicitly only the metabolites that provided the link
+transitions and by including only the metabolites that provided the link
 to other pathways. This is not captured formally though in the
 language. The inherent coupling with the chemical reaction view makes
 the constructed models grow linearly with the number of
-reactions. This is not a big problem for metabolic pathways because of
+reactions. This is not a major problem for metabolic pathways because of
 the iterative chain of conversion that usually takes place. For
 larger systems however with combinatorial interactions between species
 there are scaling issues (See Future perspectives for some thoughts on
@@ -142,8 +147,8 @@ of communication between the components that correspond to the
 reactions. It is particularly suited to metabolism because metabolic
 pathways usually involve linear series of conversions. These linear
 series of conversion can be encoded with the sequential operator of
-the calculus that defined state changes of a component afer
-communication actions(reactions). The other characterstic we are
+the calculus that defines state changes of a component afer
+communication actions (reactions). The other characterstic we are
 interested in, decisions, is also captured nicely with the choice
 operator of the calculus that provides non-determinism. Another
 advantage of stochastic pi-calculus over Petri Nets is the
@@ -160,7 +165,7 @@ larger networks.
 In this section we present some possible future directions for our
 contstructed models and experimental validation.
 
-Using the already contstructed models as a scaffold we could expand
+Using the already contstructed models as a scaffold we can expand
 them to include interactions with other pathways. In this work we
 concentrated on even-chain saturated FAs but these are not the only FA
 products. FAs can get modified after creation not only but the
@@ -171,49 +176,52 @@ double bond combine as building blocks to form more complex lipid
 products like triacylglycerols (TAGs) and diacylglycerols (DAGs). DAGs
 and TAGs contain a headgroup and two or three FAs
 respectively. Following from our high level view of FA
-biosynthesis/elongation we could add probabilistic further
-modifications and probabilistic complex formation. Our current
-modelling methoodology is suited for this kind of systems. For example
+biosynthesis/elongation we can derive probability equations for these further
+modifications and complex formations. Our current
+modelling methoodology is suited for this kind of system. For example
 if we also had some experimental data about the frequencies of the
 triplets or pairs of FAs found in TAGs and DAGs respectively we could
 extend the model by making the current sinks of the system feed into
 transitions for complex formation using the frequencies to infer the
 probabilities. Perhaps we could start from yeast that only has
 mono-unsaturated FAs to limit the combinatorial space in complex
-formation \cite [] {nielsen2009systems}. 
+formation \cite [] {nielsen2009systems}. Yeast is a good choice for a
+model organism as it produces complex lipids like other animals but
+without taking Polyunsaturated FAs from the diet.
 Production and modelling the net forward direction is only part of
 the story however and the corresponding catabolic processes are
 equally important and the balance between them one of the major goals
 of the interplay and control between different parts of the metabolic
-machine. For example we could and should definitely add degradation of
+machinery. For example we can add degradation of
 FAs. Finally as an extension to our model with control we could add
-other control mechanisms. The control of of Acetyl-CoA flow to FA
+other control mechanisms. The control of Acetyl-CoA flow to FA
 biosynthesis through ATP and AMPK is only one point of control. The
-production of $C_{16}$ also inhibits the flow to prevent the
+production of $C_{16}$ molecules also inhibits the flow to prevent the
 accumulation of FAs for example.
 
 
-In order for our models to be valid in their representation of some
-aspect of the natural world we need to be able to experimentally
-validate them by comparing their execution to real data. We have done
-that for our basic model for which we have output real experimental
-data. It would be interesting to get experimental data to confirm the
+In order to validate our modelling strategy we need to compare its execution to real data. We have done
+that for our basic model for which we have output real output. It would be interesting to gather experimental data to confirm the
 control mechanism between ATP and Acetyl-CoA flow to FA formation. For
 example we could use $^{13}C$ metabolite labelling to get time-series
 data of the flows. This would allow us to calculate the strength of
-the response to ATP change in Acetyl-CoA flow towards FA biosynthesis
+the response to ATP change (through TCA activity) in Acetyl-CoA flow towards FA biosynthesis
 and would allow us to tune the $k$ parameter we used in our extended
 model for the transition from Acetyl-CoA to the \texttt{FAsyn}
 place. Having experimental data across different conditions, like we
 had for example for our basic model, could provide another useful
 dimension to our models. In the Results section we calculated the
-model parameters for different clusters of lipid product profiles. By
+model parameters for different clusters of lipid product patterns among the FA distribution under healthy and pathological conditions. By
 observing changes in the parameters across conditions we could
 pinpoint areas or structures that show behavioural changes in the model. This could lead
 to mechanistic understanding of changes that lead to different
 conditions and disorders. This would be far more attractive with the
 time-series data and the control mechanisms that appear to be the
-reasons behind several metabolic disorders. Even with our high level
+reasons behind several metabolic disorders. Controlling the diet over
+a number of invidivuals is very hard and dynamic analysis is currently
+inaccesible for animals so we could again start with yeast as a
+model organism for time-series measurements of metabolites and
+flows. Even with our high level
 models we could for example calculate the strength response parameter
 $k$ across conditions.
 
@@ -222,7 +230,7 @@ $k$ across conditions.
 As we have mentioned in previous sections Petri Nets may not be suited
 to larger systems. Even for smaller system they lack the
 expressiveness to capture different parts of models at different
-levels of abstraction. \citet{lprogramming} propose Petri Nets with
+levels of abstraction. \citet{DBLP:journals/corr/abs-1304-3121} propose Petri Nets with
 Boundaries that can decompose Petri Nets and compositional operators
 to define the interconnections between different parts. This approach
 has a graphical notation where each part is enclosed in box
@@ -234,10 +242,10 @@ via normal transitions (Figure~\ref{fig:pnb}). The main operator of the algebra 
 synchronisation between these parts for communication. The researchers
 have also provided a nice programming language borrowing elements from
 functional programming to use along with the
-algebra for Petri Nets with boundaries that I think it is important
+algebra for Petri Nets with boundaries that we believe it is important
 in order for these formalisms to be adopted by practitioners. Now this
-approach is quite attractive because it allows for the decomposition
-of net models in an intuitive way and then communication between the
+approach is quite attractive because it allows us to decompose the net
+models in an intuitive way and then communication between the
 components through the synchronisation operator. In a way it borrows
 some of the advantages of process-algebra models while keeping the
 vivid graphical notation of Petri Nets. For our purposes of biological
@@ -250,7 +258,7 @@ extended model but this approach makes it formal. This approach
 however has as its main motivation behind the decomposition the
 minimisation of state-space for model checking. It will need some
 further work for it to be executable and useful for biological
-modelling. I am just presenting it here because I think it is a step
+modelling. We are only presenting it here because we believe it is a step
 in the right direction.
 
 \begin{figure}[htbp!]
@@ -275,10 +283,16 @@ the ability to nest structures \cite []
 {jensen2004bigraphs}. \citet{degasperi2013process} proposed a process
 algebra with hooks that attempts to provide modelling capabilities for
 multi-level biological systems and communication operators between the
-levels. I think that these are steps in the right direction because we
+levels. In our opinion these are steps in the right direction because we
 are interested in qualities of biological systems that naturally fall
-on different levels. We should be able to express the higher level
-qualities in terms of the lower level qualities. That way we could
-possible have multi-level stratified design of biological systems akin
+on different levels. For example in metabolims we might want to talk
+about the cross-talk between pathways or communication between cells. We should be able to express these higher level
+qualities in terms of the lower level qualities. The language we use
+could have primitives to talk about the lowest level, for example
+binding between chemical species, and then the language would be
+expressive enough to let the modeller/programmer build its own
+language that is suited to the problem on top of those primitives.
+That way we could
+possible have multi-level stratified design of biological systems similar
 to computer programs organisation and abstraction \cite [] {abelson1987lisp}.
 

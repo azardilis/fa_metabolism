@@ -45,7 +45,7 @@ defined as outbound edges. Markings are represented by tokens inside
 the place. For example a Petri Net with three places and the following
 marking,
 \begin{equation*}
-M_{p1} = 2\mbox{, } M_{p_2}=1 \mbox{ and } M_{p_3} = 2
+\mathcal{M}_{p1} = 2\mbox{, } \mathcal{M}_{p_2}=1 \mbox{ and } \mathcal{M}_{p_3} = 2
 \end{equation*}
 , would be represented by 2 tokens residing in the circle for place
 $p_1$, 1 token in the circle for place $p_2$, and 2 tokens in the
@@ -70,14 +70,17 @@ from $p_2$, and 2 tokens will be added to place $p_3$(Figure~\ref{fig:pn_operati
 \begin{figure}
 \centering
 \includegraphics[scale=1.0]{pn_example}
-\caption{Small basic Petri Net example}
+\caption[Small basic Petri Net example]{Small basic Petri Net example. The net has a single
+  transition $t_1$ with $p_1$ and $p_2$ as pre-places and $p_3$ as post-place.}
 \label{fig:pn_example}
 \end{figure}
 
 \begin{figure}
 \centering
 \includegraphics[scale=0.7]{pn_operation}
-\caption{The token game for basic Petri Nets.}
+\caption[Token game for basic Petri Nets]{The token game for basic Petri Nets. When transition $t_1$
+  fires tokens (discs inside place nodes) are removed from its
+  pre-places and added to its post-places according to the edge weights.}
 \label{fig:pn_operation}
 \end{figure}
 
@@ -106,7 +109,10 @@ post-place.
 \begin{figure}
 \centering
 \includegraphics[scale=0.7]{nondet}
-\caption{Non-deterministic decisions encoded in Petri Net structure.}
+\caption[Non-determinism in Petri Net structure]{Non-deterministic decisions encoded in Petri Net
+  structure. In this structure there is a conflict between the two
+  transitions which creates a race condition that encodes
+  non-determinism in the system.}
 \label{fig:nondet}
 \end{figure}
 
@@ -144,10 +150,10 @@ defined as before with the only addition being the $\nu$ that is a
 map between transitions and rate functions. A rate function for a
 transition $t$ is a
 possibly marking dependent function that returns the rate
-$\lambda(M)_t$ for the wait time of that transition. Now the
+$\lambda(\mathcal{M})_t$ for the wait time of that transition. Now the
 operational semantics also change slightly. When a transition $t$ is
 enabled a wait time is sampled from a negative exponential with rate
-$\lambda(M)_t$ which has to lapse before the transition
+$\lambda(\mathcal{M})_t$ which has to lapse before the transition
 fires. Therefore time is explicitly captured. When more than one
 transition is enabled a wait time is sampled from all of them and the
 one with the least wait time gets to fire. This suits our modelling
@@ -254,7 +260,12 @@ more outgoing edges from a process state.
 \begin{figure}
 \centering
 \includegraphics[scale=0.3]{sp_graph}
-\caption{Graphical notation for SPiM}
+\caption[SPiM graphical notation]{Graphical notation of SPiM. The notation encodes a
+  labeled-transition system. Each node represents a state and the
+  labels in the edges the communication actions that need to take
+  place in order for the transitions between the two states. A new
+  state for a process could be an entirely new process (for example A
+  eventually evolves to a new process P)}
 \label{fig:sp_graph}
 \end{figure}
 
