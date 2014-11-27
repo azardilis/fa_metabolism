@@ -45,8 +45,7 @@ disorders and diseases. While Flux Balance
 Analysis is of great importance in the study of large metabolic
 networks it is not so suited in studying Lipid metabolism. Lipid
 metabolism is poorly annotated in the databases and it is hard to
-analyse using constraint based methods like FBA. Constraint-based
-methologies (FBA) have avoided systems like Lipid metabolism
+analyse using constraint based methods like FBA. Constraint-based methods (FBA) have avoided systems like Lipid metabolism
 probably because they require more local probabilistic metabolic
 processes and crucial regulatory mechanisms.
 
@@ -67,7 +66,7 @@ done was method development and since we noticed a more
 general trend towards executable formal models in biology \cite [] {fisher2007executable} we also
 note that an alternative language to capture the model is the process
 algebra of  pi-calculus. We therefore attempt to contrast the two formal
-modeling approaches: net models and process algebra models.
+modelling approaches: net models and process algebra models.
 
 In this introduction, I start by giving an overview of the currently most popular
 method for the description of metabolic pathways (FBA),
@@ -79,18 +78,18 @@ distributed computing modelling languages.
 
 \section{Dynamical systems theory and Flux Balance Analysis}
 Systems Biology attempts to master the complexity and understand metabolic
-pathways and any biological system by usually contructing
+pathways and any biological system by usually constructing
 models. There are two types of models based on their construction
 method. Bottom-up models are constructed by extracting biological
 knowledge from experimental datasets. This category includes for
 example the diagrammatic means of capturing the interconnected
-structure of metabolic pathwayw. Top-down models on the other hand
+structure of metabolic pathway. Top-down models on the other hand
 start from a detailed knowledge of the system to get a mechanistic
 model \cite [] {schneider2013understanding}.
 
-Early attemps to capture the interactions and dependencies between
+Early attempts to capture the interactions and dependencies between
 components were made with bottom-up models which resulted in large diagrams that
-capture the conversion processes happending inside metabolic pathways. While these
+capture the conversion processes happening inside metabolic pathways. While these
 diagrams are important and are a useful representation of our knowledge
 about metabolism, they lack the dynamic nature which is crucial in a
 systems level understanding of a system which should not only include
@@ -160,7 +159,7 @@ of the system. The usual problem mathematical biologists face is that
 the reaction rate function (the $r_k(\mathbf{x})$) contain parameter
 constants that are not usually known.
 
-In the contex of metabolic systems however, there is a mathematical technique, called Flux Balance
+In the context of metabolic systems however, there is a mathematical technique, called Flux Balance
 Analysis, that is used to compute these flows without explicit
 knowledge of these parameters by making some assumptions about the
 system to simplify the problem \cite [] {orth2010flux}. If we assume that that metabolites
@@ -279,7 +278,7 @@ give a more local perspective of the iterative conversion processes
 and the stochastic nature of the probabilistic
 decision-making process. In this study we
 focus on the Fatty Acid Biosynthesis pathway which is an important
-part of lipid metabolism. It exhibits the characeteristics that are
+part of lipid metabolism. It exhibits the characteristics that are
 suited to a reaction-centric analysis: iterative behaviour with
 non-deterministic decisions and regulatory mechanisms from other pathways.
 
@@ -305,7 +304,7 @@ section and Methods) that make them useful in the analysis of the
 reaction-centric view of lipid metabolism. Language is important not
 only because a syntax is needed to define our models but also because
 the notation we use is our tool of thought and the use of the correct
-language for thinking about a problem can enhance our understadnding
+language for thinking about a problem can enhance our understanding
 and ultimately help us solving it \cite [] {iverson2007notation}. That is why we have more
 than one high-level programming language despite the fact that all of
 them are Turing complete and therefore have the ability to express all
@@ -385,7 +384,7 @@ makes it an interesting case-study.
 The main aim of this study was to assess the
 applicability of the Petri net formal language to capture a
 reaction-centric view of lipid metabolism by producing a model of the
-Fatty Acid biosyntesis/elongation process. For completeness we also
+Fatty Acid biosynthesis/elongation process. For completeness we also
 created a stochastic pi-calculus version of the model to contrast the
 two methods as part of the more general exploration towards executable
 formal models in Biology. An extended version of the basic FA
