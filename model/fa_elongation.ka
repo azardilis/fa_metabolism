@@ -1,0 +1,53 @@
+### Iterative FA elongation process
+
+#### Signatures 
+%agent: AcylCoA(r)
+%agent: MalCoA(l, r)
+
+#### Rules
+'irrev' AcylCoA(r), MalCoA(l) -> AcylCoA(r!1), MalCoA(l!1) @ 'init_rate'
+'el_step' MalCoA(l!_, r), MalCoA(l) <-> MalCoA(l!_, r!1), MalCoA(l!1) @ 'el_rate', 'break_rate'
+
+#### Vars
+%var: 'init_rate' 0.1
+%var: 'el_rate' 0.5
+%var: 'break_rate' 0.05
+%var: 'n_Acyl' 20
+%var: 'n_Mal' 100
+
+#### Observables to keep track
+%obs: 'freeAcyl' AcylCoA(r)
+%obs: 'freeMal' MalCoA(l, r)
+%obs: 'C4' AcylCoA(r!1), MalCoA(l!1, r)
+%obs: 'C6' AcylCoA(r!1), MalCoA(l!1, r!2), MalCoA(l!2, r) 
+%obs: 'C8' AcylCoA(r!1), MalCoA(l!1, r!2), MalCoA(l!2, r!3), MalCoA(l!3, r)
+%obs: 'C10' AcylCoA(r!1), MalCoA(l!1, r!2), MalCoA(l!2, r!3), MalCoA(l!3, r!4), \
+      	    MalCoA(l!4, r)
+%obs: 'C12' AcylCoA(r!1), MalCoA(l!1, r!2), MalCoA(l!2, r!3), MalCoA(l!3, r!4), \
+      	    MalCoA(l!4, r!5), MalCoA(l!5, r)
+%obs: 'C14' AcylCoA(r!1), MalCoA(l!1, r!2), MalCoA(l!2, r!3), MalCoA(l!3, r!4), \
+      	    MalCoA(l!4, r!5), MalCoA(l!5, r!6), MalCoA(l!6, r)
+%obs: 'C16' AcylCoA(r!1), MalCoA(l!1, r!2), MalCoA(l!2, r!3), MalCoA(l!3, r!4), \
+      	    MalCoA(l!4, r!5), MalCoA(l!5, r!6), MalCoA(l!6, r!7), MalCoA(l!7, r)
+%obs: 'C18' AcylCoA(r!1), MalCoA(l!1, r!2), MalCoA(l!2, r!3), MalCoA(l!3, r!4), \
+      	    MalCoA(l!4, r!5), MalCoA(l!5, r!6), MalCoA(l!6, r!7), MalCoA(l!7, r!8), \
+	    MalCoA(l!8, r)
+%obs: 'C20' AcylCoA(r!1), MalCoA(l!1, r!2), MalCoA(l!2, r!3), MalCoA(l!3, r!4), \
+      	    MalCoA(l!4, r!5), MalCoA(l!5, r!6), MalCoA(l!6, r!7), MalCoA(l!7, r!8), \
+	    MalCoA(l!8, r!9), MalCoA(l!9, r)
+%obs: 'C22' AcylCoA(r!1), MalCoA(l!1, r!2), MalCoA(l!2, r!3), MalCoA(l!3, r!4), \
+      	    MalCoA(l!4, r!5), MalCoA(l!5, r!6), MalCoA(l!6, r!7), MalCoA(l!7, r!8), \
+	    MalCoA(l!8, r!9), MalCoA(l!9, r!10), MalCoA(l!10, r)
+%obs: 'C24' AcylCoA(r!1), MalCoA(l!1, r!2), MalCoA(l!2, r!3), MalCoA(l!3, r!4), \
+      	    MalCoA(l!4, r!5), MalCoA(l!5, r!6), MalCoA(l!6, r!7), MalCoA(l!7, r!8), \
+	    MalCoA(l!8, r!9), MalCoA(l!9, r!10), MalCoA(l!10, r!11), MalCoA(l!11, r)
+
+
+#### Initial conditions
+%init: 'n_Acyl' AcylCoA()
+%init: 'n_Mal' MalCoA()
+
+%mod: [E] > 10 do $SNAPSHOT
+%def: "dotSnapshots" "yes"
+
+
