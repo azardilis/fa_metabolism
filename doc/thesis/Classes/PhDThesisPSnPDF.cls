@@ -859,6 +859,8 @@ wish to left align your text}
 \vspace*{1ex}
 {\large \textit {\@degree} \par}
 
+\vfill
+{\large Word count: 13576 \par}
 
 \end{center}
 \vfill

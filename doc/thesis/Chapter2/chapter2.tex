@@ -39,7 +39,7 @@ defined in the $pre$ and $post$ maps:
 There is a widely used graphical notation for Petri Nets where
 transitions are represented by squares, places by circles, and the
 condition maps with directed weighted edges between the two types of
-nodes(squares and circles). Edges defined in the $pre$ map are
+nodes (squares and circles). Edges defined in the $pre$ map are
 represented as inbound edges and edges defined in the $post$ map are
 defined as outbound edges. Markings are represented by tokens inside
 the place. For example a Petri Net with three places and the following
@@ -47,7 +47,7 @@ marking,
 \begin{equation*}
 \mathcal{M}_{p1} = 2\mbox{, } \mathcal{M}_{p_2}=1 \mbox{ and } \mathcal{M}_{p_3} = 2
 \end{equation*}
-, would be represented by 2 tokens residing in the circle for place
+would be represented by 2 tokens residing in the circle for place
 $p_1$, 1 token in the circle for place $p_2$, and 2 tokens in the
 circle for place $p_3$. If the net also has one transition $t_1$ and
 the following maps,
@@ -58,14 +58,14 @@ pre(t_1) = (p_1 = 2, p_2 = 1, p_3=0) \mbox{ and } post(t_1) = (p_1
 then the net would have inbound edges from $p_1$ and $p_2$ to the
 transition node weighted with 2 and 1 respectively and an outbound edge
 weighted by 2 between the transition node and the circle representing
-$p_3$(Figure~\ref{fig:pn_example}). The places connected with
+$p_3$ (Figure~\ref{fig:pn_example}). The places connected with
 inbound edges with a transition are called the pre-places and the
 places connected with outbound edges with a transition are called the
 post-places of that transition. When a transition fires, tokens are removed from its
 pre-places and are placed in its post-places according to the weights
 on the corresponding edges. For example in the previously defined net,
 if transition $t_1$ fires 2 tokens will be removed from $p_1$, 1 token
-from $p_2$, and 2 tokens will be added to place $p_3$(Figure~\ref{fig:pn_operation}).
+from $p_2$, and 2 tokens will be added to place $p_3$ (Figure~\ref{fig:pn_operation}).
 
 \begin{figure}
 \centering
@@ -91,10 +91,11 @@ leads to a simple algorithm for the execution of Petri Net models:
 
 \begin{enumerate}[noitemsep]
 \item Initialise the net  with $(P, T, pre, post)$ and set state $\mathcal{M} = \mathcal{M}_0$
-\item Find enabled transitions, $enabled \subseteq T, \forall t \in T \mbox{ if } pre(t) \leq M$
+\item Find enabled transitions, $enabled \subseteq T, \forall t \in T \mbox{ if } pre(t) \leq \mathcal{M}$
 \item Choose transition $t$ from set of enabled at random
 \item Update state according to $\mathcal{M} = \mathcal{M} -pre(t) + post(t)$
-\item Repeat steps 2-4 until there are no more enabled transitions or an external stop condition is met(e.g. max number of steps)
+\item Repeat steps 2-4 until there are no more enabled transitions or
+  an external stop condition is met (e.g. max number of steps)
 \end{enumerate}
 Non-determinism comes in the system from step 2 where we choose a
 transition to fire at random from a set of enabled ones. This way multi-option
@@ -120,7 +121,7 @@ There is a very natural correspondence Petri Nets and biochemical
 systems. Every reaction is represented by a transition with the
 reactants becoming pre-places and the products post-places of that
 transition. The stoichiometry of a reaction is represented in the
-pre and post maps. A reaction like $2H + O \rightarrow H_2O$ will lead
+\textit{pre} and \textit{post} maps. A reaction like $2H + O \rightarrow H_2O$ will lead
 to a Petri Net with three places and one transition removing two
 tokens from the $H$ places and 1 token from the $O$ place and adding
 one token to the $H_2O$ place. The tokens in each place indicate the
@@ -169,21 +170,22 @@ computation as the action of independent agents/processes which
 communicate with each other. Stochastic pi-calculus is an extension to
 the original formulation to capture stochasticity and time similar to
 the Stochastic Petri net extension for basic Petri Nets. Processes can
-do a sequence of actions which are composed with the '.'(dot)
+do a sequence of actions which are composed with the \texttt{'.'} (dot)
 operator. Each action can be a receive or send 
 action. Communication between processes is done with
-message-passing through send/receive actions between procesess. For
+message-passing through send/receive actions between processes. For
 example consider a process A:
 \begin{equation*}
 A = !a.?b.P
 \end{equation*}
 The behaviour of $A$ is a chain of events composed with the
-\texttt{.} operator. First $A$ offers to send a message on channel
+\texttt{'.'} operator. First $A$ offers to send a message on channel
 \texttt{a}, then it offers to receive a message on channel \texttt{b}
 and then it evolves into a process P. Communication happens between two
 processes that offer to receive and send on the same channel. Consider
-the following evolution of a system consising of two parallel processes(composed
-with the '|' operator):
+the following evolution of a system consisting of two parallel
+processes (composed
+with the parallel '|' operator):
 \begin{equation*}
 (!a.?b.P) | (?a.Q) \Rightarrow (?b.P) | Q
 \end{equation*}
@@ -192,14 +194,14 @@ move to the next action in their sequence. Communication over a
 channel has the ability to pass messages between the two processes
 that can be further used in subsequent actions. This message passing
 feature is mainly used to pass private channels, which can be created
-by processes, for private communication.Non-determinism is added to
+by processes, for private communication. Non-determinism is added to
 the system by having a choice operator '+'. This operator can join
 sequence of actions together. For example consider an extension to the
 $A$ process we defined above:
 \begin{equation*}
 A = !a.?b.P + ?c.Q
 \end{equation*}
-Now A has a choice between two series of actions. If the first action
+Now $A$ has a choice between two series of actions. If the first action
 for both series can occur then one of them is chosen
 non-deterministically. This is equivalent to the decision structure we
 have seen in the basic Petri Nets. As was the case with the Stochastic
@@ -211,7 +213,7 @@ channel will occur. This mechanism again allows us to encode
 probabilities of options for decisions.
 
 In this study we used SPiM which is a programming language based on
-stochastic pi-calculus with a well-degined syntax that
+stochastic pi-calculus with a well-designed syntax that
 one can use to program a biological model. It also, and more
 importantly, has a graphical notation which corresponds to the textual
 notation. The language operators change slightly and the language is
@@ -237,9 +239,9 @@ run (A()|B())
 Channels can be declared with the \texttt{new} keyword and processes
 similar to how functions are traditionally declared in programming
 languages. Processes can also take arguments which is one difference
-between SPiM and traditional stochastic pi-calculus. The '+' operator for choice becomes a 'do or' statement,
+between SPiM and traditional stochastic pi-calculus. The '+' operator for choice becomes a \texttt{do or} statement,
 the dot operator becomes ';'. Another addition to the notation is the
-'delay' operator which can be used to delay an action with an
+\texttt{delay} operator which can be used to delay an action with an
 exponentially distributed wait time based on the rate of that delay:
 \begin{verbatim}
 let A = delay@0.3;!a;()
@@ -275,7 +277,7 @@ biochemical systems molecules become processes and their communications
 are the reactions. Defining a pi-calculus model is not a straight
 translation from a series of reactions because reactions are broken
 down to a send and receive part which are then defined as actions for
-the reactant proesses. The products of the reaction are defined as the
+the reactant processes. The products of the reaction are defined as the
 reactant processes evolving to a new process after the
 communication. Despite the fact that the model is not defined in
 terms of reactions but in terms of species, the evolution of a

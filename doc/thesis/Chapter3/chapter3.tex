@@ -15,7 +15,7 @@ number of carbons in these side-groups, for example a FA with a chain
 of 6 carbons is usually denoted as $C_6$. The side-chains of FAs grow
 by successive $C_2$ concatenations. This concatenation process takes places at
 the FA biosynthesis pathway in the cytosol for chain lengths up to
-$C_{18}$. Further elongation takes places at the FA elongation
+$C_{16}$. Further elongation takes places at the FA elongation
 pathway in the Endoplasmatic Reticulum(ER).
 
 \begin{figure}[htbp!]
@@ -23,7 +23,7 @@ pathway in the Endoplasmatic Reticulum(ER).
 \includegraphics[width=0.6\textwidth]{fas}
 \caption[Fatty Acid structure]{The structure of Fatty Acids(FA) which
   consists of a long hydrocarbon side-group. The length of this
-  side-group charactersises the FA.}
+  side-group characterises the FA.}
 \label{fig:fas}
 \end{figure}
 
@@ -43,7 +43,7 @@ FA biosynthesis starts with Acetyl-CoA which is being converted to
 Malonyl-CoA. A reaction between Malonyl-CoA and Acetyl-CoA starts off
 the first $C_4$ FA product and a $CO_2$ molecule. After that there are successive $C_2$
 concatenations to elongate the FA product with each elongation step
-that requires 4 reactions, requiring another Malonyl-CoA(Figure~\ref{fig:fa_synthesis}). The
+that requires 4 reactions, requiring another Malonyl-CoA (Figure~\ref{fig:fa_synthesis}). The
 full pathway from KEGG can be seen in
 Figure~\ref{fig:kegg_synthesis}. The elongation pathway located in ER
 is similar in nature but the intermediaries are CoAs instead of
@@ -60,7 +60,7 @@ is where the growing FA chain is bound during elongation.
 \begin{figure}[htbp!]
 \centering
 \includegraphics[width=1.0\textwidth]{kegg_synthesis}
-\caption[Fatty Acid biosynthsis in cytosol]{FA biosynthesis in the
+\caption[Fatty Acid biosynthesis in cytosol]{FA biosynthesis in the
   cytosol. Notice the successive concatenations. Each concatenation
   takes 4 reactions.}
 \label{fig:kegg_synthesis}
@@ -77,9 +77,10 @@ in biosynthesis.}
 
 Because of the natural correspondence between biochemical reactions as
 they are annotated in the KEGG static model to Petri Net model constructs
-a straight translation between the two is straightforward. All the
+a straight translation between the two is straightforward. The Petri
+Net model for just the FA elongation pathway is given in Figure~\ref{fig:pn_fa_elongation}. All the
 pathway reactions become transitions with pre-places the reactants and
-post-places for the products. Here we made our first assumptions by
+post-places the products. Here we made our first assumptions by
 omitting the enzymes participating as catalysts from the reactions. Information about the enzymes
 is not so important for our purposes since we are interested in the
 numbers of molecules of the metabolites involved in the process. Information
@@ -132,9 +133,9 @@ probabilistic these numbers will be different at the end of each model
 execution and in the limit the average number of metabolites will be
 the same as the equivalent deterministic model. This is in contrast with most dynamic modelling approaches
 as we are not interested in the time traces but rather only at the end
-result of this stochastic process and matching with the experimental
-dat awe have afterwards. We can think of the Petri Net as a
-magic box governed by some probabilities(that we can tune) where we
+result of this stochastic process and matching it with the experimental
+data we have afterwards. We can think of the Petri Net as a
+magic box governed by some probabilities (that we can tune) where we
 throw some inputs and according to these probabilities some output
 will come out at the other end in the form of proportions of FAs at different
 lengths. The probabilities are just the control parameters that guide
@@ -147,8 +148,8 @@ this study. First of all the model will capture the combined effect of
 both pathways. The two pathways are in different compartments of
 the cell, one in cytosol and one in ER, but we will ignore the
 transportation of FAs from cytosol to ER and we will assume that the
-two process are sequential so a $C_{18}$ for example can be elongated
-directly to a $C_{20}$ while in reality it would have to first be
+two process are sequential so a $C_{16}$ for example can be elongated
+directly to a $C_{18}$ while in reality it would have to first be
 transported to the ER. Since we also take this view of the
 net model as a control box turning input signal through a series of
 steps to an output signal, we can safely squeeze the four step reaction chain
@@ -163,7 +164,7 @@ sinks will only include products $C_{12}$ - $C_{22}$. FAs with lengths
 4-10 will be included but no output will be considered. These
 decisions are supported by the output from the real experimental data available
 for tuning the model (see
-Results section).
+Section~\ref{sec:results}).
 
 The basic model was built with SNOOPY \cite [] {heiner2012snoopy} using the previous conditions and assumptions. This basic model that will
 be the basis for our work in this study can be seen in
@@ -172,11 +173,11 @@ the more full model presented previously but the concatenation steps
 are represented as single transitions and the elongation process goes
 up to $C_{22}$ because the elongation process in the ER is also
 included. Initially, I consider as simple model with two input points Malonyl-CoA
-and Acetyl-CoA whereas in reality the only precursor of FA
+and Acyl-CoA whereas in reality the only precursor of FA
 biosynthesis is Acetyl-CoA and the 2 input points of the pathway are
 products coming from Acetyl-CoA. The model as presented in
 Figure~\ref{fig:fa_elongation_full} starts with inputs: 300
-Malonyl-CoA and 100 Acetyl-CoA molecules. The model can then be set in
+Malonyl-CoA and 100 Acyl-CoA molecules. The model can then be set in
 motion with SNOOPY until it reaches a dead state which
 corresponds to the point where the system runs out of input
 metabolites to 'fuel' further reactions. The output of the system
@@ -202,9 +203,9 @@ at each iteration only one token is travelling through the net. This token
 goes through an iteration of repeating the same binary decision: to either stay at the current length or continue to form a longer FA. More formally as the token gets
 transformed to an intermediate product there are only two transitions
 enabled: the transition taking it to the next longer intermediate and
-the transition taking to be stored at its current length(Figure~\ref{fig:binary_decision}). Let these
+the transition taking to be stored at its current length (Figure~\ref{fig:binary_decision}). Let these
 two transitions be $t_1$ and $t_2$ respectively. According to
-the operational semantics of Stochatic Petri Nets (see Section~\ref{sec:spn})
+the operational semantics of Stochastic Petri Nets (see Section~\ref{sec:spn})
 a wait time is sampled for each of the enabled transitions from a
 negative exponential distribution with rate the value of the rate
 function of the
@@ -235,7 +236,7 @@ then only the ratio of these two successive transitions rates is
 important and not their absolute numbers. The entire journey of a token through the network
 from the initial $C_4$ product until it reaches a sink and gets stored,
 can be thought of a series of Bernoulli
-trials(Figure~\ref{fig:trials}). The entire stochastic process
+trials (Figure~\ref{fig:trials}). The entire stochastic process
 can be thought of a sequence of successive realisations of this series
 of trials with tokens travelling through the net one
 after the other with each one going through the series of decisions
@@ -246,15 +247,15 @@ transitions representing each binary decision. We consider this assumption, beca
 of chains of Bernoulli trials.
 It is also interesting to note how the binary decision
 corresponds to a conflict between two events that share pre-conditions
-which create non-determinsim through a race condition between the two
-depdendent events. The 'conflict' that represents this decision
+which creates non-determinism through a race condition between the two
+dependent events. The 'conflict' that represents this decision
 process is captured inherently in the structure and semantics of Petri
 Nets.
 
 \begin{figure}[htbp!]
 \centering
 \includegraphics[width=0.55\textwidth]{trials}
-\caption[Stochastic proces as a series of Bernoulli trials]{The entire
+\caption[Stochastic process as a series of Bernoulli trials]{The entire
 stochastic process a series of Bernoulli trials.}
 \label{fig:trials}
 \end{figure}
@@ -267,7 +268,7 @@ it, in order to be able to execute the model many times and with many
 orders of multiple iterations to get
 output profiles we needed a programmatic solution. We wrote code in
 Python that can read a model, execute it once or a number of times, and write
-out the results. For the description of the model I used the PySCeS
+out the results. For the description of the model we used the PySCeS
 model description language for biochemical systems which is aimed at
 the Python language \cite [] {olivier2005modelling}. The reactions are
 defined in the standard chemical notation and since this corresponds
@@ -295,13 +296,13 @@ the stay-continue decisions for FA intermediaries with lengths
 $[C_{12}, C_{22}]$ since they are ones that have sinks. In this
 section two methods are presented for the identification of these parameters for
 tuning the model so that its execution is biologically valid. They both rely on having experimental real dataset of
-realative proportions of FAs. These data can be
+relative proportions of FAs. These data can be
 seen as different realisations of the stochastic process that acts in nature. The attempt is then to tune our
 model to be as close to the real model as possible by trying to tune
 the proportions of the outputs of our model to match the proportions
 of the outputs by the in the experimental
 data. This is  classical Machine Learning formulation of the inverse
-problem(Figure~\ref{fig:ml}). In this section I first present a method to get point
+problem (Figure~\ref{fig:ml}). In this section we first present a method to get point
 estimates and then profiles for the success probabilities parameters of the series of Bernoulli
 trials representing the chain of decisions for a token travelling
 through the net. The two methods presented here are used to analyse a
@@ -410,7 +411,7 @@ of each of the tokens that went through the net during that
 realisation of the process, 5 tokens made the decision to stay at the
 first trial- [success]- , 10 tokens made a decision to continue on the
 first decision and then to stay on the second decision- [fail,
-sucess]-, 34 tokens continued on the first two decision and stayed on
+success]-, 34 tokens continued on the first two decision and stayed on
 the third- [fail, fail, success], and so on. We can therefore calculate
 the probabilities for each FA product sinks as follows:
 \begin{align}
@@ -441,7 +442,7 @@ P(\{p_i\} | D) \sim L(D | \{p_i\}) P(\{p_i\})
 \end{equation*}
 where the data $D$ is simply the outputs of one realisation of the
 process or the counts at each sink and $P(\{p_i\})$ are the priors of
-the parameters. If we assume uniformative priors the above parameter
+the parameters. If we assume uninformative priors the above parameter
 posterior simply becomes: $P(\{p_i\} | D) \sim L(D | \{p_i\})$. Since
 the parameters are not exactly the parameters of the multinomial but
 they are only related through Equations~\ref{eq:param_cor} an analytic
@@ -485,7 +486,7 @@ relative numbers should not affect the outcome.
 Point estimates of the  success probabilities calculated with from the
 Control(treatment level 0)
 subset of the real dataset can be seen in
-Table~\ref{tab:param_estimates}. We then applied Baysian Hierarchical
+Table~\ref{tab:param_estimates}. We then applied Bayesian Hierarchical
 Clustering (BHC) to the samples in the dataset to investigate changes
 in the parameters in the different groups. The clustering algorithm
 gave back 4 clusters. The centroid of each of the 4 clusters was used
@@ -542,7 +543,7 @@ $p_5$ & 0.8333333 & 0.7500000 & 0.8000000 & 0.7500000 \\
 In this section I present a stochastic pi-calculus version of the
 model which is specifically written in its SPiM variant which extends
 the traditional pi-calculus first by introducing explicitly time which
-is needed for quantitive analysis of biochemical networks and also by
+is needed for quantitative analysis of biochemical networks and also by
 adding operational semantics in terms of an Abstract Machine and a
 graphical representation language. The SPiM code is given for the
 processes making up the system to introduce further some of the
@@ -656,7 +657,7 @@ simplified view of FA elongation/synthesis. In this section I
 will present a Petri net implementation of an extended model which
 captures one of the main control regulatory mechanisms between FA
 biosynthesis and other general metabolic
-machinery of the cell. The first and commited step in the FA
+machinery of the cell. The first and committed step in the FA
 biosynthesis pathway is the conversion of acetyl-CoA to Malonyl-CoA
 through the action of acetyl-CoA carboxylase. Acetyl-CoA carboxylase
 is inactivated by AMPK protein kinase in mammals. In the well-fed
@@ -676,7 +677,7 @@ immediate energy requirements are low (high ATP).
 
 \citet{nielsen2009systems} experimentally confirmed that
 this regulatory mechanism is conserved in yeast through the action of
-Snf1 which the yeast analog of the mammalian AMPK and they also
+Snf1 which the yeast analogue of the mammalian AMPK and they also
 produced Flux Balance models to capture the
 change in flows in the system throught the action of protein kinase
 Snf1. Here we provide a Petri Net implementation of the above
@@ -771,7 +772,7 @@ will guide the flow towards those two input points of the FA
 synthesis/elongation process. For every $C_2$ concatenation step we
 need one Malonyl-CoA so for example if the process does 7 steps to
 reach the $C_{16}$ then we would need 7 Malonyl-CoAs and 1
-Acetyl-CoA. Since it is a stochastic process however we do not know in
+Acyl-CoA. Since it is a stochastic process however we do not know in
 advance how many steps each token will take through the net. We can
 however find the expectation of the number of steps:
 \begin{equation*}

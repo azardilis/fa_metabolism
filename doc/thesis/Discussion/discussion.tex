@@ -59,12 +59,12 @@ other pathways. So for example the entire TCA cycle and respiratory chain
 responsible for the production of energy was represented as one transition with
 only ATP as output as that is the point of
 communication with the FA biosynthesis process. ATP is required in the
-conversion of Acetyl-CoA to Malonyl-CoA for the first commited step
+conversion of Acetyl-CoA to Malonyl-CoA for the first committed step
 towards FA biosynthesis and also acts as a regulation metabolite of
 the AMPK protein kinase that inhibits this step. Also this interaction
 was represented as a single step while in reality it goes through the
 AMPK protein kinase. Again transportation between the compartments
-that in this case also inlude the mitochondrion is not included and
+that in this case also include the mitochondrion is not included and
 Acetyl-CoA is represented by a single place. An interesting aspect of
 our model is that we can also capture the communication between the
 pathways and the environment for example by setting the rate for
@@ -79,7 +79,7 @@ simplified model can provide accurate description and a mechanistic model for th
 measurable quantities but not a mechanistic model for the underlying
 biochemical process. We still consider this a reaction-centric model
 though despite the fact that the Petri Net transitions do not exactly
-correspond to accurate biochemcical reactions because the main events of the model are the
+correspond to accurate biochemical reactions because the main events of the model are the
 transformations of species from one form to the other.
 
 \section{Description languages}
@@ -92,7 +92,7 @@ pi-calculus (SPiM) implementation of the basic model.
 Petri Nets have an attractive graphical notation language that
 captures the main
 characteristics we identified in lipid metabolism that served as
-motivation for this reacton-centric view: iterative conversion
+motivation for this reaction-centric view: iterative conversion
 processes and probabilistic decisions. There is also a very natural
 correspondence between Petri Net transitions and reactions. The
 behaviour of the net is described with formal operational semantics
@@ -112,12 +112,12 @@ tradition of using Petri Nets so there exist many tools to 'draw' nets
 and play the token game. In this work we mainly focused on
 quantitative analysis of stochastic Petri Nets but the dynamic picture
 is only part of the strength of Petri Nets. Their formal specification
-allows for qualititative static topological analyses that yield the
+allows for qualitative static topological analyses that yield the
 same insides as standard techniques in the field like Elementary Modes
 analysis. Another topic that we do not address here but it is of
 particular interest especially as the models grow in size is the model
 checking ability we have with the use of Petri Nets. We can use model
-checking techniques for example to explore qualitative and quantitive
+checking techniques for example to explore qualitative and quantitative
 static and dynamic properties of systems. \citet{gilbert2007unifying}
 go as far as to provide a unifying framework for both qualitative and
 quantitative analysis of biochemical networks captured with the Petri
@@ -140,15 +140,15 @@ decomposability and scalability).
 
 Stochastic pi-calculus and specifically SPiM are more detached from
 the standard biochemical graphical notation. Each component of the
-system is defined indepedently in contrast to the Petri Nets where the
+system is defined independently in contrast to the Petri Nets where the
 main unit of definition are the transitions corresponding to the
-reactions. Their operational reduction semantics are howerer defined in terms
+reactions. Their operational reduction semantics are however defined in terms
 of communication between the components that correspond to the
 reactions. It is particularly suited to metabolism because metabolic
 pathways usually involve linear series of conversions. These linear
 series of conversion can be encoded with the sequential operator of
-the calculus that defines state changes of a component afer
-communication actions (reactions). The other characterstic we are
+the calculus that defines state changes of a component after
+communication actions (reactions). The other characteristic we are
 interested in, decisions, is also captured nicely with the choice
 operator of the calculus that provides non-determinism. Another
 advantage of stochastic pi-calculus over Petri Nets is the
@@ -163,14 +163,14 @@ larger networks.
 
 \subsection{Modelling and experimental validation}
 In this section we present some possible future directions for our
-contstructed models and experimental validation.
+constructed models and experimental validation.
 
-Using the already contstructed models as a scaffold we can expand
+Using the already constructed models as a scaffold we can expand
 them to include interactions with other pathways. In this work we
 concentrated on even-chain saturated FAs but these are not the only FA
 products. FAs can get modified after creation not only but the
 elongation pathway we considered but by adding double bonds at one
-(monounsatureate) or many (polyunsaturated) places in their CH
+(monounsaturated) or many (polyunsaturated) places in their CH
 tails. Then these FA products of different lengths and numbers of
 double bond combine as building blocks to form more complex lipid
 products like triacylglycerols (TAGs) and diacylglycerols (DAGs). DAGs
@@ -178,7 +178,7 @@ and TAGs contain a headgroup and two or three FAs
 respectively. Following from our high level view of FA
 biosynthesis/elongation we can derive probability equations for these further
 modifications and complex formations. Our current
-modelling methoodology is suited for this kind of system. For example
+modelling methods are suited to this kind of system. For example
 if we also had some experimental data about the frequencies of the
 triplets or pairs of FAs found in TAGs and DAGs respectively we could
 extend the model by making the current sinks of the system feed into
@@ -218,8 +218,8 @@ to mechanistic understanding of changes that lead to different
 conditions and disorders. This would be far more attractive with the
 time-series data and the control mechanisms that appear to be the
 reasons behind several metabolic disorders. Controlling the diet over
-a number of invidivuals is very hard and dynamic analysis is currently
-inaccesible for animals so we could again start with yeast as a
+a number of individuals is very hard and dynamic analysis is currently
+inaccessible for animals so we could again start with yeast as a
 model organism for time-series measurements of metabolites and
 flows. Even with our high level
 models we could for example calculate the strength response parameter
@@ -267,14 +267,14 @@ in the right direction.
 \caption[Petri Nets with boundaries]{Petri Nets with boundaries. On
   the left two composing parts of the net. Each has its own internal
   net structure and transitions. Some of the places can communicate
-  via transitions withe the outports of that part(squares at the edge
+  via transitions with the outports of that part(squares at the edge
   of the box). Communication between the two parts happens through
   synchronisation of the outports of the two(picture on the right).}
 \label{fig:pnb}
 \end{figure}
 
 This is part of a more general attempt to capture hierarchy in
-these minimilastic languages for distributed computing. In Petri Nets
+these minimalistic languages for distributed computing. In Petri Nets
 with boundaries we can talk at two levels, the local level of the
 transitions and state changes inside a box and then the communication
 through synchronisation between boxes. Another attempt that falls in
@@ -285,7 +285,7 @@ algebra with hooks that attempts to provide modelling capabilities for
 multi-level biological systems and communication operators between the
 levels. In our opinion these are steps in the right direction because we
 are interested in qualities of biological systems that naturally fall
-on different levels. For example in metabolims we might want to talk
+on different levels. For example in metabolism we might want to talk
 about the cross-talk between pathways or communication between cells. We should be able to express these higher level
 qualities in terms of the lower level qualities. The language we use
 could have primitives to talk about the lowest level, for example
